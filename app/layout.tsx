@@ -28,7 +28,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${outfit.variable} ${philosopher.variable} font-sans`}
+      className={`${outfit.variable} ${philosopher.variable}`}
     >
       <body>{children}</body>
     </html>
