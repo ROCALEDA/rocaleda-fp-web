@@ -1,6 +1,7 @@
 import './globals.css'
 import type { Metadata } from 'next'
 import { Outfit, Philosopher } from 'next/font/google'
+import ThemeRegistry from './ThemeRegistry'
 
 const outfit = Outfit({
   subsets: ['latin'],
@@ -30,7 +31,9 @@ export default function RootLayout({
       lang="en"
       className={`${outfit.variable} ${philosopher.variable}`}
     >
-      <body>{children}</body>
+      <body>
+        <ThemeRegistry options={{ key: 'mui' }}>{children}</ThemeRegistry>
+      </body>
     </html>
-  )
+  );
 }
