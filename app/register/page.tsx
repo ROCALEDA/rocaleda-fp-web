@@ -1,24 +1,9 @@
-import Image from 'next/image'
-import CloudOutlinedIcon from '@mui/icons-material/CloudOutlined';
+import AuthLayout from "@/components/layout/auth-layout";
 
-export default function page() {
+export default function LoginPage() {
     return (
-        <>
-        <div style={{
-            zIndex: -1,
-            position: 'fixed',
-            width: '100%',
-            height: '100vh'
-        }}>
-        <Image
-        src="/images/background.png"
-        layout="fill"
-        objectFit="cover"
-        alt="Cloud Background Image"
-        />
-        </div>
-        <CloudOutlinedIcon color="primary" fontSize="large" />
-        <h1>Register</h1>
-        </>
-    )
-}
+      <AuthLayout text="Empresas" textColor='#FF0099'>
+
+      </AuthLayout>
+    );
+  }
