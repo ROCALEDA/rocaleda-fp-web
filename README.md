@@ -20,9 +20,15 @@ npm run dev
 ```
 
 4. Abrir el navegador en la dirección http://localhost:3000
+   
+5. Rutas disponibles
+   
+   - http://localhost:3000
+   - http://localhost:3000/login
+   - http://localhost:3000/register
 
 
-5. Ejecutar Cypress en modo interactivo
+6. Ejecutar Cypress en modo interactivo
 
 ```
 npm run e2e
