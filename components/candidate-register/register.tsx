@@ -10,16 +10,42 @@ import {
 import BasicSelect from "../select-hard/select";
 
 export default function Register() {
-    const options = [
-        { value: 1, label: 'AWS' },
-        { value: 2, label: 'Developer' },
-        { value: 3, label: 'DEVOPS' },
-        { value: 4, label: 'Backend' },
-      ];
-    const options2 = [
-        { value: 1, label: 'Comunicación' },
-        { value: 2, label: 'Resolución de Problemas' }
-      ];  
+  const tech_skill = [
+    { value: 1, label: 'Frontend' },
+    { value: 2, label: 'Backend' },
+    { value: 3, label: 'ReactJS' },
+    { value: 4, label: 'NodeJS' },
+    { value: 5, label: 'NextJS' },
+    { value: 6, label: 'Python' },
+    { value: 7, label: 'Flask' },
+    { value: 8, label: 'AWS' },
+    { value: 9, label: 'Architecture' },
+    { value: 10, label: 'NestJS' },
+    { value: 11, label: 'Angular' },
+    { value: 12, label: 'GCP' },
+    { value: 13, label: 'Azure' },
+    { value: 14, label: 'DevOps' },
+    { value: 15, label: 'Java' },
+    { value: 16, label: 'SpringBoot' },
+    { value: 17, label: 'FastAPI' },
+    { value: 18, label: 'Data Science' },
+    { value: 19, label: 'SQL' },
+    { value: 20, label: 'NoSQL' },
+    { value: 21, label: 'MongoDB' },
+    { value: 22, label: 'Redis' },
+    { value: 23, label: 'CSS' },
+    { value: 24, label: 'Typescript' },
+];
+const soft_skill = [
+  { value: 1, label: 'Leadership' },
+  { value: 2, label: 'Responsibility' },
+  { value: 3, label: 'Ownership' },
+  { value: 4, label: 'Communication' },
+  { value: 5, label: 'Teamwork' },
+  { value: 6, label: 'Adaptability' },
+  { value: 7, label: 'Empathy' },
+  { value: 8, label: 'Management' },
+];  
     return (
       <Grid container spacing={2} padding={2}>
         <Grid item xs={12} md={6} gap={2}>
@@ -81,8 +107,8 @@ export default function Register() {
                           />
                         </Grid>
                       </Grid>
-                      <BasicSelect text='Habilidades Técnicas' options={options}/>
-                      <BasicSelect text='Habilidades Blandas' options={options2}/>
+                      <BasicSelect text='Habilidades Técnicas' options={ tech_skill }/>
+                      <BasicSelect text='Habilidades Blandas' options={ soft_skill }/>
 
 
                       <Button
@@ -97,7 +123,7 @@ export default function Register() {
                           },
                         }}
                       >
-                        Registrar
+                        Registrarme
                       </Button>
                     </Stack>
                   </Box>
@@ -114,7 +140,7 @@ export default function Register() {
               style={{ fontFamily: "Philosopher, sans-serif" }}
             >
               Regístrate como <br />
-              <strong>candidato:</strong> y obtén:
+              <strong>candidato</strong> y obtén:
             </Typography>
             <Box paddingTop={4}>
               <Typography variant="h5" gutterBottom>
