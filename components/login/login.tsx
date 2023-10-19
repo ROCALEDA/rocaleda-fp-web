@@ -9,18 +9,47 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { getSomeData } from "@/api/apiService";
+import * as Yup from "yup";
+import { useFormik } from "formik";
 import { enqueueSnackbar } from "notistack";
+import { login } from "@/api/apiService";
+
+const validationSchema = Yup.object({
+  email: Yup.string()
+    .email("Invalid email address")
+    .required("Email is required"),
+  password: Yup.string().required("Password is required"),
+});
 
 export default function Login() {
-  const onLogin = async () => {
+  const formik = useFormik({
+    initialValues: {
+      email: "",
+      password: "",
+    },
+    validationSchema: validationSchema,
+    onSubmit: async (values) => {
+      // Handle form submission here
+      console.log(values);
+      await onLogin(values);
+    },
+  });
+
+  const onLogin = async (values: { email: string; password: string }) => {
     try {
-      const { data, status } = await getSomeData();
+      const { data, status } = await login(values.email, values.password);
       console.log(data);
       enqueueSnackbar(`Sesión iniciada (${status})`, { variant: "success" });
-    } catch (err) {
-      console.log("error", err);
-      enqueueSnackbar("Error", { variant: "error" });
+      if (data.token) {
+        document.cookie = `token=${data.token}; path=/`;
+        window.location.href = "/proyectos";
+      } else {
+        // Handle errors
+        console.error("Authentication failed");
+      }
+    } catch (error) {
+      const errorMessage = (error as Error).message;
+      enqueueSnackbar(errorMessage, { variant: "error" });
     }
   };
 
@@ -33,23 +62,41 @@ export default function Login() {
               <Box padding={4} textAlign="center" width="100%">
                 <Typography variant="h5">Iniciar sesión</Typography>
                 <Box padding={4}>
-                  <Stack direction="column" spacing={6}>
-                    <TextField
-                      required
-                      label="Correo"
-                      type="email"
-                      variant="standard"
-                    />
-                    <TextField
-                      label="Password"
-                      type="password"
-                      autoComplete="current-password"
-                      variant="standard"
-                    />
-                    <Button variant="contained" onClick={() => onLogin()}>
-                      Ingresar
-                    </Button>
-                  </Stack>
+                  <form onSubmit={formik.handleSubmit}>
+                    <Stack direction="column" spacing={6}>
+                      <TextField
+                        label="Correo"
+                        name="email"
+                        type="email"
+                        variant="standard"
+                        value={formik.values.email}
+                        onChange={formik.handleChange}
+                        error={
+                          formik.touched.email && Boolean(formik.errors.email)
+                        }
+                        helperText={formik.touched.email && formik.errors.email}
+                      />
+                      <TextField
+                        label="Password"
+                        name="password"
+                        type="password"
+                        autoComplete="current-password"
+                        variant="standard"
+                        value={formik.values.password}
+                        onChange={formik.handleChange}
+                        error={
+                          formik.touched.password &&
+                          Boolean(formik.errors.password)
+                        }
+                        helperText={
+                          formik.touched.password && formik.errors.password
+                        }
+                      />
+                      <Button variant="contained" type="submit">
+                        Ingresar
+                      </Button>
+                    </Stack>
+                  </form>
                 </Box>
               </Box>
             </Card>
