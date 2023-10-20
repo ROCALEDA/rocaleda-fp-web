@@ -36,7 +36,6 @@ export default function Register() {
   };
 
   const isEmailValid = (email: string) => {
-    // Simple regex for email validation
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   };
 
@@ -86,8 +85,8 @@ export default function Register() {
                           variant="standard"
                           value={password}
                           onChange={handlePasswordChange}
-                          error={password.length < 6 && password !== ""}
-                          helperText={password.length < 6 && password !== "" ? "La contraseña debe tener al menos 6 caracteres" : ""}
+                          error={password.length < 8 && password !== ""}
+                          helperText={password.length < 8 && password !== "" ? "La contraseña debe tener al menos 8 caracteres" : ""}
                         />
                       </Grid>
                       <Grid item xs={6}>
