@@ -50,7 +50,6 @@ export const registerCompany = async (email: string, password: string, name: str
   try {
     return await fetchData("customer", "POST", { email, password, name });
   } catch (error) {
-    console.error("Error al registrar la empresa:", error);
     return { status: 500, data: null, error: (error as Error).message }; 
   }
 };

@@ -79,19 +79,19 @@ export default function Register() {
                 <form onSubmit={handleSubmit}>
                   <Stack direction="column" spacing={6}>
                     <TextField
+                      label="Compañía"
                       variant="standard"
                       name="compañia"
                       required
                       fullWidth
                       id="compañia"
-                      label="Compañía"
                       autoFocus
                       value={company}
                       onChange={handleCompanyChange}
                     />
                     <TextField
-                      required
                       label="Correo"
+                      required
                       type="email"
                       variant="standard"
                       value={email}
@@ -102,8 +102,8 @@ export default function Register() {
                     <Grid container>
                       <Grid item xs={6}>
                         <TextField
-                          required
                           label="Contraseña"
+                          required
                           type="password"
                           id="password"
                           autoComplete="new-password"
@@ -116,8 +116,8 @@ export default function Register() {
                       </Grid>
                       <Grid item xs={6}>
                         <TextField
-                          required
                           label="Repetir contraseña"
+                          required
                           type="password"
                           id="password2"
                           autoComplete="new-password"
