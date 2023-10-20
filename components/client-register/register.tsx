@@ -1,3 +1,5 @@
+"use client";
+import React, { useState } from "react";
 import {
   Box,
   Card,
@@ -9,6 +11,39 @@ import {
 } from "@mui/material";
 
 export default function Register() {
+  const [company, setCompany] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [password2, setPassword2] = useState("");
+
+  const handleCompanyChange = (e) => {
+    const value = e.target.value;
+    if (value.length <= 50 && !/\d/.test(value)) {
+      setCompany(value);
+    }
+  };
+
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
+  };
+
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value);
+  };
+
+  const handlePassword2Change = (e) => {
+    setPassword2(e.target.value);
+  };
+
+  const isEmailValid = (email) => {
+    // Simple regex for email validation
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  };
+
+  const arePasswordsEqual = () => {
+    return password === password2;
+  };
+
   return (
     <Grid container spacing={2} padding={2}>
       <Grid item xs={12} md={6} gap={2}>
@@ -27,12 +62,18 @@ export default function Register() {
                       id="compañia"
                       label="Compañía"
                       autoFocus
+                      value={company}
+                      onChange={handleCompanyChange}
                     />
                     <TextField
                       required
                       label="Correo"
                       type="email"
                       variant="standard"
+                      value={email}
+                      onChange={handleEmailChange}
+                      error={!isEmailValid(email) && email !== ""}
+                      helperText={!isEmailValid(email) && email !== "" ? "Por favor ingresa un correo válido" : ""}
                     />
                     <Grid container>
                       <Grid item xs={6}>
@@ -43,6 +84,10 @@ export default function Register() {
                           id="password"
                           autoComplete="new-password"
                           variant="standard"
+                          value={password}
+                          onChange={handlePasswordChange}
+                          error={password.length < 6 && password !== ""}
+                          helperText={password.length < 6 && password !== "" ? "La contraseña debe tener al menos 6 caracteres" : ""}
                         />
                       </Grid>
                       <Grid item xs={6}>
@@ -53,6 +98,10 @@ export default function Register() {
                           id="password2"
                           autoComplete="new-password"
                           variant="standard"
+                          value={password2}
+                          onChange={handlePassword2Change}
+                          error={password2 !== "" && !arePasswordsEqual()}
+                          helperText={password2 !== "" && !arePasswordsEqual() ? "Las contraseñas no coinciden" : ""}
                         />
                       </Grid>
                     </Grid>
