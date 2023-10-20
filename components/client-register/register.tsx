@@ -38,6 +38,7 @@ export default function Register() {
 
     if (response && response.status === 200) {
       enqueueSnackbar('Registro completo exitoso', { variant: 'success' });
+      window.location.href = "/proyectos";
     } else if (response && response.error) {
       enqueueSnackbar(`Error: ${response.error}`, { variant: 'error' });
     } else {
