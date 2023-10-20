@@ -39,3 +39,7 @@ export const getOtherData = async () => {
 export const login = async (email: string, password: string) => {
   return fetchData("auth", "POST", { email, password });
 };
+
+export const registerCompany = async (email: string, password: string, name: string) => {
+  return fetchData("customer", "POST", { email, password, name });
+};

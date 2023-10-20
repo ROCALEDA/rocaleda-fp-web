@@ -9,6 +9,7 @@ import {
   Stack,
   Button,
 } from "@mui/material";
+import { registerCompany } from "@/api/apiService";
 
 export default function Register() {
   const [company, setCompany] = useState("");
@@ -20,6 +21,21 @@ export default function Register() {
     const value = e.target.value;
     if (value.length <= 50 && !/\d/.test(value)) {
       setCompany(value);
+    }
+  };
+
+  const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+  
+    // Si quieres puedes agregar más validaciones aquí
+  
+    const response = await registerCompany(email, password, company);
+  
+    if (response.status === 200) {
+      console.log('Registro completo exitoso');
+      // Aquí puedes manejar el éxito, por ejemplo redirigir al usuario o mostrar un mensaje de éxito
+    } else {
+      console.log('No se pudo registrar la empresa');
     }
   };
 
@@ -52,6 +68,7 @@ export default function Register() {
               <Box padding={3} textAlign="center">
                 <Typography variant="h5">Registrar mi empresa</Typography>
                 <Box padding={3}>
+                <form onSubmit={handleSubmit}>
                   <Stack direction="column" spacing={6}>
                     <TextField
                       variant="standard"
@@ -119,6 +136,7 @@ export default function Register() {
                       Registrar
                     </Button>
                   </Stack>
+                  </form>
                 </Box>
               </Box>
             </Card>
