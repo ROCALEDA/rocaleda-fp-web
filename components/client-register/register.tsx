@@ -9,6 +9,7 @@ import {
   Stack,
   Button,
 } from "@mui/material";
+import { enqueueSnackbar } from "notistack";
 import { registerCompany } from "@/api/apiService";
 
 export default function Register() {
@@ -24,19 +25,25 @@ export default function Register() {
     }
   };
 
-  const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    const payload = {
+      email: email,
+      password: password,
+      name: company
+    };
   
-    // Si quieres puedes agregar más validaciones aquí
-  
-    const response = await registerCompany(email, password, company);
-  
-    if (response.status === 200) {
-      console.log('Registro completo exitoso');
-      // Aquí puedes manejar el éxito, por ejemplo redirigir al usuario o mostrar un mensaje de éxito
+    const response = await registerCompany(payload.email, payload.password, payload.name);
+
+    if (response && response.status === 200) {
+      enqueueSnackbar('Registro completo exitoso', { variant: 'success' });
+    } else if (response && response.error) {
+      enqueueSnackbar(`Error: ${response.error}`, { variant: 'error' });
     } else {
-      console.log('No se pudo registrar la empresa');
+      enqueueSnackbar('Hubo un error al realizar registro de usuario. Intente nuevamente.', { variant: 'error' });
     }
+  
   };
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {

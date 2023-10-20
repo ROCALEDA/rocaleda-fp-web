@@ -40,6 +40,17 @@ export const login = async (email: string, password: string) => {
   return fetchData("auth", "POST", { email, password });
 };
 
-export const registerCompany = async (email: string, password: string, name: string) => {
-  return fetchData("customer", "POST", { email, password, name });
+interface ApiResponse {
+  status: number;
+  data: any; 
+  error?: string; 
+}
+
+export const registerCompany = async (email: string, password: string, name: string): Promise<ApiResponse> => {
+  try {
+    return await fetchData("customer", "POST", { email, password, name });
+  } catch (error) {
+    console.error("Error al registrar la empresa:", error);
+    return { status: 500, data: null, error: (error as Error).message }; 
+  }
 };
