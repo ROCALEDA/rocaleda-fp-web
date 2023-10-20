@@ -16,26 +16,26 @@ export default function Register() {
   const [password, setPassword] = useState("");
   const [password2, setPassword2] = useState("");
 
-  const handleCompanyChange = (e) => {
+  const handleCompanyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     if (value.length <= 50 && !/\d/.test(value)) {
       setCompany(value);
     }
   };
 
-  const handleEmailChange = (e) => {
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
   };
 
-  const handlePasswordChange = (e) => {
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
   };
 
-  const handlePassword2Change = (e) => {
+  const handlePassword2Change = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword2(e.target.value);
   };
 
-  const isEmailValid = (email) => {
+  const isEmailValid = (email: string) => {
     // Simple regex for email validation
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   };
