@@ -41,7 +41,7 @@ export default function Login() {
       console.log(data);
       enqueueSnackbar(`Sesión iniciada (${status})`, { variant: "success" });
       if (data.token) {
-        document.cookie = `token=${data.token}; path=/`;
+        localStorage.setItem("token", data.token);
         window.location.href = "/proyectos";
       } else {
         // Handle errors
