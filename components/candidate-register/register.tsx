@@ -1,3 +1,5 @@
+"use client";
+import React, { useState } from 'react';
 import {
   Box,
   Card,
@@ -9,7 +11,65 @@ import {
 } from "@mui/material";
 import BasicSelect from "../select-hard/select";
 
+
+
 export default function Register() {
+  const [nombre, setName] = useState("");
+  const [apellido, setLastName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [password2, setPassword2] = useState("")
+
+
+
+  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    if (value.length <= 50 && !/\d/.test(value)) {
+      setName(value);
+    }
+  };
+  const handleLastNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    if (value.length <= 50 && !/\d/.test(value)) { 
+      setLastName(value);
+    }
+};
+function getFullName() {
+  return `${nombre} ${apellido}`;
+}
+
+function isValidFullName() {
+  const fullName = getFullName();
+  return fullName.length <= 50 && !/\d/.test(fullName);
+}
+const isValidPhone = (phone: string) => {
+  const phonePattern = /^\+?\d{1,15}$/;
+  return phonePattern.test(phone);
+};
+const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const newPhoneValue = e.target.value;
+  if (newPhoneValue === "+" || /^\+?\d{0,15}$/.test(newPhoneValue)) {
+    setPhone(newPhoneValue);
+  }
+};
+const isEmailValid = (email: string) => {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+};
+const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  setEmail(e.target.value);
+};
+const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  setPassword(e.target.value);
+};
+
+const handlePassword2Change = (e: React.ChangeEvent<HTMLInputElement>) => {
+  setPassword2(e.target.value);
+};
+const arePasswordsEqual = () => {
+  return password === password2;
+};
+
 const tech_skill = [
   { value: '1', label: 'Frontend' },
   { value: '2', label: 'Backend' },
@@ -45,7 +105,10 @@ const soft_skill = [
 { value: '6', label: 'Adaptability' },
 { value: '7', label: 'Empathy' },
 { value: '8', label: 'Management' },
-];  
+]; 
+
+
+
   return (
     <Grid container spacing={2} padding={2}>
       <Grid item xs={12} md={6} gap={2}>
@@ -58,12 +121,15 @@ const soft_skill = [
                   <Stack direction="column" spacing={6}>
                   <Grid container>
                       <Grid item xs={6}>
-                        <TextField
-                          required
-                          label="Nombre"
-                          type= "text"
-                          variant="standard"
-                        />
+                      <TextField
+                      required
+                      label="Nombre"
+                      type="text"
+                      variant="standard"
+                      name="nombre"
+                      value={nombre}
+                      onChange={handleNameChange}
+                      />
                       </Grid>
                       <Grid item xs={6}>
                         <TextField
@@ -71,6 +137,8 @@ const soft_skill = [
                           label="Apellido"
                           type="text"
                           variant="standard"
+                          value={apellido}
+                          onChange={handleLastNameChange}
                         />
                       </Grid>
                     </Grid>
@@ -82,9 +150,31 @@ const soft_skill = [
                       label="Correo"
                       type="email"
                       variant="standard"
+                      value={email}
+                      onChange={handleEmailChange}
+                      error={!isEmailValid(email) && email !== ""}
+                      helperText={!isEmailValid(email) && email !== "" ? "Por favor ingresa un correo válido" : ""}
                     />
                     </Grid>
                     </Grid>
+                    <Grid container spacing={2}>
+                    <Grid item xs={11}>
+                    <TextField
+                    label="Teléfono"
+                    fullWidth
+                    required
+                    variant="standard"
+                    value={phone}
+                    onChange={handlePhoneChange}
+                    error={!isValidPhone(phone) && phone !== ""}
+                    helperText={!isValidPhone(phone) && phone !== "" ? "Por favor ingresa un número de teléfono válido (máximo 15 dígitos) con o sin + inicial" : "Ejemplo: +573503325442"}
+                    />
+                    </Grid>
+                    </Grid>
+
+
+
+
                     <Grid container>
                       <Grid item xs={6}>
                         <TextField
@@ -94,6 +184,10 @@ const soft_skill = [
                           id="password"
                           autoComplete="new-password"
                           variant="standard"
+                          value={password}
+                          onChange={handlePasswordChange}
+                          error={password.length < 6 && password !== ""}
+                          helperText={password.length < 6 && password !== "" ? "La contraseña debe tener al menos 6 caracteres" : ""}
                         />
                       </Grid>
                       <Grid item xs={6}>
@@ -104,6 +198,10 @@ const soft_skill = [
                           id="password2"
                           autoComplete="new-password"
                           variant="standard"
+                          value={password2}
+                          onChange={handlePassword2Change}
+                          error={password2 !== "" && !arePasswordsEqual()}
+                          helperText={password2 !== "" && !arePasswordsEqual() ? "Las contraseñas no coinciden" : ""}
                         />
                       </Grid>
                     </Grid>
