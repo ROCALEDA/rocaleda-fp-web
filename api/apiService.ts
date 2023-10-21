@@ -39,3 +39,17 @@ export const getOtherData = async () => {
 export const login = async (email: string, password: string) => {
   return fetchData("auth", "POST", { email, password });
 };
+
+interface ApiResponse {
+  status: number;
+  data: any; 
+  error?: string; 
+}
+
+export const registerCompany = async (email: string, phone: string, password: string, name: string): Promise<ApiResponse> => {
+  try {
+    return await fetchData("customer", "POST", { email, phone, password, name });
+  } catch (error) {
+    return { status: 500, data: null, error: (error as Error).message }; 
+  }
+};
