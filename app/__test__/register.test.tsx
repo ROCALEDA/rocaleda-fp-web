@@ -11,12 +11,13 @@ describe("<Register />", () => {
     test("shows error on invalid submission", async () => {
         const { getByText, getByLabelText, findByText } = render(<Register />);
         const companyInput = getByLabelText(/Compañía/);
+        const phoneInput = getByLabelText(/Teléfono/);
         const emailInput = getByLabelText(/Correo/);
         const passwordInput = getByLabelText(/Contraseña/);
         const password2Input = getByLabelText(/Repetir contraseña/);
         const submitButton = getByText("Registrar");
 
-        // Simulate a form submission without entering data
+        fireEvent.change(phoneInput, { target: { value: "+573503325442" } });
         fireEvent.click(submitButton);
 });
 });

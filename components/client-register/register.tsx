@@ -15,6 +15,7 @@ import { registerCompany } from "@/api/apiService";
 export default function Register() {
   const [company, setCompany] = useState("");
   const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [password2, setPassword2] = useState("");
 
@@ -25,30 +26,20 @@ export default function Register() {
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    const payload = {
-      email: email,
-      password: password,
-      name: company
-    };
-  
-    const response = await registerCompany(payload.email, payload.password, payload.name);
-
-    if (response && response.status === 200) {
-      enqueueSnackbar('Registro completo exitoso', { variant: 'success' });
-      window.location.href = "/proyectos";
-    } else if (response && response.error) {
-      enqueueSnackbar(`Error: ${response.error}`, { variant: 'error' });
-    } else {
-      enqueueSnackbar('Hubo un error al realizar registro de usuario. Intente nuevamente.', { variant: 'error' });
-    }
-  
-  };
-
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
+  };
+
+  const isValidPhone = (phone: string) => {
+    const phonePattern = /^\+?\d{1,15}$/;
+    return phonePattern.test(phone);
+  };
+
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newPhoneValue = e.target.value;
+    if (newPhoneValue === "+" || /^\+?\d{0,15}$/.test(newPhoneValue)) {
+      setPhone(newPhoneValue);
+    }
   };
 
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -63,8 +54,33 @@ export default function Register() {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   };
 
+  
+
   const arePasswordsEqual = () => {
     return password === password2;
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const payload = {
+      email: email,
+      phone: phone,
+      password: password,
+      name: company
+    };
+    console.log(payload);
+    const response = await registerCompany(payload.email, payload.phone ,payload.password, payload.name);
+
+    if (response && response.status === 200) {
+      enqueueSnackbar('Registro completo exitoso', { variant: 'success' });
+      window.location.href = "/proyectos";
+    } else if (response && response.error) {
+      enqueueSnackbar(`Error: ${response.error}`, { variant: 'error' });
+    } else {
+      enqueueSnackbar('Hubo un error al realizar registro de usuario. Intente nuevamente.', { variant: 'error' });
+    }
+  
   };
 
   return (
@@ -99,6 +115,15 @@ export default function Register() {
                       error={!isEmailValid(email) && email !== ""}
                       helperText={!isEmailValid(email) && email !== "" ? "Por favor ingresa un correo válido" : ""}
                     />
+                    <TextField
+                      label="Teléfono"
+                      required
+                      variant="standard"
+                      value={phone}
+                      onChange={handlePhoneChange}
+                      error={!isValidPhone(phone) && phone !== ""}
+                      helperText={!isValidPhone(phone) && phone !== "" ? "Por favor ingresa un número de teléfono válido (máximo 15 dígitos)" : "Ejemplo: +573503325442"}
+                      />
                     <Grid container>
                       <Grid item xs={6}>
                         <TextField

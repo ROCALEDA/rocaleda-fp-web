@@ -46,9 +46,9 @@ interface ApiResponse {
   error?: string; 
 }
 
-export const registerCompany = async (email: string, password: string, name: string): Promise<ApiResponse> => {
+export const registerCompany = async (email: string, phone: string, password: string, name: string): Promise<ApiResponse> => {
   try {
-    return await fetchData("customer", "POST", { email, password, name });
+    return await fetchData("customer", "POST", { email, phone, password, name });
   } catch (error) {
     return { status: 500, data: null, error: (error as Error).message }; 
   }
