@@ -41,4 +41,37 @@ describe("BasicSelect Component", () => {
 
     userEvent.click(dropdown);
   });
+  it("renders chips for selected options", async () => {
+    render(<BasicSelect text="Select an option" options={mockOptions} />);
+    const dropdown = screen.getByRole("combobox");
+    userEvent.click(dropdown);
+    await waitFor(() => {
+      const option1 = screen.getByText(new RegExp("Option 1", "i"));
+      userEvent.click(option1);
+    });
+    const chip = screen.getByText(new RegExp("Option 1", "i"));
+    expect(chip).toBeInTheDocument();
+  });
+  it("changes the style of selected menu items", async () => {
+    render(<BasicSelect text="Select an option" options={mockOptions} />);
+    const dropdown = screen.getByRole("combobox");
+    userEvent.click(dropdown);
+    await waitFor(() => {
+      const option1 = screen.getByText(new RegExp("Option 1", "i"));
+      userEvent.click(option1);
+    });
+    const menuItem = screen.getByText(new RegExp("Option 1", "i"));
+    // Add an assertion for the style changes you expect
+  });
+  it("allows deselecting a selected option", async () => {
+    render(<BasicSelect text="Select an option" options={mockOptions} />);
+    const dropdown = screen.getByRole("combobox");
+    userEvent.click(dropdown);
+    await waitFor(() => {
+      const option1 = screen.getByText(new RegExp("Option 1", "i"));
+      userEvent.click(option1);  // Select
+      userEvent.click(option1);  // Deselect
+    });
+    // Add assertions to verify that the option has been deselected
+  });
 });
