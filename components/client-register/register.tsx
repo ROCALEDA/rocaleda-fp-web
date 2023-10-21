@@ -88,6 +88,7 @@ export default function Register() {
                           onChange={handlePasswordChange}
                           error={password.length < 6 && password !== ""}
                           helperText={password.length < 6 && password !== "" ? "La contraseña debe tener al menos 6 caracteres" : ""}
+                          data-testid="password"
                         />
                       </Grid>
                       <Grid item xs={6}>
@@ -102,6 +103,7 @@ export default function Register() {
                           onChange={handlePassword2Change}
                           error={password2 !== "" && !arePasswordsEqual()}
                           helperText={password2 !== "" && !arePasswordsEqual() ? "Las contraseñas no coinciden" : ""}
+                          data-testid="password2"
                         />
                       </Grid>
                     </Grid>
