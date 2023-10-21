@@ -17,6 +17,8 @@ interface Option {
 interface SelectProps {
     text?: string;
     options?: Option[];
+    selectedOptions: string[]; // nuevas propiedades
+    onSelectionChange: (selected: string[]) => void; // callback
 }
 
 const ITEM_HEIGHT = 48;
@@ -38,7 +40,7 @@ function getStyles(name: string, personName: readonly string[], theme: Theme) {
   };
 }
 
-export default function BasicSelect({ text, options = [] }: SelectProps) {
+export default function BasicSelect({ text, options = [], selectedOptions, onSelectionChange }: SelectProps) {
     const theme = useTheme();
     const [selectedValues, setSelectedValues] = React.useState<string[]>([]);
 
@@ -49,6 +51,8 @@ export default function BasicSelect({ text, options = [] }: SelectProps) {
         );
         
         setSelectedValues(selectedLabels);
+
+        onSelectionChange(selectedLabels);
     };
     
     return (
