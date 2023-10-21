@@ -10,7 +10,7 @@ import {
   Button
 } from "@mui/material";
 import BasicSelect from "../select-hard/select";
-
+import { registerCandidate } from "@/api/apiService";
 
 
 export default function Register() {
@@ -20,6 +20,8 @@ export default function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [password2, setPassword2] = useState("")
+  const [techSkills, setTechSkills] = useState<string[]>([]);
+  const [softSkills, setSoftSkills] = useState<string[]>([]);
 
 
 
@@ -70,6 +72,15 @@ const arePasswordsEqual = () => {
   return password === password2;
 };
 
+const handleTechSkillsChange = (selectedSkills: string[]) => {
+  setTechSkills(selectedSkills);
+};
+
+const handleSoftSkillsChange = (selectedSkills: string[]) => {
+  setSoftSkills(selectedSkills);
+};
+
+
 const tech_skill = [
   { value: '1', label: 'Frontend' },
   { value: '2', label: 'Backend' },
@@ -107,9 +118,33 @@ const soft_skill = [
 { value: '8', label: 'Management' },
 ]; 
 
+const handleSubmit = async (event: React.FormEvent) => {
+  event.preventDefault(); 
+  
+  if (isValidFullName() && isValidPhone(phone) && isEmailValid(email) && arePasswordsEqual()) {
+    const candidateData = {
+      email,
+      phone,
+      password,
+      fullname: getFullName(),
+      soft_skills: softSkills, 
+      tech_skills: techSkills
+    };
+    console.log("Datos que se enviarán:", candidateData);
+    try {
+      const response = await registerCandidate(email, phone, password, getFullName(), softSkills, techSkills);
+      // Aquí puedes manejar la respuesta, como redirigir al usuario o mostrar un mensaje
+    } catch (error) {
+      console.error("Error al registrar el candidato:", error);
+    }
+  } else {
+    // Aquí puedes mostrar un mensaje de error o manejar la validación de manera más detallada
+  }
+};
 
 
   return (
+    
     <Grid container spacing={2} padding={2}>
       <Grid item xs={12} md={6} gap={2}>
         <Stack direction="column" alignItems="center">
@@ -118,7 +153,9 @@ const soft_skill = [
               <Box padding={3} textAlign="center">
                 <Typography variant="h5">Registrarme como candidato</Typography>
                 <Box padding={3}>
+                <form onSubmit={handleSubmit}> 
                   <Stack direction="column" spacing={6}>
+                  
                   <Grid container>
                       <Grid item xs={6}>
                       <TextField
@@ -171,10 +208,6 @@ const soft_skill = [
                     />
                     </Grid>
                     </Grid>
-
-
-
-
                     <Grid container>
                       <Grid item xs={6}>
                         <TextField
@@ -205,8 +238,18 @@ const soft_skill = [
                         />
                       </Grid>
                     </Grid>
-                    <BasicSelect text='Habilidades Técnicas' options={ tech_skill }/>
-                    <BasicSelect text='Habilidades Blandas' options={ soft_skill }/>
+                    <BasicSelect
+                    text='Habilidades Técnicas' 
+                    options={tech_skill}
+                    selectedOptions={techSkills}
+                    onSelectionChange={setTechSkills}
+                    />
+                    <BasicSelect 
+                    text='Habilidades Blandas' 
+                    options={soft_skill}
+                    selectedOptions={softSkills}
+                    onSelectionChange={setSoftSkills}
+                    />
 
 
                     <Button
@@ -224,12 +267,14 @@ const soft_skill = [
                       Registrarme
                     </Button>
                   </Stack>
+                  </form>
                 </Box>
               </Box>
             </Card>
           </Box>
         </Stack>
       </Grid>
+      
       <Grid item xs={12} md={6}>
         <Stack direction="column" justifyContent="space-between">
           <Typography

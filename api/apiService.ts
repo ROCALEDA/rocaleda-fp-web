@@ -53,3 +53,20 @@ export const registerCompany = async (email: string, password: string, name: str
     return { status: 500, data: null, error: (error as Error).message }; 
   }
 };
+
+
+export const registerCandidate = async (email: string, phone: string, password: string, fullname: string, soft_skills: string[], tech_skills: string[]): Promise<ApiResponse> => {
+
+  try {
+    return await fetchData("candidate", "POST", {
+      email,
+      phone,
+      password,
+      fullname,
+      soft_skills,
+      tech_skills
+    });
+  } catch (error) {
+    return { status: 500, data: null, error: (error as Error).message };
+  }
+};
