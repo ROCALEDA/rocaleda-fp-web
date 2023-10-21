@@ -10,6 +10,7 @@ import {
   Button
 } from "@mui/material";
 import BasicSelect from "../select-hard/select";
+import { enqueueSnackbar } from "notistack";
 import { registerCandidate } from "@/api/apiService";
 
 
@@ -133,13 +134,19 @@ const handleSubmit = async (event: React.FormEvent) => {
     console.log("Datos que se enviarán:", candidateData);
     try {
       const response = await registerCandidate(email, phone, password, getFullName(), softSkills, techSkills);
-      // Aquí puedes manejar la respuesta, como redirigir al usuario o mostrar un mensaje
+      if (response && response.status === 200) {
+        enqueueSnackbar('Registro completo exitoso', { variant: 'success' });
+        window.location.href = "/proyectos";
+      }
     } catch (error) {
-      console.error("Error al registrar el candidato:", error);
+      //console.error("Error al registrar el candidato:", error);
+      enqueueSnackbar("Error al registrar el candidato", { variant: "error" });
     }
   } else {
-    // Aquí puedes mostrar un mensaje de error o manejar la validación de manera más detallada
+    enqueueSnackbar("Llene todos los campos", { variant: "error" });
+
   }
+  
 };
 
 
