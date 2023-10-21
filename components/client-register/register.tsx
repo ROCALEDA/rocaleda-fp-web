@@ -151,6 +151,7 @@ export default function Register() {
                           onChange={handlePassword2Change}
                           error={password2 !== "" && !arePasswordsEqual()}
                           helperText={password2 !== "" && !arePasswordsEqual() ? "Las contraseñas no coinciden" : ""}
+                          data-testid="password2"
                         />
                       </Grid>
                     </Grid>
