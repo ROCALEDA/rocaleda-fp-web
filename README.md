@@ -26,6 +26,7 @@ npm run dev
    - http://localhost:3000
    - http://localhost:3000/login
    - http://localhost:3000/register
+   - http://localhost:3000/candidate
 
 
 6. Ejecutar Cypress en modo interactivo
