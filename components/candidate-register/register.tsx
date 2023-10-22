@@ -12,7 +12,7 @@ import {
 import BasicSelect from "../select-hard/select";
 import { enqueueSnackbar } from "notistack";
 import { registerCandidate } from "@/api/apiService";
-
+import Link from "next/link";
 
 export default function Register() {
   const [nombre, setName] = useState("");
@@ -131,22 +131,23 @@ const handleSubmit = async (event: React.FormEvent) => {
       soft_skills: softSkills, 
       tech_skills: techSkills
     };
-    console.log("Datos que se enviarán:", candidateData);
+
     try {
       const response = await registerCandidate(email, phone, password, getFullName(), softSkills, techSkills);
       if (response && response.status === 200) {
         enqueueSnackbar('Registro completo exitoso', { variant: 'success' });
-        window.location.href = "/proyectos";
+        window.location.href = "/login";
+      } else {
+        // En caso de que la respuesta no sea exitosa pero no haya un error lanzado
+        enqueueSnackbar('Algo salió mal al registrarse. Por favor, inténtelo de nuevo.', { variant: 'error' });
       }
     } catch (error) {
-      //console.error("Error al registrar el candidato:", error);
-      enqueueSnackbar("Error al registrar el candidato", { variant: "error" });
+      // Ahora, si el servicio lanza un error, se mostrará el mensaje del error al usuario
+      enqueueSnackbar(error.message, { variant: "error" });
     }
   } else {
     enqueueSnackbar("Llene todos los campos", { variant: "error" });
-
-  }
-  
+  } 
 };
 
 
@@ -257,8 +258,6 @@ const handleSubmit = async (event: React.FormEvent) => {
                     selectedOptions={softSkills}
                     onSelectionChange={setSoftSkills}
                     />
-
-
                     <Button
                       type="submit"
                       variant="contained"
@@ -300,9 +299,10 @@ const handleSubmit = async (event: React.FormEvent) => {
           </Box>
           <Box paddingTop={4}>
             <Typography variant="h5" gutterBottom>
-              Ya tienes una cuenta?
+              ¿Ya tienes una cuenta?
             </Typography>
             <Stack direction="row" spacing={2} sx={{ width: "30%" }}>
+            <Link href="/login" passHref>
               <Button
                 type="submit"
                 variant="contained"
@@ -311,6 +311,7 @@ const handleSubmit = async (event: React.FormEvent) => {
               >
                 Ingresar
               </Button>
+              </Link>
             </Stack>
           </Box>
         </Stack>
