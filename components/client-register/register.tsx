@@ -14,6 +14,7 @@ import * as Yup from 'yup';
 import { enqueueSnackbar } from "notistack";
 import { registerCompany } from "@/api/apiService";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const validationSchema = Yup.object().shape({
   company: Yup.string()
@@ -35,6 +36,7 @@ const validationSchema = Yup.object().shape({
 });
 
 export default function Register() {
+  const router = useRouter();
   const formik = useFormik({
     initialValues: {
       company: '',
@@ -45,17 +47,22 @@ export default function Register() {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      const { email, phone, password, company } = values;
-      const response = await registerCompany(email, phone, password, company);
+      try {
+        const { email, phone, password, company } = values;
+        const response = await registerCompany(email, phone, password, company);
 
-      if (response && response.status === 200) {
-        enqueueSnackbar('Registro completo exitoso', { variant: 'success' });
-        window.location.href = "/proyectos";
-      } else if (response && response.error) {
-        enqueueSnackbar(`Error: ${response.error}`, { variant: 'error' });
-      } else {
-        enqueueSnackbar('Hubo un error al realizar registro de usuario. Intente nuevamente.', { variant: 'error' });
+        if (response && response.status === 200) {
+          enqueueSnackbar('Registro completo exitoso', { variant: 'success' });
+          router.push('/login');
+        } else if (response && response.error) {
+          enqueueSnackbar(`Error: ${response.error}`, { variant: 'error' });
+        } else {
+          enqueueSnackbar('Hubo un error al realizar registro de usuario. Intente nuevamente.', { variant: 'error' });
+        }
+      }catch(error: any){
+        enqueueSnackbar(error.message, { variant: "error" });
       }
+      
     }
   });
 
@@ -73,9 +80,9 @@ export default function Register() {
                     <TextField
                       label="Compañía"
                       variant="standard"
-                      name="compañia"
+                      name="company"
                       fullWidth
-                      id="compañia"
+                      id="company"
                       autoFocus
                       value={formik.values.company}
                       onChange={formik.handleChange}
@@ -85,6 +92,8 @@ export default function Register() {
                     <TextField
                       label="Correo"
                       type="email"
+                      name='email'
+                      id='email'
                       variant="standard"
                       value={formik.values.email}
                       onChange={formik.handleChange}
@@ -93,6 +102,8 @@ export default function Register() {
                     />
                     <TextField
                       label="Teléfono"
+                      name='phone'
+                      id='phone'
                       variant="standard"
                       value={formik.values.phone}
                       onChange={formik.handleChange}
@@ -105,6 +116,7 @@ export default function Register() {
                           label="Contraseña"
                           type="password"
                           id="password"
+                          name='password'
                           autoComplete="new-password"
                           variant="standard"
                           value={formik.values.password}
@@ -118,6 +130,7 @@ export default function Register() {
                           label="Repetir contraseña"
                           type="password"
                           id="password2"
+                          name='password2'
                           autoComplete="new-password"
                           variant="standard"
                           value={formik.values.password2}
