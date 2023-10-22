@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import {
   Box,
   Card,
@@ -9,79 +9,54 @@ import {
   Stack,
   Button,
 } from "@mui/material";
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
 import { enqueueSnackbar } from "notistack";
 import { registerCompany } from "@/api/apiService";
 
+const validationSchema = Yup.object().shape({
+  company: Yup.string()
+    .max(50, 'El nombre de la compañía debe tener 50 caracteres o menos')
+    .matches(/^[^\d]*$/, 'El nombre de la compañía no debe contener números')
+    .required('Este campo es obligatorio'),
+  email: Yup.string()
+    .email('Por favor ingresa un correo válido')
+    .required('Este campo es obligatorio'),
+  phone: Yup.string()
+    .matches(/^\+?\d{1,15}$/, 'Por favor ingresa un número de teléfono válido (máximo 15 dígitos)')
+    .required('Este campo es obligatorio'),
+  password: Yup.string()
+    .min(8, 'La contraseña debe tener al menos 8 caracteres')
+    .required('Este campo es obligatorio'),
+  password2: Yup.string()
+    .oneOf([Yup.ref('password')], 'Las contraseñas no coinciden')
+    .required('Este campo es obligatorio')
+});
+
 export default function Register() {
-  const [company, setCompany] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
-  const [password, setPassword] = useState("");
-  const [password2, setPassword2] = useState("");
+  const formik = useFormik({
+    initialValues: {
+      company: '',
+      email: '',
+      phone: '',
+      password: '',
+      password2: ''
+    },
+    validationSchema: validationSchema,
+    onSubmit: async (values) => {
+      const { email, phone, password, company } = values;
+      const response = await registerCompany(email, phone, password, company);
 
-  const handleCompanyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    if (value.length <= 50 && !/\d/.test(value)) {
-      setCompany(value);
+      if (response && response.status === 200) {
+        enqueueSnackbar('Registro completo exitoso', { variant: 'success' });
+        window.location.href = "/proyectos";
+      } else if (response && response.error) {
+        enqueueSnackbar(`Error: ${response.error}`, { variant: 'error' });
+      } else {
+        enqueueSnackbar('Hubo un error al realizar registro de usuario. Intente nuevamente.', { variant: 'error' });
+      }
     }
-  };
-
-  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(e.target.value);
-  };
-
-  const isValidPhone = (phone: string) => {
-    const phonePattern = /^\+?\d{1,15}$/;
-    return phonePattern.test(phone);
-  };
-
-  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newPhoneValue = e.target.value;
-    if (newPhoneValue === "+" || /^\+?\d{0,15}$/.test(newPhoneValue)) {
-      setPhone(newPhoneValue);
-    }
-  };
-
-  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword(e.target.value);
-  };
-
-  const handlePassword2Change = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword2(e.target.value);
-  };
-
-  const isEmailValid = (email: string) => {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-  };
-
-  
-
-  const arePasswordsEqual = () => {
-    return password === password2;
-  };
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    const payload = {
-      email: email,
-      phone: phone,
-      password: password,
-      name: company
-    };
-    console.log(payload);
-    const response = await registerCompany(payload.email, payload.phone ,payload.password, payload.name);
-
-    if (response && response.status === 200) {
-      enqueueSnackbar('Registro completo exitoso', { variant: 'success' });
-      window.location.href = "/proyectos";
-    } else if (response && response.error) {
-      enqueueSnackbar(`Error: ${response.error}`, { variant: 'error' });
-    } else {
-      enqueueSnackbar('Hubo un error al realizar registro de usuario. Intente nuevamente.', { variant: 'error' });
-    }
-  
-  };
+  });
 
   return (
     <Grid container spacing={2} padding={2}>
@@ -92,65 +67,62 @@ export default function Register() {
               <Box padding={3} textAlign="center">
                 <Typography variant="h5">Registrar mi empresa</Typography>
                 <Box padding={3}>
-                <form onSubmit={handleSubmit}>
+                <form noValidate onSubmit={formik.handleSubmit}>
                   <Stack direction="column" spacing={6}>
                     <TextField
                       label="Compañía"
                       variant="standard"
                       name="compañia"
-                      required
                       fullWidth
                       id="compañia"
                       autoFocus
-                      value={company}
-                      onChange={handleCompanyChange}
+                      value={formik.values.company}
+                      onChange={formik.handleChange}
+                      error={formik.touched.company && Boolean(formik.errors.company)}
+                      helperText={formik.touched.company && formik.errors.company}
                     />
                     <TextField
                       label="Correo"
-                      required
                       type="email"
                       variant="standard"
-                      value={email}
-                      onChange={handleEmailChange}
-                      error={!isEmailValid(email) && email !== ""}
-                      helperText={!isEmailValid(email) && email !== "" ? "Por favor ingresa un correo válido" : ""}
+                      value={formik.values.email}
+                      onChange={formik.handleChange}
+                      error={formik.touched.email && !!formik.errors.email}
+                      helperText={formik.touched.email && formik.errors.email}
                     />
                     <TextField
                       label="Teléfono"
-                      required
                       variant="standard"
-                      value={phone}
-                      onChange={handlePhoneChange}
-                      error={!isValidPhone(phone) && phone !== ""}
-                      helperText={!isValidPhone(phone) && phone !== "" ? "Por favor ingresa un número de teléfono válido (máximo 15 dígitos)" : "Ejemplo: +573503325442"}
+                      value={formik.values.phone}
+                      onChange={formik.handleChange}
+                      error={formik.touched.phone && !!formik.errors.phone}
+                      helperText={formik.touched.phone && formik.errors.phone}
                       />
                     <Grid container>
                       <Grid item xs={6}>
                         <TextField
                           label="Contraseña"
-                          required
                           type="password"
                           id="password"
                           autoComplete="new-password"
                           variant="standard"
-                          value={password}
-                          onChange={handlePasswordChange}
-                          error={password.length < 8 && password !== ""}
-                          helperText={password.length < 8 && password !== "" ? "La contraseña debe tener al menos 8 caracteres" : ""}
+                          value={formik.values.password}
+                          onChange={formik.handleChange}
+                          error={formik.touched.password && !!formik.errors.password}
+                          helperText={formik.touched.password && formik.errors.password}
                         />
                       </Grid>
                       <Grid item xs={6}>
                         <TextField
                           label="Repetir contraseña"
-                          required
                           type="password"
                           id="password2"
                           autoComplete="new-password"
                           variant="standard"
-                          value={password2}
-                          onChange={handlePassword2Change}
-                          error={password2 !== "" && !arePasswordsEqual()}
-                          helperText={password2 !== "" && !arePasswordsEqual() ? "Las contraseñas no coinciden" : ""}
+                          value={formik.values.password2}
+                          onChange={formik.handleChange}
+                          error={formik.touched.password2 && !!formik.errors.password2}
+                          helperText={formik.touched.password2 && formik.errors.password2}
                         />
                       </Grid>
                     </Grid>
