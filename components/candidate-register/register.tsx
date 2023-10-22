@@ -15,6 +15,7 @@ import BasicSelect from "../select-hard/select";
 import { enqueueSnackbar } from "notistack";
 import { registerCandidate } from "@/api/apiService";
 import Link from "next/link";
+import { useRouter } from 'next/navigation';
 
 const validationSchema = Yup.object().shape({
   nombre: Yup.string().required('Requerido').max(50, 'Máximo 50 caracteres').matches(/^[^\d]+$/, 'No se permiten números'),
@@ -64,6 +65,7 @@ const soft_skill = [
 ]; 
 
 export default function Register() {
+  const router = useRouter();
   const formik = useFormik({
     initialValues: {
       nombre: '',
@@ -82,7 +84,7 @@ export default function Register() {
         const response = await registerCandidate(values.email, values.phone, values.password, `${values.nombre} ${values.apellido}`, values.softSkills, values.techSkills);
         if (response && response.status === 200) {
           enqueueSnackbar('Registro completo exitoso', { variant: 'success' });
-          window.location.href = "/proyectos";
+          router.push('/login');
         } else {
           enqueueSnackbar('Algo salió mal al registrarse. Por favor, inténtelo de nuevo.', { variant: 'error' });
         }
