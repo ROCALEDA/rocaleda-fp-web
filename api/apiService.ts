@@ -21,7 +21,7 @@ const fetchData = async (
 
   if (!response.ok) {
     console.log("data", data);
-    const errorMessage = data.detail?.[0].msg || "Error occurred";
+    const errorMessage = data.detail?.[0].msg || data.detail || "Error occurred";
     throw new Error(errorMessage);
   }
 
