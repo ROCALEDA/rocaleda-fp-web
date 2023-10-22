@@ -8,9 +8,13 @@ import {
   Button,
   TextField,
   Typography,
+  CircularProgress,
 } from "@mui/material";
 import * as Yup from "yup";
+import { useState } from "react";
 import { useFormik } from "formik";
+import { useRouter } from "next/navigation";
+
 import { enqueueSnackbar } from "notistack";
 import { login } from "@/api/apiService";
 
@@ -22,6 +26,9 @@ const validationSchema = Yup.object({
 });
 
 export default function Login() {
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
+
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -36,13 +43,14 @@ export default function Login() {
   });
 
   const onLogin = async (values: { email: string; password: string }) => {
+    setLoading(true);
     try {
       const { data, status } = await login(values.email, values.password);
       console.log(data);
       enqueueSnackbar(`Sesión iniciada (${status})`, { variant: "success" });
       if (data.token) {
         localStorage.setItem("token", data.token);
-        window.location.href = "/proyectos";
+        router.push("/proyectos");
       } else {
         // Handle errors
         console.error("Authentication failed");
@@ -50,6 +58,8 @@ export default function Login() {
     } catch (error) {
       const errorMessage = (error as Error).message;
       enqueueSnackbar(errorMessage, { variant: "error" });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -92,8 +102,15 @@ export default function Login() {
                           formik.touched.password && formik.errors.password
                         }
                       />
-                      <Button variant="contained" type="submit">
-                        Ingresar
+                      <Button
+                        variant="contained"
+                        type="submit"
+                        disabled={loading}
+                        endIcon={
+                          loading ? <CircularProgress size={20} /> : null
+                        }
+                      >
+                        {loading ? "Ingresando..." : "Ingresar"}
                       </Button>
                     </Stack>
                   </form>

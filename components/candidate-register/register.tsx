@@ -1,5 +1,7 @@
 "use client";
-import React, { useState } from 'react';
+import React from 'react';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
 import {
   Box,
   Card,
@@ -12,76 +14,19 @@ import {
 import BasicSelect from "../select-hard/select";
 import { enqueueSnackbar } from "notistack";
 import { registerCandidate } from "@/api/apiService";
+import Link from "next/link";
+import { useRouter } from 'next/navigation';
 
-
-export default function Register() {
-  const [nombre, setName] = useState("");
-  const [apellido, setLastName] = useState("");
-  const [phone, setPhone] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [password2, setPassword2] = useState("")
-  const [techSkills, setTechSkills] = useState<string[]>([]);
-  const [softSkills, setSoftSkills] = useState<string[]>([]);
-
-
-
-  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    if (value.length <= 50 && !/\d/.test(value)) {
-      setName(value);
-    }
-  };
-  const handleLastNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    if (value.length <= 50 && !/\d/.test(value)) { 
-      setLastName(value);
-    }
-};
-function getFullName() {
-  return `${nombre} ${apellido}`;
-}
-
-function isValidFullName() {
-  const fullName = getFullName();
-  return fullName.length <= 50 && !/\d/.test(fullName);
-}
-const isValidPhone = (phone: string) => {
-  const phonePattern = /^\+?\d{1,15}$/;
-  return phonePattern.test(phone);
-};
-const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  const newPhoneValue = e.target.value;
-  if (newPhoneValue === "+" || /^\+?\d{0,15}$/.test(newPhoneValue)) {
-    setPhone(newPhoneValue);
-  }
-};
-const isEmailValid = (email: string) => {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-};
-const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  setEmail(e.target.value);
-};
-const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  setPassword(e.target.value);
-};
-
-const handlePassword2Change = (e: React.ChangeEvent<HTMLInputElement>) => {
-  setPassword2(e.target.value);
-};
-const arePasswordsEqual = () => {
-  return password === password2;
-};
-
-const handleTechSkillsChange = (selectedSkills: string[]) => {
-  setTechSkills(selectedSkills);
-};
-
-const handleSoftSkillsChange = (selectedSkills: string[]) => {
-  setSoftSkills(selectedSkills);
-};
-
-
+const validationSchema = Yup.object().shape({
+  nombre: Yup.string().required('Requerido').max(50, 'Máximo 50 caracteres').matches(/^[^\d]+$/, 'No se permiten números'),
+  apellido: Yup.string().required('Requerido').max(50, 'Máximo 50 caracteres').matches(/^[^\d]+$/, 'No se permiten números'),
+  email: Yup.string().required('Requerido').email('Correo inválido'),
+  phone: Yup.string().required('Requerido').matches(/^\+?\d{0,15}$/, 'Número de teléfono inválido'),
+  password: Yup.string().required('Requerido').min(6, 'Debe tener al menos 6 caracteres'),
+  password2: Yup.string().nullable().oneOf([Yup.ref('password'), null], 'Las contraseñas deben coincidir'),
+  techSkills: Yup.array().min(1, 'Selecciona al menos una habilidad técnica'),
+  softSkills: Yup.array().min(1, 'Selecciona al menos una habilidad blanda'),
+});
 const tech_skill = [
   { value: '1', label: 'Frontend' },
   { value: '2', label: 'Backend' },
@@ -119,39 +64,37 @@ const soft_skill = [
 { value: '8', label: 'Management' },
 ]; 
 
-const handleSubmit = async (event: React.FormEvent) => {
-  event.preventDefault(); 
-  
-  if (isValidFullName() && isValidPhone(phone) && isEmailValid(email) && arePasswordsEqual()) {
-    const candidateData = {
-      email,
-      phone,
-      password,
-      fullname: getFullName(),
-      soft_skills: softSkills, 
-      tech_skills: techSkills
-    };
-    console.log("Datos que se enviarán:", candidateData);
-    try {
-      const response = await registerCandidate(email, phone, password, getFullName(), softSkills, techSkills);
-      if (response && response.status === 200) {
-        enqueueSnackbar('Registro completo exitoso', { variant: 'success' });
-        window.location.href = "/proyectos";
+export default function Register() {
+  const router = useRouter();
+  const formik = useFormik({
+    initialValues: {
+      nombre: '',
+      apellido: '',
+      email: '',
+      phone: '',
+      password: '',
+      password2: '',
+      techSkills: [],
+      softSkills: [],
+    },
+    validationSchema: validationSchema,
+    onSubmit: async (values) => {
+      console.log("Valores enviados:", values); 
+      try {
+        const response = await registerCandidate(values.email, values.phone, values.password, `${values.nombre} ${values.apellido}`, values.softSkills, values.techSkills);
+        if (response && response.status === 200) {
+          enqueueSnackbar('Registro completo exitoso', { variant: 'success' });
+          router.push('/login');
+        } else {
+          enqueueSnackbar('Algo salió mal al registrarse. Por favor, inténtelo de nuevo.', { variant: 'error' });
+        }
+      } catch (error: any) {
+        enqueueSnackbar(error.message, { variant: "error" });
       }
-    } catch (error) {
-      //console.error("Error al registrar el candidato:", error);
-      enqueueSnackbar("Error al registrar el candidato", { variant: "error" });
-    }
-  } else {
-    enqueueSnackbar("Llene todos los campos", { variant: "error" });
-
-  }
-  
-};
-
+    },
+  });
 
   return (
-    
     <Grid container spacing={2} padding={2}>
       <Grid item xs={12} md={6} gap={2}>
         <Stack direction="column" alignItems="center">
@@ -160,120 +103,127 @@ const handleSubmit = async (event: React.FormEvent) => {
               <Box padding={3} textAlign="center">
                 <Typography variant="h5">Registrarme como candidato</Typography>
                 <Box padding={3}>
-                <form onSubmit={handleSubmit}> 
-                  <Stack direction="column" spacing={6}>
-                  
-                  <Grid container>
-                      <Grid item xs={6}>
-                      <TextField
-                      required
-                      label="Nombre"
-                      type="text"
-                      variant="standard"
-                      name="nombre"
-                      value={nombre}
-                      onChange={handleNameChange}
+                  <form noValidate onSubmit={formik.handleSubmit}> 
+                    <Stack direction="column" spacing={6}>
+                      <Grid container>
+                        <Grid item xs={6}>
+                          <TextField
+                            //required
+                            label="Nombre"
+                            type="text"
+                            variant="standard"
+                            name="nombre"
+                            value={formik.values.nombre}
+                            onChange={formik.handleChange}
+                            error={formik.touched.nombre && !!formik.errors.nombre}
+                            helperText={formik.touched.nombre && formik.errors.nombre}
+                          />
+                        </Grid>
+                        <Grid item xs={6}>
+                          <TextField
+                            //required
+                            label="Apellido"
+                            type="text"
+                            variant="standard"
+                            name="apellido"
+                            value={formik.values.apellido}
+                            onChange={formik.handleChange}
+                            error={formik.touched.apellido && !!formik.errors.apellido}
+                            helperText={formik.touched.apellido && formik.errors.apellido}
+                          />
+                        </Grid>
+                      </Grid>
+
+                      <Grid container spacing={2}>
+                        <Grid item xs={11}>
+                          <TextField
+                            //required
+                            fullWidth
+                            label="Correo"
+                            type="email"
+                            variant="standard"
+                            name="email"
+                            value={formik.values.email}
+                            onChange={formik.handleChange}
+                            error={formik.touched.email && !!formik.errors.email}
+                            helperText={formik.touched.email && formik.errors.email}
+                          />
+                        </Grid>
+                      </Grid>
+
+                      <Grid container spacing={2}>
+                        <Grid item xs={11}>
+                          <TextField
+                            label="Teléfono"
+                            fullWidth
+                            //required
+                            variant="standard"
+                            name="phone"
+                            value={formik.values.phone}
+                            onChange={formik.handleChange}
+                            error={formik.touched.phone && !!formik.errors.phone}
+                            helperText={formik.touched.phone && formik.errors.phone}
+                          />
+                        </Grid>
+                      </Grid>
+
+                      <Grid container>
+                        <Grid item xs={6}>
+                          <TextField
+                            //required
+                            label="Contraseña"
+                            type="password"
+                            name="password"
+                            variant="standard"
+                            value={formik.values.password}
+                            onChange={formik.handleChange}
+                            error={formik.touched.password && !!formik.errors.password}
+                            helperText={formik.touched.password && formik.errors.password}
+                          />
+                        </Grid>
+                        <Grid item xs={6}>
+                          <TextField
+                            //required
+                            label="Repetir contraseña"
+                            type="password"
+                            name="password2"
+                            variant="standard"
+                            value={formik.values.password2}
+                            onChange={formik.handleChange}
+                            error={formik.touched.password2 && !!formik.errors.password2}
+                            helperText={formik.touched.password2 && formik.errors.password2}
+                          />
+                        </Grid>
+                      </Grid>
+
+                      <BasicSelect
+                        text='Habilidades Técnicas' 
+                        options={tech_skill}
+                        selectedOptions={formik.values.techSkills}
+                        onSelectionChange={(selected) => formik.setFieldValue('techSkills', selected)}
                       />
-                      </Grid>
-                      <Grid item xs={6}>
-                        <TextField
-                          required
-                          label="Apellido"
-                          type="text"
-                          variant="standard"
-                          value={apellido}
-                          onChange={handleLastNameChange}
-                        />
-                      </Grid>
-                    </Grid>
-                    <Grid container spacing={2}>
-                    <Grid item xs={11}>
-                    <TextField
-                      required
-                      fullWidth
-                      label="Correo"
-                      type="email"
-                      variant="standard"
-                      value={email}
-                      onChange={handleEmailChange}
-                      error={!isEmailValid(email) && email !== ""}
-                      helperText={!isEmailValid(email) && email !== "" ? "Por favor ingresa un correo válido" : ""}
-                    />
-                    </Grid>
-                    </Grid>
-                    <Grid container spacing={2}>
-                    <Grid item xs={11}>
-                    <TextField
-                    label="Teléfono"
-                    fullWidth
-                    required
-                    variant="standard"
-                    value={phone}
-                    onChange={handlePhoneChange}
-                    error={!isValidPhone(phone) && phone !== ""}
-                    helperText={!isValidPhone(phone) && phone !== "" ? "Por favor ingresa un número de teléfono válido (máximo 15 dígitos) con o sin + inicial" : "Ejemplo: +573503325442"}
-                    />
-                    </Grid>
-                    </Grid>
-                    <Grid container>
-                      <Grid item xs={6}>
-                        <TextField
-                          required
-                          label="Contraseña"
-                          type="password"
-                          id="password"
-                          autoComplete="new-password"
-                          variant="standard"
-                          value={password}
-                          onChange={handlePasswordChange}
-                          error={password.length < 6 && password !== ""}
-                          helperText={password.length < 6 && password !== "" ? "La contraseña debe tener al menos 6 caracteres" : ""}
-                        />
-                      </Grid>
-                      <Grid item xs={6}>
-                        <TextField
-                          required
-                          label="Repetir contraseña"
-                          type="password"
-                          id="password2"
-                          autoComplete="new-password"
-                          variant="standard"
-                          value={password2}
-                          onChange={handlePassword2Change}
-                          error={password2 !== "" && !arePasswordsEqual()}
-                          helperText={password2 !== "" && !arePasswordsEqual() ? "Las contraseñas no coinciden" : ""}
-                        />
-                      </Grid>
-                    </Grid>
-                    <BasicSelect
-                    text='Habilidades Técnicas' 
-                    options={tech_skill}
-                    selectedOptions={techSkills}
-                    onSelectionChange={setTechSkills}
-                    />
-                    <BasicSelect 
-                    text='Habilidades Blandas' 
-                    options={soft_skill}
-                    selectedOptions={softSkills}
-                    onSelectionChange={setSoftSkills}
-                    />
+                      <BasicSelect 
+                        text='Habilidades Blandas' 
+                        options={soft_skill}
+                        selectedOptions={formik.values.softSkills}
+                        onSelectionChange={(selected) => formik.setFieldValue('softSkills', selected)}
+                      />
 
-
-                    <Button
-                      type="submit"
-                      variant="contained"
-                      sx={{
-                        mt: 3,
-                        mb: 2,
-                        backgroundColor: "#A15CAC",
-                        "&:hover": {
-                          backgroundColor: "#864D8F",
-                        },
-                      }}
-                    >
-                      Registrarme
-                    </Button>
-                  </Stack>
+                      <Button
+                        type="submit"
+                        variant="contained"
+                        sx={{
+                          mt: 3,
+                          mb: 2,
+                          backgroundColor: "#A15CAC",
+                          "&:hover": {
+                            backgroundColor: "#864D8F",
+                          },
+                        }}
+                      >
+                        Registrarme
+                      </Button>
+                    </Stack>
                   </form>
                 </Box>
               </Box>
@@ -300,9 +250,10 @@ const handleSubmit = async (event: React.FormEvent) => {
           </Box>
           <Box paddingTop={4}>
             <Typography variant="h5" gutterBottom>
-              Ya tienes una cuenta?
+              ¿Ya tienes una cuenta?
             </Typography>
             <Stack direction="row" spacing={2} sx={{ width: "30%" }}>
+            <Link href="/login" passHref>
               <Button
                 type="submit"
                 variant="contained"
@@ -311,6 +262,7 @@ const handleSubmit = async (event: React.FormEvent) => {
               >
                 Ingresar
               </Button>
+              </Link>
             </Stack>
           </Box>
         </Stack>
