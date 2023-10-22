@@ -43,7 +43,7 @@ function getStyles(name: string, personName: readonly string[], theme: Theme) {
 export default function BasicSelect({ text, options = [], selectedOptions, onSelectionChange }: SelectProps) {
     const theme = useTheme();
     const [selectedValues, setSelectedValues] = React.useState<string[]>([]);
-
+    const idFriendlyText = text?.toLowerCase().replace(/ /g, '-');
     const handleChange = (event: SelectChangeEvent<typeof selectedValues>) => {
         const selectedOptionValues = event.target.value as string[];
         const selectedLabels = selectedOptionValues.map(value => 
@@ -58,10 +58,11 @@ export default function BasicSelect({ text, options = [], selectedOptions, onSel
     return (
         <div>
             <FormControl sx={{ m: 1, width: 400 }}>
-                <InputLabel id="demo-multiple-chip-label">{text}</InputLabel>
+                <InputLabel id={`${idFriendlyText}-label`}>{text}</InputLabel>
                 <Select
-                    labelId="demo-multiple-chip-label"
-                    id="demo-multiple-chip"
+                    data-testid={`select-${idFriendlyText}`}
+                    labelId={`${idFriendlyText}-label`}
+                    id={`${idFriendlyText}-select`}
                     multiple
                     value={selectedValues.map(label => 
                         options.find(option => option.label === label)?.value || ''
