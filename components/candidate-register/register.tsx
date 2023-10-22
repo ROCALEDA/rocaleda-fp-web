@@ -23,7 +23,7 @@ const validationSchema = Yup.object().shape({
   email: Yup.string().required('Requerido').email('Correo inválido'),
   phone: Yup.string().required('Requerido').matches(/^\+?\d{0,15}$/, 'Número de teléfono inválido'),
   password: Yup.string().required('Requerido').min(6, 'Debe tener al menos 6 caracteres'),
-  password2: Yup.string().oneOf([Yup.ref('password'), null], 'Las contraseñas deben coincidir'),
+  password2: Yup.string().nullable().oneOf([Yup.ref('password'), null], 'Las contraseñas deben coincidir'),
   techSkills: Yup.array().min(1, 'Selecciona al menos una habilidad técnica'),
   softSkills: Yup.array().min(1, 'Selecciona al menos una habilidad blanda'),
 });
@@ -88,7 +88,7 @@ export default function Register() {
         } else {
           enqueueSnackbar('Algo salió mal al registrarse. Por favor, inténtelo de nuevo.', { variant: 'error' });
         }
-      } catch (error) {
+      } catch (error: any) {
         enqueueSnackbar(error.message, { variant: "error" });
       }
     },
