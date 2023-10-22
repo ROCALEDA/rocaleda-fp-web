@@ -14,6 +14,7 @@ import {
 import BasicSelect from "../select-hard/select";
 import { enqueueSnackbar } from "notistack";
 import { registerCandidate } from "@/api/apiService";
+import Link from "next/link";
 
 const validationSchema = Yup.object().shape({
   nombre: Yup.string().required('Requerido').max(50, 'Máximo 50 caracteres').matches(/^[^\d]+$/, 'No se permiten números'),
@@ -82,9 +83,11 @@ export default function Register() {
         if (response && response.status === 200) {
           enqueueSnackbar('Registro completo exitoso', { variant: 'success' });
           window.location.href = "/proyectos";
+        } else {
+          enqueueSnackbar('Algo salió mal al registrarse. Por favor, inténtelo de nuevo.', { variant: 'error' });
         }
       } catch (error) {
-        enqueueSnackbar("Error al registrar el candidato", { variant: "error" });
+        enqueueSnackbar(error.message, { variant: "error" });
       }
     },
   });

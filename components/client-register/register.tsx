@@ -13,6 +13,7 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { enqueueSnackbar } from "notistack";
 import { registerCompany } from "@/api/apiService";
+import Link from "next/link";
 
 const validationSchema = Yup.object().shape({
   company: Yup.string()
@@ -166,9 +167,10 @@ export default function Register() {
           </Box>
           <Box paddingTop={4}>
             <Typography variant="h5" gutterBottom>
-              Ya tienes una cuenta?
+              ¿Ya tienes una cuenta?
             </Typography>
             <Stack direction="row" spacing={2} sx={{ width: "30%" }}>
+            <Link href="/login" passHref>
               <Button
                 type="submit"
                 variant="contained"
@@ -177,6 +179,7 @@ export default function Register() {
               >
                 Ingresar
               </Button>
+              </Link>
             </Stack>
           </Box>
         </Stack>
