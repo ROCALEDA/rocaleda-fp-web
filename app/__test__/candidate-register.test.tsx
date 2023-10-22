@@ -3,10 +3,21 @@ import { render, screen, fireEvent } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import Register from "@/components/candidate-register/register";
 import { registerCandidate } from "@/api/apiService";
+import { useRouter } from 'next/navigation';
 
-
+jest.mock('next/navigation', () => ({
+  useRouter: jest.fn(),
+}));
 describe("Register Component", () => {
   beforeEach(() => {
+    
+    (useRouter as jest.Mock).mockReturnValue({
+      route: '/',
+      pathname: '/',
+      query: '',
+      asPath: '',
+    });
+
     render(<Register />);
   });
 

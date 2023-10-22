@@ -3,8 +3,22 @@ import React from "react";
 import { render, fireEvent, waitFor } from "@testing-library/react";
 import { login } from "@/api/apiService";
 import Login from "@/components/login/login";
+import { useRouter } from 'next/navigation';
+
+jest.mock('next/navigation', () => ({
+  useRouter: jest.fn(),
+}));
 
 describe("<Login />", () => {
+  beforeEach(() => {
+    (useRouter as jest.Mock).mockReturnValue({
+      route: '/',
+      pathname: '/',
+      query: '',
+      asPath: '',
+    });
+  })
+
   test("renders the login form", () => {
     const { getByText } = render(<Login />);
     // expect(getByText("Iniciar sesión")).toBeInTheDocument();
