@@ -111,15 +111,15 @@ export default function Login() {
           </Typography>
           <Box paddingTop={4}>
             <Typography variant="h5" gutterBottom>
-              Aún no tienes una cuenta?
+              ¿Aún no tienes una cuenta?
             </Typography>
             <Stack direction="row" spacing={2}>
-              <Link href="/registro-candidato" passHref>
+              <Link href="/candidate" passHref>
                 <Button sx={{ backgroundColor: "#F4E8C9", color: "black" }}>
                   Quiero ser candidato
                 </Button>
               </Link>
-              <Link href="/registro-cliente" passHref>
+              <Link href="/register" passHref>
                 <Button sx={{ backgroundColor: "#F4E8C9", color: "black" }}>
                   Soy una empresa
                 </Button>
