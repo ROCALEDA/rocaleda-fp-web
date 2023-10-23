@@ -1,0 +1,18 @@
+.container {
+    background-color: #fff;
+    min-height: 100vh;
+}
+
+.globo {
+    margin-left: 0;
+    padding-left: 0;
+    transform: translateY(30px);
+}
+
+.nubes {
+    background-image: url('/images/cloud2.png');
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+}
+
