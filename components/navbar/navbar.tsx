@@ -56,7 +56,7 @@ function Navbar() {
     <AppBar position="relative" color="default" elevation={0}>
         <StyledToolbar>
         <div className="left-section">
-            <StyledCloudIcon/>
+            <StyledCloudIcon data-testid="cloud-icon"/>
             <StyledLogoText1 variant="h4">Quire</StyledLogoText1>
             <StyledLogoText2 variant="h6">Empresas</StyledLogoText2>
             <StyledOptionButton>Proyectos</StyledOptionButton>
