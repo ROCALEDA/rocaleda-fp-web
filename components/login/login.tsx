@@ -124,7 +124,7 @@ export default function Login() {
         <Stack direction="column" justifyContent="space-between">
           <Typography variant="h4" gutterBottom>
             Estamos felices <br />
-            por verte de nuevo
+            por verte nuevamente
           </Typography>
           <Box paddingTop={4}>
             <Typography variant="h5" gutterBottom>
