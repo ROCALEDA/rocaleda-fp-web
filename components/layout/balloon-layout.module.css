@@ -1,6 +1,5 @@
 .container {
     background-color: #fff;
-    min-height: 100vh;
 }
 
 .globo {
@@ -15,4 +14,3 @@
     background-position: center;
     height: 100vh;
 }
-
