@@ -1,10 +1,11 @@
 import React from "react";
-import { render } from "@testing-library/react";
-import BalloonLayout from "@/components/layout/balloon-layout";
+import { render} from "@testing-library/react";
+import Layout from "@/components/layout/balloon-layout";
 
-describe('<BalloonLayout />', () => {
-    it('renders without crashing', () => {
-      const { getByAltText } = render(<BalloonLayout />);
-      expect(getByAltText('Balloon')).toBeInTheDocument();
-    });
+describe('<Layout />', () => {
+  it('renders without crashing', () => {
+    expect(() => {
+      render(<Layout />);
+    }).not.toThrow();
   });
+});

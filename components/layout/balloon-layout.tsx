@@ -1,32 +1,46 @@
-import Image from "next/image";
+import { Box } from '@mui/material';
 import { ReactNode } from "react";
-import { Grid, Stack, Typography } from "@mui/material";
-
-import styles from "./balloon-layout.module.css";
 import ResponsiveAppBar from "@/components/navbar/navbar";
 
-interface BalloonLayoutProps {
-  children: ReactNode;
-}
+interface LayoutProps {
+    children: ReactNode;
+  }
 
+export default function Layout({ children  }: LayoutProps) {
+    return (
+        <Box 
+        role="img"
+        alt="Balloon"
+            sx={{
+                backgroundImage: 'linear-gradient(to right, transparent 50%, transparent 50%), url(/images/cloud3.jpg)',
+                backgroundSize: '50% 100%',
+                backgroundPosition: 'right',
+                position: 'relative',
+                backgroundRepeat: 'no-repeat'
+            }}
+        >
+            <ResponsiveAppBar/>
 
-export default function BalloonLayout({ children  }: BalloonLayoutProps) {
-  return (
-    <div className={styles.container}>
-        <ResponsiveAppBar/>
-      <Grid container spacing={2} padding={2} style={{ padding: '0' }}>
-        <Grid item xs={12} md={6} display="flex" alignItems="flex-start" justifyContent="flex-start" className={styles.globo}>
-          <Image
-            src="/images/balloon.png"
-            alt="Balloon"
-            width={111}
-            height={266}
-          />
-        </Grid>
-        <Grid item xs={12} md={6} display="flex" alignItems="center" justifyContent="flex-end" className={styles.nubes}>
-            {children}
-        </Grid>
-      </Grid>
-    </div>
-  );
+            <Box
+                sx={{
+                    position: 'absolute',
+                    top: '100px',
+                    left: 0,
+                    width: '150px',
+                    height: '250px',
+                    backgroundImage: 'url(/images/balloon.png)',
+                    backgroundSize: 'contain',
+                    backgroundRepeat: 'no-repeat'
+                }}
+            ></Box>
+
+            <Box
+                sx={{
+                    marginTop: '40px'
+                }}
+            >
+                {children}
+            </Box>
+        </Box>
+    );
 }
