@@ -5,6 +5,7 @@ import * as Yup from 'yup';
 import { TextField, Button, Paper, Typography ,Box, Modal} from '@mui/material';
 import styles from "./proyect-form.module.css";
 import ProfileModal from "@/components/profileModal/profile_modal";
+import EmployeesModal from "@/components/employeesModal/employees_modal";
 
 interface FormValues {
   name: string;
@@ -103,16 +104,10 @@ const CreateProjectForm: React.FC = () => {
                 onClick={() => setOpenFunctionaryModal(true)}>
               AÑADIR FUNCIONARIO
             </Button>
-            <Modal
-              open={openFunctionaryModal}
-              onClose={() => setOpenFunctionaryModal(false)}
-            >
-              {/* Agregar el formulario para añadir un funcionario */}
-              <div>Tu formulario de funcionario aquí</div>
-            </Modal>
-
-            {/* Agregar más campos para "Perfiles" y "Funcionarios" según lo necesites */}
-
+            <EmployeesModal 
+                open={openFunctionaryModal} 
+                onClose={() => setOpenFunctionaryModal(false)} 
+            /> 
             <Box display="flex" justifyContent="space-between" marginTop="60px">
               <Button 
                 variant="outlined" 
