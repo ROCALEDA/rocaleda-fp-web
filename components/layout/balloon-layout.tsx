@@ -12,9 +12,13 @@ export default function Layout({ children  }: LayoutProps) {
             sx={{
                 backgroundImage: 'linear-gradient(to right, transparent 50%, transparent 50%), url(/images/cloud3.jpg)',
                 backgroundSize: '50% 100%',
-                backgroundPosition: 'right',
+                minHeight: '100vh',
+                backgroundPosition: 'right center',
                 position: 'relative',
-                backgroundRepeat: 'no-repeat'
+                backgroundRepeat: 'no-repeat',
+                ['@media (max-width:600px)']: {
+                height: 'auto !important',
+        }
             }}
         >
             <ResponsiveAppBar/>
