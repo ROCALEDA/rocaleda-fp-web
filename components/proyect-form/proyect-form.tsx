@@ -3,7 +3,8 @@ import React, { useState } from 'react';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import { TextField, Button, Paper, Typography ,Box, Modal} from '@mui/material';
-import styles from "./test-layout.module.css";
+import styles from "./proyect-form.module.css";
+import ProfileModal from "@/components/profileModal/profile_modal";
 
 interface FormValues {
   name: string;
@@ -22,8 +23,9 @@ const CreateProjectForm: React.FC = () => {
     const [openFunctionaryModal, setOpenFunctionaryModal] = useState(false);
 
   return (
-    <Paper elevation={0} style={{ padding: '50px' }}>
-        <Box padding={0} textAlign="center">
+    <Paper elevation={0}  style={{ padding: '50px', marginLeft: '10px'}} sx={{
+        width: '80%'}}>
+        <Box padding={0} textAlign="left" >
       <Typography variant="h4" gutterBottom sx={{ fontFamily: 'Philosopher' }}>
         Crea tu proyecto
       </Typography>
@@ -39,7 +41,7 @@ const CreateProjectForm: React.FC = () => {
         }}
         validationSchema={validationSchema}
         onSubmit={(values, { setSubmitting }) => {
-          // Aquí puedes hacer la lógica de envío del formulario
+          // hacer la lógica de envío del formulario
           console.log(values);
           setSubmitting(false);
         }}
@@ -83,13 +85,10 @@ const CreateProjectForm: React.FC = () => {
                 style={{ marginTop: '10px' }}>
               CREAR PERFIL
             </Button>
-            <Modal
-              open={openProfileModal}
-              onClose={() => setOpenProfileModal(false)}
-            >
-              {/* Aquí puedes agregar el formulario para crear un perfil */}
-              <div>Tu formulario de perfil aquí</div>
-            </Modal>
+            <ProfileModal 
+                open={openProfileModal} 
+                onClose={() => setOpenProfileModal(false)} 
+            />
 
             <Typography variant="h6" gutterBottom style={{ marginTop: '20px' }} className={styles.tituloConFondo2}>
             <span>3. Funcionarios</span>
@@ -108,22 +107,23 @@ const CreateProjectForm: React.FC = () => {
               open={openFunctionaryModal}
               onClose={() => setOpenFunctionaryModal(false)}
             >
-              {/* Aquí puedes agregar el formulario para añadir un funcionario */}
+              {/* Agregar el formulario para añadir un funcionario */}
               <div>Tu formulario de funcionario aquí</div>
             </Modal>
 
-            {/* Aquí puedes agregar más campos para "Perfiles" y "Funcionarios" según lo necesites */}
+            {/* Agregar más campos para "Perfiles" y "Funcionarios" según lo necesites */}
 
             <Box display="flex" justifyContent="space-between" marginTop="60px">
               <Button 
                 variant="outlined" 
                 sx={{
                     mt: 3,
+                    mr: 1,
                     mb: 2
                   }}
                 onClick={() => {
-                  // Aquí puedes agregar la lógica para cancelar o limpiar el formulario
-                  // Por ejemplo, puedes redirigir al usuario a otra página o simplemente limpiar los campos del formulario
+                  // Agregar la lógica para cancelar o limpiar el formulario
+                  // redirigir al usuario a otra página o simplemente limpiar los campos del formulario
               }}>
                 Cancelar
               </Button>
@@ -134,6 +134,7 @@ const CreateProjectForm: React.FC = () => {
                 sx={{
                     mt: 3,
                     mb: 2,
+                    ml: 1,
                     backgroundColor: "#A15CAC",
                     "&:hover": {
                       backgroundColor: "#864D8F",

@@ -6,24 +6,22 @@ import PeopleIcon from '@mui/icons-material/PersonOutlineOutlined';
 
 export default function CustomCard( {number = 5} ) {
   return (
-    <Box>
+    <Box margin={5}>
     <Typography variant="h4" gutterBottom sx={{ fontFamily: 'Philosopher', mt: 10 }} >Tu proyecto</Typography>
-    <Card>
+    <Card sx={{ width: { xs: '90%', xl: '50%'}, p:2 }}>
     <CardContent>
-      <Box display="flex" justifyContent="space-between" alignItems="center">
-        <Typography variant="h4">
+      <Box display="flex"  alignItems="center">
+        <Typography variant="h5" sx = {{mr:2}}>
           Centro de estudiantes
         </Typography>
-        <Button variant="contained" style={{ borderRadius: 20, borderColor: '#D5D5D5', color: 'black', backgroundColor: '#E2E8F0'}} disableElevation>
-          Equipo pendiente
-        </Button>
+        <Chip label="Equipo pendiente" size="small" />
       </Box>
 
       <Box display="flex" flexDirection="column" alignItems="flex-start" mt={2}>
       <Chip 
         icon={<PeopleIcon sx={{ "&&": { color: "#864D8F" } }}/>} 
         label= {number}
-        sx={{ backgroundColor: '#E2C4F6',
+        sx={{ backgroundColor: '#FAE8FF',
         '& .MuiChip-label': {
             fontSize: '1.2rem', 
           }}}/>

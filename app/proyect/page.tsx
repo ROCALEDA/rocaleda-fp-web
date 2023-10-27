@@ -2,7 +2,7 @@ import BalloonLayout from "@/components/layout/balloon-layout";
 import CreateProjectForm from "@/components/proyect-form/proyect-form";
 import Layout from "@/components/layout/balloon-layout";
 import { Grid, Stack, Typography } from "@mui/material";
-import CustomCard from "@/components/proyecy-card/proyect-card";
+import CustomCard from "@/components/proyect-card/proyect-card";
 
 export default function RegisterPage() {
     return (
