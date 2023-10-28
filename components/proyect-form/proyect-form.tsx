@@ -9,6 +9,8 @@ import EditModal from "@/components/editEmployees/EditModal"
 import ProfileCard from "@/components/profileCard/profile_card";
 import EditProfileModal from "@/components/editProfile/EditProfile";
 
+
+
 interface CreateProjectFormProps {
     proyectName: string; 
     handleTitleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;

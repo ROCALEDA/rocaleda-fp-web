@@ -1,7 +1,11 @@
-import React from 'react';
+"use client";
+import React, { useState} from 'react';
 import { Modal, Box, Typography, TextField, Select, MenuItem, Button, Chip } from '@mui/material';
 import InputLabel from '@mui/material/InputLabel';
 import CancelIcon from '@mui/icons-material/Cancel'; 
+import * as yup from 'yup';
+
+
 
 interface ProfileModalProps {
   open: boolean;
@@ -55,25 +59,48 @@ const menuProps = {
     },
 };
 
+const profileValidationSchema = yup.object().shape({
+  profileName: yup.string()
+    .required("El nombre del perfil es requerido")
+    .max(50, "El nombre del perfil no puede tener más de 50 caracteres"),
+  numberOfProfiles: yup.number()
+    .required("El número de perfiles es requerido")
+    .min(1, "El mínimo de perfiles es 1")
+    .max(50, "El máximo de perfiles es 50")
+});
 
 const ProfileModal: React.FC<ProfileModalProps> = ({ open, onClose, onAdd }) => {
     const [techSkills, setTechSkills] = React.useState<string[]>([]);
     const [softSkills, setSoftSkills] = React.useState<string[]>([]);
     const [profileName, setProfileName] = React.useState<string>('');
     const [numberOfProfiles, setNumberOfProfiles] = React.useState<number>(1);
+    const [errors, setErrors] = React.useState<{ [key: string]: string }>({});
 
     const addProfile = () => {
-      onAdd({
-        profileName,
-        techSkills,
-        softSkills,
-        numberOfProfiles
-      });
-      setProfileName('');
-      setTechSkills([]);
-      setSoftSkills([]);
-      setNumberOfProfiles(1);
-      onClose();
+      profileValidationSchema.validate({ profileName, numberOfProfiles }, { abortEarly: false })
+        .then(() => {
+          onAdd({
+            profileName,
+            techSkills,
+            softSkills,
+            numberOfProfiles
+          });
+          setProfileName('');
+          setTechSkills([]);
+          setSoftSkills([]);
+          setNumberOfProfiles(1);
+          onClose();
+          setErrors({}); 
+        })
+        .catch(error => {
+          if (error instanceof yup.ValidationError) {
+            const errorMessages: { [key: string]: string } = {};
+            error.inner.forEach(err => {
+              errorMessages[err.path!] = err.message;
+            });
+            setErrors(errorMessages);
+          }
+        });
     };
 
   
@@ -100,7 +127,9 @@ const ProfileModal: React.FC<ProfileModalProps> = ({ open, onClose, onAdd }) => 
             value={profileName}
             onChange={(e) => setProfileName(e.target.value)} 
             margin="normal" 
-            variant="standard" 
+            variant="standard"
+            error={!!errors.profileName}
+            helperText={errors.profileName} 
             />
           <InputLabel id="demo-multiple-chip-label" style={{ marginTop: '40px' }}>Habilidades técnicas</InputLabel>
           <Select
@@ -167,7 +196,9 @@ const ProfileModal: React.FC<ProfileModalProps> = ({ open, onClose, onAdd }) => 
             type="number"
             value={numberOfProfiles}
             onChange={(e) => setNumberOfProfiles(parseInt(e.target.value, 10))} 
-            style={{ marginTop: '40px' }} 
+            style={{ marginTop: '40px' }}
+            error={!!errors.numberOfProfiles}
+            helperText={errors.numberOfProfiles} 
             />
   
           <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 5 }}>
