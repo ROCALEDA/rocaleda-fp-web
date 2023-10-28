@@ -10,10 +10,10 @@ import ProfileCard from "@/components/profileCard/profile_card";
 import EditProfileModal from "@/components/editProfile/EditProfile";
 
 interface CreateProjectFormProps {
-  proyectName: string; 
-  handleTitleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  proyectDescription: string; 
-  handleDescriptionChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+    proyectName: string; 
+    handleTitleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+    proyectDescription: string; 
+    handleDescriptionChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
     updateProfiles: (profiles: any[]) => void;
     updateEmployees: (employees: any[]) => void;
 }

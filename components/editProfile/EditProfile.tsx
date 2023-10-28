@@ -121,7 +121,7 @@ const EditProfileModal: React.FC<EditProfileProps> = ({ open, onClose, initialDa
   };
 
   const handleSave = () => {
-    // You might want to do some validation here.
+    // Ver validaciones
     onSave(originalProfileName,data);
     onClose();
   };
