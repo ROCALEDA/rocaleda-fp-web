@@ -1,7 +1,6 @@
 .tituloConFondo {
     position: relative;
     display: inline-block;
-    font-size: 20px; 
     z-index: 2;
 }
 
@@ -9,8 +8,13 @@
     position: relative;
     display: inline-block;
     z-index: 2;
-    margin-top: 20px;
-    margin-bottom: 20px;
+    
+}
+
+.tituloConFondo3 {
+    position: relative;
+    display: inline-block;
+    z-index: 2;
 }
 
 .tituloConFondo span::before {
@@ -19,7 +23,7 @@
     top: 78%;
     left: -2px;
     right: 0;
-    width: 113px;
+    width: 133px;
     height: 15px;  
     transform: translateY(-50%); 
     background-color: #F5E0C8;
@@ -32,7 +36,7 @@
     top: 78%;
     left: -2px; 
     right: 0;
-    width: 65px;
+    width: 70px;
     height: 15px; 
     transform: translateY(-50%);
     background-color: #F5E0C8;
@@ -45,7 +49,7 @@
     top: 78%;
     left: -2px; 
     right: 0;
-    width: 70px;
+    width: 73px;
     height: 15px; 
     transform: translateY(-50%);
     background-color: #F5E0C8;

@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React, { useState } from 'react';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
@@ -6,34 +6,58 @@ import { TextField, Button, Paper, Typography ,Box, Modal} from '@mui/material';
 import styles from "./proyect-form.module.css";
 import ProfileModal from "@/components/profileModal/profile_modal";
 import EmployeesModal from "@/components/employeesModal/employees_modal";
-
+import EmployeeCard from "@/components/employeesCard/employees_card";
+import EditModal from "@/components/editEmployees/EditModal"
 interface FormValues {
-  name: string;
-  description: string;
+    name: string;
+    description: string;
 }
 
 const validationSchema = Yup.object().shape({
-  name: Yup.string()
-    .required('El nombre es obligatorio'),
-  description: Yup.string()
-    .required('La descripción es obligatoria')
+    name: Yup.string()
+        .required('El nombre es obligatorio'),
+    description: Yup.string()
+        .required('La descripción es obligatoria')
 });
 
 const CreateProjectForm: React.FC = () => {
     const [openProfileModal, setOpenProfileModal] = useState(false);
     const [openFunctionaryModal, setOpenFunctionaryModal] = useState(false);
+    const [employees, setEmployees] = useState<Array<{ name: string; role: string }>>([]);
+    const handleAddEmployee = (employee: { name: string; role: string }) => {
+        setEmployees(prev => [...prev, employee]);
+    }
+    const [editModalOpen, setEditModalOpen] = useState(false);
+    const [selectedData, setSelectedData] = useState({ name: '', role: '' });
+    const [originalName, setOriginalName] = useState('');
+
+    const handleEditClick = (data: { name: string, role: string }) => {
+    setOriginalName(data.name);
+    setSelectedData(data);
+    setEditModalOpen(true);
+    };
+
+    const handleUpdateEmployee = (originalName, updatedData) => {
+        setEmployees(prevEmployees => {
+            return prevEmployees.map(employee => 
+                employee.name === originalName ? updatedData : employee
+            );
+        });
+    }
+
+    const handleDeleteEmployee = (employeeName) => {
+        setEmployees(prevEmployees => {
+            return prevEmployees.filter(employee => employee.name !== employeeName);
+        });
+    }
 
   return (
-    <Paper elevation={0}  style={{ padding: '50px', marginLeft: '10px'}} sx={{
-        width: '80%'}}>
+    <Paper elevation={0}  style={{ padding: '50px', marginLeft: '10px'}} sx={{width: '80%'}}>
         <Box padding={0} textAlign="left" >
-      <Typography variant="h4" gutterBottom sx={{ fontFamily: 'Philosopher' }}>
+      <Typography variant="h4" gutterBottom sx={{ fontFamily: 'Philosopher' ,paddingBottom: 3 }}>
         Crea tu proyecto
       </Typography>
         </Box>
-      <Typography variant="h6" gutterBottom className={styles.tituloConFondo}>
-        <span>1. Datos Básicos</span>
-      </Typography>
       
       <Formik<FormValues>
         initialValues={{
@@ -49,6 +73,10 @@ const CreateProjectForm: React.FC = () => {
       >
         {({ errors, touched, isSubmitting }) => (
           <Form>
+            <Typography variant="h5" gutterBottom className={styles.tituloConFondo}>
+            <span>1. Datos Básicos</span>
+            </Typography>
+            <Box p={3}>
             <Field
               name="name"
               as={TextField}
@@ -71,32 +99,48 @@ const CreateProjectForm: React.FC = () => {
               helperText={touched.description ? errors.description : ''}
               error={touched.description && Boolean(errors.description)}
             />
-            <Typography variant="h6" gutterBottom className={styles.tituloConFondo2} style={{ marginTop: '20px' }}>
+            </Box>
+            <Typography variant="h5" gutterBottom className={styles.tituloConFondo2} style={{ marginTop: '20px' }}>
               <span>2. Perfiles</span>
             </Typography>
+            <Box p={3}>
             <Typography variant="subtitle1" gutterBottom color="secondary">
                 Aún no has agregado ningún perfil
             </Typography>
-
             <Button 
                 variant="outlined" 
                 color="primary"
                 fullWidth 
                 onClick={() => setOpenProfileModal(true)}
                 style={{ marginTop: '10px' }}>
-              CREAR PERFIL
+                CREAR PERFIL
             </Button>
             <ProfileModal 
                 open={openProfileModal} 
                 onClose={() => setOpenProfileModal(false)} 
             />
+            </Box>
 
-            <Typography variant="h6" gutterBottom style={{ marginTop: '20px' }} className={styles.tituloConFondo2}>
-            <span>3. Funcionarios</span>
+            <Typography variant="h5" gutterBottom style={{ marginTop: '20px' }} className={styles.tituloConFondo3}>
+            <span>3. Funcionarios</span> <span style={{ color: '#A0AEC0', fontSize:15 }}>(opcional)</span>
             </Typography>
-            <Typography variant="subtitle1" gutterBottom color="secondary">
-                Aún no has agregado ningún funcionario
-            </Typography>
+            <Box p={3}>
+            {/* Visualizar la Lista de Empleados */}
+            {employees.length === 0 ? (
+                <Typography variant="subtitle1" gutterBottom color="secondary">
+                    Aún no has agregado ningún funcionario
+                </Typography>
+            ) : (
+                <ul>
+                    {employees.map((employee, index) => (
+                        <EmployeeCard 
+                            key={employee.name} {...employee} 
+                            onEditClick={handleEditClick}
+                            onDeleteClick={handleDeleteEmployee}
+                            />
+                    ))}
+                </ul>
+            )}
             <Button 
                 variant="outlined"
                 fullWidth 
@@ -107,7 +151,16 @@ const CreateProjectForm: React.FC = () => {
             <EmployeesModal 
                 open={openFunctionaryModal} 
                 onClose={() => setOpenFunctionaryModal(false)} 
+                onAddEmployee={handleAddEmployee}
+            />
+            <EditModal 
+                open={editModalOpen} 
+                onClose={() => setEditModalOpen(false)} 
+                initialData={selectedData} 
+                onSave={handleUpdateEmployee}
+                originalName={originalName}   
             /> 
+            </Box>
             <Box display="flex" justifyContent="space-between" marginTop="60px">
               <Button 
                 variant="outlined" 

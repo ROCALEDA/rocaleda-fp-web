@@ -63,7 +63,7 @@ const ProfileModal: React.FC<ProfileModalProps> = ({ open, onClose }) => {
       <Modal open={open} onClose={onClose}>
         <Box
           sx={{
-            width: '20%',
+            width: '30%',
             maxHeight: '100%',
             m: 'auto',
             mt: '5%',
