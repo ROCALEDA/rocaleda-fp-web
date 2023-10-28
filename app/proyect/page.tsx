@@ -8,12 +8,22 @@ import CustomCard from "@/components/proyect-card/proyect-card";
 export default function RegisterPage() {
   const [proyectName, setProyectName] = useState('');
   const [proyectDescription, setProyectDescription] = useState('');
+  const [profiles, setProfiles] = useState([]);
+  const [employees, setEmployees] = useState([]);
   const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setProyectName(event.target.value);
   };
   const handleDescriptionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setProyectDescription(event.target.value);
   };
+
+  const updateProfiles = (newProfiles:any) => {
+    setProfiles(newProfiles);
+  }
+  
+  const updateEmployees = (newEmployees:any) => {
+    setEmployees(newEmployees);
+  }
 
     return (
       <Layout>
@@ -24,12 +34,17 @@ export default function RegisterPage() {
         handleTitleChange={handleTitleChange}
         proyectDescription={proyectDescription}
         handleDescriptionChange={handleDescriptionChange}
+        updateProfiles={updateProfiles}
+        updateEmployees={updateEmployees}
         />
         </Grid>
         <Grid item xs={12} md={6}>
         <CustomCard 
+          number={5}
           proyectName={proyectName} 
-          proyectDescription= {proyectDescription} 
+          proyectDescription= {proyectDescription}
+          profiles={profiles}
+          employees={employees}
           />
         </Grid>
         </Grid>

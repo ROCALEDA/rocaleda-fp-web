@@ -1,8 +1,6 @@
 "use client";
-import React, { useState } from 'react';
-import { Formik, Form, Field } from 'formik';
-import * as Yup from 'yup';
-import { TextField, Button, Paper, Typography ,Box, Modal} from '@mui/material';
+import React, { useState} from 'react';
+import { TextField, Button, Paper, Typography ,Box} from '@mui/material';
 import styles from "./proyect-form.module.css";
 import ProfileModal from "@/components/profileModal/profile_modal";
 import EmployeesModal from "@/components/employeesModal/employees_modal";
@@ -11,26 +9,16 @@ import EditModal from "@/components/editEmployees/EditModal"
 import ProfileCard from "@/components/profileCard/profile_card";
 import EditProfileModal from "@/components/editProfile/EditProfile";
 
-interface FormValues {
-    name: string;
-    description: string;
-}
-
 interface CreateProjectFormProps {
-    proyectName: string; 
-    handleTitleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-    proyectDescription: string; 
-    handleDescriptionChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  proyectName: string; 
+  handleTitleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  proyectDescription: string; 
+  handleDescriptionChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+    updateProfiles: (profiles: any[]) => void;
+    updateEmployees: (employees: any[]) => void;
 }
 
-const validationSchema = Yup.object().shape({
-    name: Yup.string()
-        .required('El nombre es obligatorio'),
-    description: Yup.string()
-        .required('La descripción es obligatoria')
-});
-
-const CreateProjectForm: React.FC<CreateProjectFormProps> = ({ proyectName, handleTitleChange, proyectDescription, handleDescriptionChange }) => {
+const CreateProjectForm: React.FC<CreateProjectFormProps> = ({ proyectName, handleTitleChange, proyectDescription, handleDescriptionChange,updateProfiles,updateEmployees}) => {
     const [openProfileModal, setOpenProfileModal] = useState(false);
     const [openFunctionaryModal, setOpenFunctionaryModal] = useState(false);
     const [employees, setEmployees] = useState<Array<{ name: string; role: string }>>([]);
@@ -41,10 +29,7 @@ const CreateProjectForm: React.FC<CreateProjectFormProps> = ({ proyectName, hand
     const [selectedData, setSelectedData] = useState({ name: '', role: '' });
     const [originalName, setOriginalName] = useState('');
     const [profiles, setProfiles] = useState<Array<any>>([]);
-    const [modalOpen, setModalOpen] = useState(false);
-
     const [isEditModalOpen, setEditModal2Open] = React.useState(false);
-    const [profileToEdit, setProfileToEdit] = React.useState(null);
     const [selectedData2, setSelectedData2] = useState({
         profileName: '',
         techSkills: [],
@@ -81,42 +66,35 @@ const CreateProjectForm: React.FC<CreateProjectFormProps> = ({ proyectName, hand
 
     const handleUpdateProfile = (originalProfileName: string, updatedData: Profile) => {
         setProfiles(prevProfiles => {
-          return prevProfiles.map(profile => {
-            if (profile.profileName === originalProfileName) {
-              return updatedData;
-            } else {
-              return profile;
+            return prevProfiles.map(profile => {
+                if (profile.profileName === originalProfileName) {
+                return updatedData;
+                } else {
+                return profile;
             }
-          });
+            });
         });
         setEditModal2Open(false);
     };
-
-
     const handleDeleteEmployee = (employeeName: string) => {
         setEmployees(prevEmployees => {
             return prevEmployees.filter(employee => employee.name !== employeeName);
         });
     }
-
     const handleDeleteProfile = (profileName: string) => {
         setProfiles(prevProfiles => {
             return prevProfiles.filter(profile => profile.profileName!== profileName);
         });
     }
-
-
     type ProfileData = {
         profileName: string;
         techSkills: string[];
         softSkills: string[];
         numberOfProfiles: number;
     };
-
     const handleAddProfile = (profileData: ProfileData) => {
         setProfiles(prevProfiles => [...prevProfiles, profileData]);
     };
-
     const handleEditProfile = (profile: ProfileData) => {
         setOriginalProfileName(profile.profileName);
         setSelectedData2({
@@ -127,6 +105,29 @@ const CreateProjectForm: React.FC<CreateProjectFormProps> = ({ proyectName, hand
         });
         setEditModal2Open(true);
     };
+    updateProfiles(profiles);
+    updateEmployees(employees);
+
+    const handleSubmit = () => {
+
+      const projectData = {
+        name: proyectName,
+        description: proyectDescription,
+        profiles: profiles.map(profile => ({
+            name: profile.profileName,
+            soft_skills: profile.softSkills,
+            tech_skills: profile.techSkills,
+            amount: profile.numberOfProfiles,
+        })),
+        employees: employees.map(employee => ({
+            full_name: employee.name,
+            profile_name: employee.role,
+        }))
+    };
+    console.log(JSON.stringify(projectData, null, 2));
+    console.log(projectData);
+      // Aquí puedes agregar lógica adicional para enviar el JSON a un servidor o hacer cualquier otro procesamiento.
+  };
 
   return (
     <Paper elevation={0}  style={{ padding: '50px', marginLeft: '10px'}} sx={{width: '80%'}}>
@@ -135,40 +136,21 @@ const CreateProjectForm: React.FC<CreateProjectFormProps> = ({ proyectName, hand
         Crea tu proyecto
       </Typography>
         </Box>
-      
-      <Formik<FormValues>
-        initialValues={{
-          name: '',
-          description: ''
-        }}
-        validationSchema={validationSchema}
-        onSubmit={(values, { setSubmitting }) => {
-          // hacer la lógica de envío del formulario
-          console.log(values);
-          setSubmitting(false);
-        }}
-      >
-        {({ errors, touched, isSubmitting }) => (
-          <Form>
             <Typography variant="h5" gutterBottom className={styles.tituloConFondo}>
             <span>1. Datos Básicos</span>
             </Typography>
             <Box p={3}>
-            <Field
+            <TextField
               name="name"
-              as={TextField}
               label="Nombre"
               fullWidth
               variant="standard"
               margin="normal"
               value={proyectName}
               onChange={handleTitleChange}
-              helperText={touched.name ? errors.name : ''}
-              error={touched.name && Boolean(errors.name)}
             />
-            <Field
+            <TextField
               name="description"
-              as={TextField}
               label="Descripción"
               fullWidth
               variant="standard"
@@ -177,13 +159,11 @@ const CreateProjectForm: React.FC<CreateProjectFormProps> = ({ proyectName, hand
               margin="normal"
               value={proyectDescription}
               onChange={handleDescriptionChange}
-              helperText={touched.description ? errors.description : ''}
-              error={touched.description && Boolean(errors.description)}
             />
             </Box>
             {/* PERFILES */}
             <Typography variant="h5" gutterBottom className={styles.tituloConFondo2} style={{ marginTop: '20px' }}>
-              <span>2. Perfiles</span>
+                <span>2. Perfiles</span>
             </Typography>
             <Box p={3}>
             
@@ -198,7 +178,7 @@ const CreateProjectForm: React.FC<CreateProjectFormProps> = ({ proyectName, hand
                         onDelete={handleDeleteProfile}
                     />
                     ))
-)}
+            )}
             <Button 
                 variant="outlined" 
                 color="primary"
@@ -207,6 +187,7 @@ const CreateProjectForm: React.FC<CreateProjectFormProps> = ({ proyectName, hand
                 style={{ marginTop: '10px' }}>
                 CREAR PERFIL
             </Button>
+            
             <ProfileModal 
                 open={openProfileModal} 
                 onClose={() => setOpenProfileModal(false)}
@@ -220,8 +201,6 @@ const CreateProjectForm: React.FC<CreateProjectFormProps> = ({ proyectName, hand
                 onSave={handleUpdateProfile}
                 originalProfileName={originalProfileName}  
             />
-                
-
             </Box>
             {/* FUNCIONARIOS */}
             <Typography variant="h5" gutterBottom style={{ marginTop: '20px' }} className={styles.tituloConFondo3}>
@@ -278,7 +257,6 @@ const CreateProjectForm: React.FC<CreateProjectFormProps> = ({ proyectName, hand
               }}>
                 Cancelar
               </Button>
-
               <Button 
                 type="submit" 
                 variant="contained" 
@@ -291,13 +269,11 @@ const CreateProjectForm: React.FC<CreateProjectFormProps> = ({ proyectName, hand
                       backgroundColor: "#864D8F",
                     },
                   }}
-                disabled={isSubmitting}>
+                  onClick={handleSubmit}
+                  >
                 Crear Proyecto
               </Button>
             </Box>
-          </Form>
-        )}
-      </Formik>
     </Paper>
   );
 }

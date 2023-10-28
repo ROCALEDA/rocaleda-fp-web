@@ -3,14 +3,32 @@ import React from 'react';
 import { Card, CardContent, Typography, Box, Chip} from '@mui/material';
 import PeopleIcon from '@mui/icons-material/PersonOutlineOutlined';
 
-export default function CustomCard( {
-  number = 5, 
-  proyectName = "", 
-  proyectDescription = "", 
-  profiles = ["FrontEnd", "BackEnd"],
-  employees = [{"name":"Luisa Velez", "role": "Project Manager"}]
 
-} ) {
+type Profile = {
+  profileName: string;
+  numberOfProfiles: number;
+};
+
+type Employee = {
+  name: string;
+  role: string;
+};
+
+type CustomCardProps = {
+  number: number;
+  proyectName: string;
+  proyectDescription: string;
+  profiles: Profile[];
+  employees: Employee[];
+};
+
+export default function CustomCard({
+  number=5,
+  proyectName="No hay nombre de proyecto",
+  proyectDescription='No hay descripción de proyecto',
+  profiles=[{"profileName":"Frontend Developer", "numberOfProfiles":2}, {"profileName":"Backend Developer","numberOfProfiles":3}],
+  employees=[{"name":"Luisa Velez", "role": "Project Manager"},{"name":"Luisa Velez2", "role": "Project Manager"}]
+}: CustomCardProps) {
   return ( 
     <Box margin={5}>
       {/* Nombre Proyecto creado */}
@@ -42,36 +60,32 @@ export default function CustomCard( {
         </Typography>
       {/* Perfiles creados */}
       <Box display="flex" flexDirection="column" alignItems="flex-start" mt={2}>
-          {profiles.map((profile: string , index: number) => ( 
+          {profiles.map((profile: { profileName: string, numberOfProfiles: number }, index: number) => (
           <Card elevation={1} style={{ width: '100%', marginBottom: '3px'}} key={index}>
               <CardContent style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', maxHeight: '40px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%'}}>
                   <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-start' }}>
-                    <Typography component="div" color="textSecondary" key={profile}>
-                      Perfil-{profile}
+                    <Typography component="div" color="textSecondary">
+                      Perfil-{profile.profileName}
                     </Typography>
                   </div>
+                  <Chip size="small" icon={<PeopleIcon fontSize="small"/>} label={profile.numberOfProfiles} sx={{'& .MuiChip-label': {fontSize: '1rem'}}}/>
                 </div>    
               </CardContent>
             </Card>))}
       {/* Funcionarios creados */}
-          <Card elevation={1} style={{ width: '100%' }}>
-            <CardContent style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+      {employees.map((employee: { name: string, role: string }, index: number) => ( 
+          <Card elevation={1} style={{ width: '100%', marginBottom: '3px' }} key={index}>
+            <CardContent style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', maxHeight: '40px' }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
                 <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-start' }}>
                   <Typography component="div" color="textSecondary">
-                    {employees[0].name} - {employees[0].role}
+                    {employee.name} - {employee.role}
                   </Typography>
                 </div>
-                <Chip 
-                  size="small" 
-                  icon={<PeopleIcon fontSize="small"/>} 
-                  label={number}
-                  sx={{'& .MuiChip-label': {fontSize: '1rem'}}}
-                />
               </div>    
             </CardContent>
-          </Card>
+          </Card>))}
     </Box>
 
 
