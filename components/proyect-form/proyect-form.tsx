@@ -16,6 +16,13 @@ interface FormValues {
     description: string;
 }
 
+interface CreateProjectFormProps {
+    proyectName: string; 
+    handleTitleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+    proyectDescription: string; 
+    handleDescriptionChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+}
+
 const validationSchema = Yup.object().shape({
     name: Yup.string()
         .required('El nombre es obligatorio'),
@@ -23,7 +30,7 @@ const validationSchema = Yup.object().shape({
         .required('La descripción es obligatoria')
 });
 
-const CreateProjectForm: React.FC = () => {
+const CreateProjectForm: React.FC<CreateProjectFormProps> = ({ proyectName, handleTitleChange, proyectDescription, handleDescriptionChange }) => {
     const [openProfileModal, setOpenProfileModal] = useState(false);
     const [openFunctionaryModal, setOpenFunctionaryModal] = useState(false);
     const [employees, setEmployees] = useState<Array<{ name: string; role: string }>>([]);
@@ -154,6 +161,8 @@ const CreateProjectForm: React.FC = () => {
               fullWidth
               variant="standard"
               margin="normal"
+              value={proyectName}
+              onChange={handleTitleChange}
               helperText={touched.name ? errors.name : ''}
               error={touched.name && Boolean(errors.name)}
             />
@@ -166,6 +175,8 @@ const CreateProjectForm: React.FC = () => {
               multiline
               rows={2}
               margin="normal"
+              value={proyectDescription}
+              onChange={handleDescriptionChange}
               helperText={touched.description ? errors.description : ''}
               error={touched.description && Boolean(errors.description)}
             />
