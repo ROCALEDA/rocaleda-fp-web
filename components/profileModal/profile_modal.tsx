@@ -6,6 +6,7 @@ import CancelIcon from '@mui/icons-material/Cancel';
 interface ProfileModalProps {
   open: boolean;
   onClose: () => void;
+  onAdd: (profileData: { profileName: string, techSkills: string[], softSkills: string[], numberOfProfiles: number }) => void;
 }
 
 const tech_skill = [
@@ -55,9 +56,26 @@ const menuProps = {
 };
 
 
-const ProfileModal: React.FC<ProfileModalProps> = ({ open, onClose }) => {
+const ProfileModal: React.FC<ProfileModalProps> = ({ open, onClose, onAdd }) => {
     const [techSkills, setTechSkills] = React.useState<string[]>([]);
     const [softSkills, setSoftSkills] = React.useState<string[]>([]);
+    const [profileName, setProfileName] = React.useState<string>('');
+    const [numberOfProfiles, setNumberOfProfiles] = React.useState<number>(1);
+
+    const addProfile = () => {
+      onAdd({
+        profileName,
+        techSkills,
+        softSkills,
+        numberOfProfiles
+      });
+      setProfileName('');
+      setTechSkills([]);
+      setSoftSkills([]);
+      setNumberOfProfiles(1);
+      onClose();
+    };
+
   
     return (
       <Modal open={open} onClose={onClose}>
@@ -76,7 +94,14 @@ const ProfileModal: React.FC<ProfileModalProps> = ({ open, onClose }) => {
             Crear perfil
           </Typography>
   
-          <TextField label="Nombre del perfil" fullWidth margin="normal" variant="standard" />
+          <TextField 
+            label="Nombre del perfil" 
+            fullWidth
+            value={profileName}
+            onChange={(e) => setProfileName(e.target.value)} 
+            margin="normal" 
+            variant="standard" 
+            />
           <InputLabel id="demo-multiple-chip-label" style={{ marginTop: '40px' }}>Habilidades técnicas</InputLabel>
           <Select
             label = "Habilidades técnicas"
@@ -134,13 +159,25 @@ const ProfileModal: React.FC<ProfileModalProps> = ({ open, onClose }) => {
     ))}
           </Select>
   
-          <TextField label="Número de perfiles" fullWidth margin="normal" variant="standard" type="number" style={{ marginTop: '40px' }} />
+          <TextField 
+            label="Número de perfiles" 
+            fullWidth 
+            margin="normal" 
+            variant="standard" 
+            type="number"
+            value={numberOfProfiles}
+            onChange={(e) => setNumberOfProfiles(parseInt(e.target.value, 10))} 
+            style={{ marginTop: '40px' }} 
+            />
   
           <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 5 }}>
             <Button variant="outlined" onClick={onClose}>
               CANCELAR
             </Button>
-            <Button variant="contained" sx={{
+            <Button 
+            variant="contained" 
+            onClick={addProfile} 
+            sx={{
                     px: 3,
                     backgroundColor: "#A15CAC",
                     "&:hover": {

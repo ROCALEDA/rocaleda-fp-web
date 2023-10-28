@@ -15,10 +15,8 @@ export default function Layout({ children  }: LayoutProps) {
                 minHeight: '100vh',
                 backgroundPosition: 'right center',
                 position: 'relative',
-                backgroundRepeat: 'no-repeat',
-                ['@media (max-width:600px)']: {
                 height: 'auto !important',
-        }
+                backgroundRepeat: 'no-repeat'
             }}
         >
             <ResponsiveAppBar/>

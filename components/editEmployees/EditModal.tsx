@@ -2,19 +2,31 @@
 import React, { useState , useEffect } from 'react';
 import { Modal, Box, Typography, TextField, Button } from '@mui/material';
 
-const EditModal = ({ open, onClose, initialData, onSave, originalName }) => {
+interface EditModalProps {
+    open: boolean;
+    onClose: () => void;
+    initialData: {
+      name: string;
+      role: string;
+    };
+    onSave: (originalName: string, data: { name: string; role: string }) => void;
+    originalName: string;
+  }
+
+
+  const EditModal: React.FC<EditModalProps> = ({ open, onClose, initialData, onSave, originalName }) => {
     const [data, setData] = useState({
       name: initialData.name,
       role: initialData.role
     });
 
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-    setData(prevData => ({
-      ...prevData,
-      [name]: value
-    }));
-  };
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = event.target;
+        setData(prevData => ({
+          ...prevData,
+          [name]: value
+        }));
+      };
 
   const handleSave = () => {
     onSave(originalName, data);

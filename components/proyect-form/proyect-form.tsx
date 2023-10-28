@@ -8,6 +8,8 @@ import ProfileModal from "@/components/profileModal/profile_modal";
 import EmployeesModal from "@/components/employeesModal/employees_modal";
 import EmployeeCard from "@/components/employeesCard/employees_card";
 import EditModal from "@/components/editEmployees/EditModal"
+import ProfileCard from "@/components/profileCard/profile_card";
+
 interface FormValues {
     name: string;
     description: string;
@@ -30,14 +32,20 @@ const CreateProjectForm: React.FC = () => {
     const [editModalOpen, setEditModalOpen] = useState(false);
     const [selectedData, setSelectedData] = useState({ name: '', role: '' });
     const [originalName, setOriginalName] = useState('');
+    const [profiles, setProfiles] = useState<Array<any>>([]);
+    const [modalOpen, setModalOpen] = useState(false);
 
     const handleEditClick = (data: { name: string, role: string }) => {
     setOriginalName(data.name);
     setSelectedData(data);
     setEditModalOpen(true);
     };
+    type Employee = {
+        name: string;
+        role: string;
+    };
 
-    const handleUpdateEmployee = (originalName, updatedData) => {
+    const handleUpdateEmployee = (originalName: string, updatedData: Employee) => {
         setEmployees(prevEmployees => {
             return prevEmployees.map(employee => 
                 employee.name === originalName ? updatedData : employee
@@ -45,11 +53,14 @@ const CreateProjectForm: React.FC = () => {
         });
     }
 
-    const handleDeleteEmployee = (employeeName) => {
+    const handleDeleteEmployee = (employeeName: string) => {
         setEmployees(prevEmployees => {
             return prevEmployees.filter(employee => employee.name !== employeeName);
         });
     }
+    const handleAddProfile = (profileData: { profileName: string, techSkills: string[], softSkills: string[], numberOfProfiles: number }) => {
+        setProfiles(prevProfiles => [...prevProfiles, profileData]);
+    };
 
   return (
     <Paper elevation={0}  style={{ padding: '50px', marginLeft: '10px'}} sx={{width: '80%'}}>
@@ -100,13 +111,23 @@ const CreateProjectForm: React.FC = () => {
               error={touched.description && Boolean(errors.description)}
             />
             </Box>
+            {/* PERFILES */}
             <Typography variant="h5" gutterBottom className={styles.tituloConFondo2} style={{ marginTop: '20px' }}>
               <span>2. Perfiles</span>
             </Typography>
             <Box p={3}>
-            <Typography variant="subtitle1" gutterBottom color="secondary">
-                Aún no has agregado ningún perfil
-            </Typography>
+            
+            {profiles.length === 0 ? (
+            <Typography variant="subtitle1" gutterBottom color="secondary">Aún no has agregado ningún perfil</Typography>
+            ) : (
+                profiles.map((profile, index) => (
+                    <ProfileCard 
+                        key={index} 
+                        profile={profile}
+                        onEdit={() => console.log('Editar perfil')} 
+                        onDelete={() => console.log('Eliminar perfil')}
+            />))
+)}
             <Button 
                 variant="outlined" 
                 color="primary"
@@ -117,10 +138,11 @@ const CreateProjectForm: React.FC = () => {
             </Button>
             <ProfileModal 
                 open={openProfileModal} 
-                onClose={() => setOpenProfileModal(false)} 
+                onClose={() => setOpenProfileModal(false)}
+                onAdd={handleAddProfile} 
             />
             </Box>
-
+            {/* FUNCIONARIOS */}
             <Typography variant="h5" gutterBottom style={{ marginTop: '20px' }} className={styles.tituloConFondo3}>
             <span>3. Funcionarios</span> <span style={{ color: '#A0AEC0', fontSize:15 }}>(opcional)</span>
             </Typography>
