@@ -14,7 +14,7 @@ interface EditModalProps {
   }
 
 
-  const EditModal: React.FC<EditModalProps> = ({ open, onClose, initialData, onSave, originalName }) => {
+const EditModal: React.FC<EditModalProps> = ({ open, onClose, initialData, onSave, originalName }) => {
     const [data, setData] = useState({
       name: initialData.name,
       role: initialData.role

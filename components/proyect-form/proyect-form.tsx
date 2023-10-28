@@ -9,6 +9,7 @@ import EmployeesModal from "@/components/employeesModal/employees_modal";
 import EmployeeCard from "@/components/employeesCard/employees_card";
 import EditModal from "@/components/editEmployees/EditModal"
 import ProfileCard from "@/components/profileCard/profile_card";
+import EditProfileModal from "@/components/editProfile/EditProfile";
 
 interface FormValues {
     name: string;
@@ -35,14 +36,32 @@ const CreateProjectForm: React.FC = () => {
     const [profiles, setProfiles] = useState<Array<any>>([]);
     const [modalOpen, setModalOpen] = useState(false);
 
+    const [isEditModalOpen, setEditModal2Open] = React.useState(false);
+    const [profileToEdit, setProfileToEdit] = React.useState(null);
+    const [selectedData2, setSelectedData2] = useState({
+        profileName: '',
+        techSkills: [],
+        softSkills: [],
+        numberOfProfiles: 0
+    });
+    const [originalProfileName, setOriginalProfileName] = useState('');
+
     const handleEditClick = (data: { name: string, role: string }) => {
     setOriginalName(data.name);
     setSelectedData(data);
     setEditModalOpen(true);
     };
+
     type Employee = {
         name: string;
         role: string;
+    };
+
+    type Profile = {
+        profileName: string;
+        techSkills: string[];
+        softSkills: string[];
+        numberOfProfiles: number;
     };
 
     const handleUpdateEmployee = (originalName: string, updatedData: Employee) => {
@@ -53,13 +72,53 @@ const CreateProjectForm: React.FC = () => {
         });
     }
 
+    const handleUpdateProfile = (originalProfileName: string, updatedData: Profile) => {
+        setProfiles(prevProfiles => {
+          return prevProfiles.map(profile => {
+            if (profile.profileName === originalProfileName) {
+              return updatedData;
+            } else {
+              return profile;
+            }
+          });
+        });
+        setEditModal2Open(false);
+    };
+
+
     const handleDeleteEmployee = (employeeName: string) => {
         setEmployees(prevEmployees => {
             return prevEmployees.filter(employee => employee.name !== employeeName);
         });
     }
-    const handleAddProfile = (profileData: { profileName: string, techSkills: string[], softSkills: string[], numberOfProfiles: number }) => {
+
+    const handleDeleteProfile = (profileName: string) => {
+        setProfiles(prevProfiles => {
+            return prevProfiles.filter(profile => profile.profileName!== profileName);
+        });
+    }
+
+
+    type ProfileData = {
+        profileName: string;
+        techSkills: string[];
+        softSkills: string[];
+        numberOfProfiles: number;
+    };
+
+    const handleAddProfile = (profileData: ProfileData) => {
         setProfiles(prevProfiles => [...prevProfiles, profileData]);
+    };
+
+    const handleEditProfile = (profile: ProfileData) => {
+        setOriginalProfileName(profile.profileName);
+        setSelectedData2({
+            profileName: profile.profileName,
+            techSkills: profile.techSkills as never[],
+            softSkills: profile.softSkills as never[],
+            numberOfProfiles: profile.numberOfProfiles
+        });
+        setEditModal2Open(true);
     };
 
   return (
@@ -124,9 +183,10 @@ const CreateProjectForm: React.FC = () => {
                     <ProfileCard 
                         key={index} 
                         profile={profile}
-                        onEdit={() => console.log('Editar perfil')} 
-                        onDelete={() => console.log('Eliminar perfil')}
-            />))
+                        onEdit={() => handleEditProfile(profile)} 
+                        onDelete={handleDeleteProfile}
+                    />
+                    ))
 )}
             <Button 
                 variant="outlined" 
@@ -141,6 +201,16 @@ const CreateProjectForm: React.FC = () => {
                 onClose={() => setOpenProfileModal(false)}
                 onAdd={handleAddProfile} 
             />
+            
+            <EditProfileModal 
+                open={isEditModalOpen} 
+                onClose={() => setEditModal2Open(false)}
+                initialData={selectedData2}
+                onSave={handleUpdateProfile}
+                originalProfileName={originalProfileName}  
+            />
+                
+
             </Box>
             {/* FUNCIONARIOS */}
             <Typography variant="h5" gutterBottom style={{ marginTop: '20px' }} className={styles.tituloConFondo3}>

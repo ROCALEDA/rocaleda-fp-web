@@ -10,7 +10,7 @@ interface ProfileCardProps {
         numberOfProfiles: number;
     };
     onEdit: () => void;
-    onDelete: () => void;
+    onDelete: (profileName: string) => void;
 }
 
 
@@ -40,7 +40,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ profile, onEdit, onDelete }) 
                     <IconButton onClick={onEdit}>
                         <EditIcon color="primary" />
                     </IconButton>
-                    <IconButton onClick={onDelete}>
+                    <IconButton onClick={() => onDelete(profileName)}>
                         <DeleteIcon color="error" />
                     </IconButton>
                 </div>
