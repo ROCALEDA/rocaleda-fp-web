@@ -61,3 +61,7 @@ export const registerCandidate = async (email: string, phone: string, password: 
       tech_skills
     });
 };
+
+export const getCustomerProjects = async (): Promise<ApiResponse> => {
+  return fetchData("customer/projects");
+};
