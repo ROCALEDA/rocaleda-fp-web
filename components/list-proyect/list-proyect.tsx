@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Grid, Paper, Typography,Button } from "@mui/material";
 import { getCustomerProjects } from "@/api/apiService";
 import Link from "next/link";
-import DetailProyect from "@/components/proyect-detail/proyect-detail";
+import DetailProject from "@/components/proyect-detail/proyect-detail";
 
 export default function ListProyect() {
 
@@ -45,7 +45,7 @@ export default function ListProyect() {
             </Link>      
             </Grid>
             <Grid item xs={12} sm={12}>
-            <DetailProyect/>
+            <DetailProject/>
             </Grid>
             </Grid>
             </Paper>
