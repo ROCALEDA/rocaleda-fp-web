@@ -167,7 +167,7 @@ const CreateProjectForm: React.FC<CreateProjectFormProps> = ({ proyectName, hand
     };
   
   return (
-    <Paper elevation={0}  style={{ padding: '50px', marginLeft: '10px'}} sx={{width: '80%'}}>
+    <Paper elevation={0}  style={{ paddingLeft: '50px', marginLeft: '10px'}} sx={{width: '80%'}}>
         <Box padding={0} textAlign="left" >
       <Typography variant="h4" gutterBottom sx={{ fontFamily: 'Philosopher' ,paddingBottom: 3 }}>
         Crea tu proyecto
@@ -286,7 +286,7 @@ const CreateProjectForm: React.FC<CreateProjectFormProps> = ({ proyectName, hand
                 originalName={originalName}   
             /> 
             </Box>
-            <Box display="flex" justifyContent="space-between" marginTop="60px">
+            <Box display="flex" justifyContent="space-between" marginTop="20px">
               <Button 
                 variant="outlined" 
                 sx={{

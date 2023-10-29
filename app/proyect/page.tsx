@@ -27,7 +27,7 @@ export default function RegisterPage() {
 
     return (
       <Layout>
-        <Grid container spacing={6} padding={2} style={{ padding: '50px' }}>
+        <Grid container spacing={6} padding={2} style={{ paddingLeft: '50px' }}>
         <Grid item xs={12} md={6}>
         <CreateProjectForm 
         proyectName={proyectName}
