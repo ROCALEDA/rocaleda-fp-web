@@ -19,7 +19,7 @@ export default function ListProyect() {
 
     return (
         <Grid container style={{ width: '50%' }}>
-            <Paper elevation={3} style={{ width: '100%', padding: '20px', marginRight: '30px' }}>
+            <Paper elevation={0} style={{ width: '100%', padding: '20px', marginRight: '30px' }}>
             <Grid container spacing={6}>
             <Grid item xs={12} sm={10}>
                 <Typography variant="h4" gutterBottom sx={{ fontFamily: 'Philosopher', paddingTop: 5 }}>

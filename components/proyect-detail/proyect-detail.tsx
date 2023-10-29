@@ -1,5 +1,7 @@
+"use client";
 import React from 'react';
-import { Card, CardContent, Typography } from '@mui/material';
+import { Card, CardContent, Typography,Chip } from '@mui/material';
+import PeopleIcon from '@mui/icons-material/PersonOutlineOutlined';
 
 const defaultData =[
     {
@@ -56,30 +58,40 @@ const defaultData =[
 export default function DetailProject({data = defaultData}) {
     return (
         <>
-            {data.map((project) => (
-                <div style={{ position: 'relative', padding: '10px 0' }}>
-                    <div 
-        style={{
-            width: '20px',
-            height: '20px',
-            borderRadius: '50%',
-            backgroundColor: project.is_team_complete ? '#B1E5D9' : '#F3DA90',
-            position: 'absolute',
-            left: '-10px',
-            top: '15%',
-            transform: 'translateY(-50%)'
-        }}
-    ></div>
-                <Card key={project.id} sx={{ minWidth: 275}}>
-                    <CardContent>
-                        <Typography variant="h5" component="div">
-                            {project.name}
-                        </Typography>
-                        {/* Aquí puedes agregar más detalles del proyecto si lo deseas */}
-                    </CardContent>
-                </Card>
-                </div>
-            ))}
+            {data.map((project) => {
+                // Define las propiedades del chip en base al estado del equipo
+                const chipProps = project.is_team_complete
+                    ? { label: "Equipo completo", color: "success" }
+                    : { label: "Equipo pendiente", color: "warning" };
+
+                return (
+                    <div key={project.id} style={{ position: 'relative', padding: '5px 0' }}>
+                        <div 
+                            style={{
+                                width: '20px',
+                                height: '20px',
+                                borderRadius: '50%',
+                                backgroundColor: project.is_team_complete ? '#B1E5D9' : '#F3DA90',
+                                position: 'absolute',
+                                left: '-10px',
+                                top: '15%',
+                                transform: 'translateY(-50%)'
+                            }}
+                        ></div>
+                        <Card sx={{ minWidth: 275}}>
+                            <CardContent style={{ display: 'flex', flexDirection: 'row', maxHeight: '70px',justifyContent: 'space-between', alignItems: 'center' }}>
+                                <Typography variant="h6" >
+                                    {project.name}
+                                </Typography>
+                                <div style={{ display: 'flex', gap: '10px', marginTop: '8px', marginLeft: '20px' }}>
+                                <Chip size="small" icon={<PeopleIcon fontSize="small"/>} label={project.total_positions} sx={{'& .MuiChip-label': {fontSize: '1rem'}}}/>
+                                <Chip size="small" {...chipProps}  sx={{ '& .MuiChip-label': {fontSize: '1rem'}, marginLeft:'20px' }}/>
+                                </div>
+                            </CardContent>
+                        </Card>
+                    </div>
+                );
+            })}
         </>
     );
 }
