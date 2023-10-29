@@ -8,8 +8,9 @@ import EmployeeCard from "@/components/employeesCard/employees_card";
 import EditModal from "@/components/editEmployees/EditModal"
 import ProfileCard from "@/components/profileCard/profile_card";
 import EditProfileModal from "@/components/editProfile/EditProfile";
-
-
+import * as yup from 'yup';
+import { registerProject } from "@/api/apiService";
+import { enqueueSnackbar } from "notistack";
 
 interface CreateProjectFormProps {
     proyectName: string; 
@@ -20,7 +21,15 @@ interface CreateProjectFormProps {
     updateEmployees: (employees: any[]) => void;
 }
 
+const proyectValidationSchema = yup.object().shape({
+    proyectName: yup.string()
+    .required("El nombre del proyecto es requerido"),
+    proyectDescription: yup.string()
+    .required("La descripción del proyecto es requerida")
+});
+
 const CreateProjectForm: React.FC<CreateProjectFormProps> = ({ proyectName, handleTitleChange, proyectDescription, handleDescriptionChange,updateProfiles,updateEmployees}) => {
+    const [errors, setErrors] = React.useState<{ [key: string]: string }>({});
     const [openProfileModal, setOpenProfileModal] = useState(false);
     const [openFunctionaryModal, setOpenFunctionaryModal] = useState(false);
     const [employees, setEmployees] = useState<Array<{ name: string; role: string }>>([]);
@@ -36,7 +45,7 @@ const CreateProjectForm: React.FC<CreateProjectFormProps> = ({ proyectName, hand
         profileName: '',
         techSkills: [],
         softSkills: [],
-        numberOfProfiles: 0
+        numberOfProfiles: 1
     });
     const [originalProfileName, setOriginalProfileName] = useState('');
 
@@ -110,27 +119,53 @@ const CreateProjectForm: React.FC<CreateProjectFormProps> = ({ proyectName, hand
     updateProfiles(profiles);
     updateEmployees(employees);
 
-    const handleSubmit = () => {
-
-      const projectData = {
-        name: proyectName,
-        description: proyectDescription,
-        profiles: profiles.map(profile => ({
-            name: profile.profileName,
-            soft_skills: profile.softSkills,
-            tech_skills: profile.techSkills,
-            amount: profile.numberOfProfiles,
-        })),
-        employees: employees.map(employee => ({
-            full_name: employee.name,
-            profile_name: employee.role,
-        }))
+    const handleSubmit = async () => {
+        try {
+            await proyectValidationSchema.validate({
+                proyectName,
+                proyectDescription
+            });
+    
+            const projectData = {
+                name: proyectName,
+                description: proyectDescription,
+                profiles: profiles.map(profile => ({
+                    name: profile.profileName,
+                    soft_skills: profile.softSkills,
+                    tech_skills: profile.techSkills,
+                    amount: profile.numberOfProfiles,
+                })),
+                employees: employees.map(employee => ({
+                    full_name: employee.name,
+                    profile_name: employee.role,
+                }))
+            };
+    
+            console.log(JSON.stringify(projectData, null, 2));
+            
+            const response = await registerProject(projectData);
+    
+            if (response && response.status === 200) {
+                enqueueSnackbar("Proyecto registrado exitosamente!", { variant: "success" });
+            } else {
+                enqueueSnackbar("Hubo un error al registrar el proyecto", { variant: "error" });
+            }
+    
+        } catch (error: any) {
+            console.log("Error durante la validación:", error);
+    
+            if (error instanceof yup.ValidationError) {
+                const errorMessages: { [key: string]: string } = {};
+                error.inner.forEach(err => {
+                    errorMessages[err.path!] = err.message;
+                });
+                setErrors(errorMessages);
+            } else {
+                enqueueSnackbar(error.message, { variant: "error" });
+            }
+        }
     };
-    console.log(JSON.stringify(projectData, null, 2));
-    console.log(projectData);
-      // Aquí puedes agregar lógica adicional para enviar el JSON a un servidor o hacer cualquier otro procesamiento.
-  };
-
+  
   return (
     <Paper elevation={0}  style={{ padding: '50px', marginLeft: '10px'}} sx={{width: '80%'}}>
         <Box padding={0} textAlign="left" >
@@ -143,24 +178,30 @@ const CreateProjectForm: React.FC<CreateProjectFormProps> = ({ proyectName, hand
             </Typography>
             <Box p={3}>
             <TextField
-              name="name"
-              label="Nombre"
-              fullWidth
-              variant="standard"
-              margin="normal"
-              value={proyectName}
-              onChange={handleTitleChange}
+                name="name"
+                label="Nombre"
+                fullWidth
+                required
+                variant="standard"
+                margin="normal"
+                value={proyectName}
+                onChange={handleTitleChange}
+                error={!!errors.proyectName}
+                helperText={errors.proyectName}
             />
             <TextField
-              name="description"
-              label="Descripción"
-              fullWidth
-              variant="standard"
-              multiline
-              rows={2}
-              margin="normal"
-              value={proyectDescription}
-              onChange={handleDescriptionChange}
+                name="description"
+                label="Descripción"
+                fullWidth
+                required
+                variant="standard"
+                multiline
+                rows={2}
+                margin="normal"
+                value={proyectDescription}
+                onChange={handleDescriptionChange}
+                error={!!errors.proyectDescription}
+                helperText={errors.proyectDescription}
             />
             </Box>
             {/* PERFILES */}
