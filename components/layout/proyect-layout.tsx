@@ -1,6 +1,6 @@
 import { Box } from '@mui/material';
 import { ReactNode } from "react";
-import ResponsiveAppBar from "@/components/navbar/navbar";
+import ResponsiveAppBar from "@/components/navbar/empresa";
 import EnterpriseBreadcrumbs from "@/components/breadcrumbs/empresas";
 
 interface LayoutProps {

@@ -18,10 +18,11 @@ export default function ListProyect() {
     };
 
     return (
-        <Grid container style={{ width: '50%' }}>
-            <Paper elevation={0} style={{ width: '100%', padding: '20px', marginRight: '30px' }}>
+        <Grid container>
+        <Grid item xs={12} sm={6}>
+            <Paper elevation={0} style={{ width: '95%', padding: '20px', marginRight: '30px' }}>
             <Grid container spacing={6}>
-            <Grid item xs={12} sm={10}>
+            <Grid item xs={8} sm={10}>
                 <Typography variant="h4" gutterBottom sx={{ fontFamily: 'Philosopher', paddingTop: 5 }}>
                     Proyectos
                 </Typography>
@@ -29,7 +30,7 @@ export default function ListProyect() {
                     Gestiona tus proyectos y tu equipo
                 </Typography>
             </Grid>
-            <Grid item xs={12} sm={2}  marginTop={'45px'} display="flex" alignItems="center" justifyContent="flex-end">
+            <Grid item xs={4} sm={2}  marginTop={'45px'} display="flex" alignItems="center" justifyContent="flex-end">
             
             <Link href="/crea_proyecto" passHref>
                 <Button 
@@ -49,6 +50,10 @@ export default function ListProyect() {
             </Grid>
             </Grid>
             </Paper>
+        </Grid>
+        <Grid item xs={12} sm={6}>
+        {/* agregar detalle */}
+        </Grid>
         </Grid>
     );
 }
