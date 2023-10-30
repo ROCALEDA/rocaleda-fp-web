@@ -1,6 +1,6 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import Navbar from '@/components/navbar/navbar';  // Ajusta la ruta si es necesario.
+import Navbar from '@/components/navbar/empresa';  // Ajusta la ruta si es necesario.
 
 
 describe('<Navbar />', () => {
