@@ -2,20 +2,19 @@ import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import Register from "@/components/client-register/register";
-import { registerCompany } from "@/api/apiService";
-import { useRouter } from 'next/navigation';
+import { useRouter } from "next/navigation";
 
-jest.mock('next/navigation', () => ({
+jest.mock("next/navigation", () => ({
   useRouter: jest.fn(),
 }));
 
 describe("Register Component", () => {
   beforeEach(() => {
     (useRouter as jest.Mock).mockReturnValue({
-      route: '/',
-      pathname: '/',
-      query: '',
-      asPath: '',
+      route: "/",
+      pathname: "/",
+      query: "",
+      asPath: "",
     });
     render(<Register />);
   });
@@ -53,7 +52,7 @@ describe("Register Component", () => {
 
   test("Password input shows error for length less than 8 characters", () => {
     const { getByText, getByLabelText, findByText } = render(<Register />);
-    const passwordInput = getByLabelText(/Contraseña/);;
+    const passwordInput = getByLabelText(/Contraseña/);
 
     userEvent.type(passwordInput, "1234567");
 

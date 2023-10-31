@@ -9,41 +9,44 @@ import {
   Stack,
   Button,
 } from "@mui/material";
-import { useFormik } from 'formik';
-import * as Yup from 'yup';
+import { useFormik } from "formik";
+import * as Yup from "yup";
 import { enqueueSnackbar } from "notistack";
-import { registerCompany } from "@/api/apiService";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { registerCompany } from "@/api/auth";
 
 const validationSchema = Yup.object().shape({
   company: Yup.string()
-    .max(50, 'El nombre de la compañía debe tener 50 caracteres o menos')
-    .matches(/^[^\d]*$/, 'El nombre de la compañía no debe contener números')
-    .required('Este campo es obligatorio'),
+    .max(50, "El nombre de la compañía debe tener 50 caracteres o menos")
+    .matches(/^[^\d]*$/, "El nombre de la compañía no debe contener números")
+    .required("Este campo es obligatorio"),
   email: Yup.string()
-    .email('Por favor ingresa un correo válido')
-    .required('Este campo es obligatorio'),
+    .email("Por favor ingresa un correo válido")
+    .required("Este campo es obligatorio"),
   phone: Yup.string()
-    .matches(/^\+?\d{1,15}$/, 'Por favor ingresa un número de teléfono válido (máximo 15 dígitos)')
-    .required('Este campo es obligatorio'),
+    .matches(
+      /^\+?\d{1,15}$/,
+      "Por favor ingresa un número de teléfono válido (máximo 15 dígitos)"
+    )
+    .required("Este campo es obligatorio"),
   password: Yup.string()
-    .min(8, 'La contraseña debe tener al menos 8 caracteres')
-    .required('Este campo es obligatorio'),
+    .min(8, "La contraseña debe tener al menos 8 caracteres")
+    .required("Este campo es obligatorio"),
   password2: Yup.string()
-    .oneOf([Yup.ref('password')], 'Las contraseñas no coinciden')
-    .required('Este campo es obligatorio')
+    .oneOf([Yup.ref("password")], "Las contraseñas no coinciden")
+    .required("Este campo es obligatorio"),
 });
 
 export default function Register() {
   const router = useRouter();
   const formik = useFormik({
     initialValues: {
-      company: '',
-      email: '',
-      phone: '',
-      password: '',
-      password2: ''
+      company: "",
+      email: "",
+      phone: "",
+      password: "",
+      password2: "",
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
@@ -52,18 +55,20 @@ export default function Register() {
         const response = await registerCompany(email, phone, password, company);
 
         if (response && response.status === 200) {
-          enqueueSnackbar('Registro completo exitoso', { variant: 'success' });
-          router.push('/login');
+          enqueueSnackbar("Registro completo exitoso", { variant: "success" });
+          router.push("/login");
         } else if (response && response.error) {
-          enqueueSnackbar(`Error: ${response.error}`, { variant: 'error' });
+          enqueueSnackbar(`Error: ${response.error}`, { variant: "error" });
         } else {
-          enqueueSnackbar('Hubo un error al realizar registro de usuario. Intente nuevamente.', { variant: 'error' });
+          enqueueSnackbar(
+            "Hubo un error al realizar registro de usuario. Intente nuevamente.",
+            { variant: "error" }
+          );
         }
-      }catch(error: any){
+      } catch (error: any) {
         enqueueSnackbar(error.message, { variant: "error" });
       }
-      
-    }
+    },
   });
 
   return (
@@ -75,86 +80,102 @@ export default function Register() {
               <Box padding={3} textAlign="center">
                 <Typography variant="h5">Registrar mi empresa</Typography>
                 <Box padding={3}>
-                <form noValidate onSubmit={formik.handleSubmit}>
-                  <Stack direction="column" spacing={6}>
-                    <TextField
-                      label="Compañía"
-                      variant="standard"
-                      name="company"
-                      fullWidth
-                      id="company"
-                      autoFocus
-                      value={formik.values.company}
-                      onChange={formik.handleChange}
-                      error={formik.touched.company && Boolean(formik.errors.company)}
-                      helperText={formik.touched.company && formik.errors.company}
-                    />
-                    <TextField
-                      label="Correo"
-                      type="email"
-                      name='email'
-                      id='email'
-                      variant="standard"
-                      value={formik.values.email}
-                      onChange={formik.handleChange}
-                      error={formik.touched.email && !!formik.errors.email}
-                      helperText={formik.touched.email && formik.errors.email}
-                    />
-                    <TextField
-                      label="Teléfono"
-                      name='phone'
-                      id='phone'
-                      variant="standard"
-                      value={formik.values.phone}
-                      onChange={formik.handleChange}
-                      error={formik.touched.phone && !!formik.errors.phone}
-                      helperText={formik.touched.phone && formik.errors.phone}
+                  <form noValidate onSubmit={formik.handleSubmit}>
+                    <Stack direction="column" spacing={6}>
+                      <TextField
+                        label="Compañía"
+                        variant="standard"
+                        name="company"
+                        fullWidth
+                        id="company"
+                        autoFocus
+                        value={formik.values.company}
+                        onChange={formik.handleChange}
+                        error={
+                          formik.touched.company &&
+                          Boolean(formik.errors.company)
+                        }
+                        helperText={
+                          formik.touched.company && formik.errors.company
+                        }
                       />
-                    <Grid container>
-                      <Grid item xs={6}>
-                        <TextField
-                          label="Contraseña"
-                          type="password"
-                          id="password"
-                          name='password'
-                          autoComplete="new-password"
-                          variant="standard"
-                          value={formik.values.password}
-                          onChange={formik.handleChange}
-                          error={formik.touched.password && !!formik.errors.password}
-                          helperText={formik.touched.password && formik.errors.password}
-                        />
+                      <TextField
+                        label="Correo"
+                        type="email"
+                        name="email"
+                        id="email"
+                        variant="standard"
+                        value={formik.values.email}
+                        onChange={formik.handleChange}
+                        error={formik.touched.email && !!formik.errors.email}
+                        helperText={formik.touched.email && formik.errors.email}
+                      />
+                      <TextField
+                        label="Teléfono"
+                        name="phone"
+                        id="phone"
+                        variant="standard"
+                        value={formik.values.phone}
+                        onChange={formik.handleChange}
+                        error={formik.touched.phone && !!formik.errors.phone}
+                        helperText={formik.touched.phone && formik.errors.phone}
+                      />
+                      <Grid container>
+                        <Grid item xs={6}>
+                          <TextField
+                            label="Contraseña"
+                            type="password"
+                            id="password"
+                            name="password"
+                            autoComplete="new-password"
+                            variant="standard"
+                            value={formik.values.password}
+                            onChange={formik.handleChange}
+                            error={
+                              formik.touched.password &&
+                              !!formik.errors.password
+                            }
+                            helperText={
+                              formik.touched.password && formik.errors.password
+                            }
+                          />
+                        </Grid>
+                        <Grid item xs={6}>
+                          <TextField
+                            label="Repetir contraseña"
+                            type="password"
+                            id="password2"
+                            name="password2"
+                            autoComplete="new-password"
+                            variant="standard"
+                            value={formik.values.password2}
+                            onChange={formik.handleChange}
+                            error={
+                              formik.touched.password2 &&
+                              !!formik.errors.password2
+                            }
+                            helperText={
+                              formik.touched.password2 &&
+                              formik.errors.password2
+                            }
+                          />
+                        </Grid>
                       </Grid>
-                      <Grid item xs={6}>
-                        <TextField
-                          label="Repetir contraseña"
-                          type="password"
-                          id="password2"
-                          name='password2'
-                          autoComplete="new-password"
-                          variant="standard"
-                          value={formik.values.password2}
-                          onChange={formik.handleChange}
-                          error={formik.touched.password2 && !!formik.errors.password2}
-                          helperText={formik.touched.password2 && formik.errors.password2}
-                        />
-                      </Grid>
-                    </Grid>
-                    <Button
-                      type="submit"
-                      variant="contained"
-                      sx={{
-                        mt: 3,
-                        mb: 2,
-                        backgroundColor: "#A15CAC",
-                        "&:hover": {
-                          backgroundColor: "#864D8F",
-                        },
-                      }}
-                    >
-                      Registrar
-                    </Button>
-                  </Stack>
+                      <Button
+                        type="submit"
+                        variant="contained"
+                        sx={{
+                          mt: 3,
+                          mb: 2,
+                          backgroundColor: "#A15CAC",
+                          "&:hover": {
+                            backgroundColor: "#864D8F",
+                          },
+                        }}
+                      >
+                        Registrar
+                      </Button>
+                    </Stack>
                   </form>
                 </Box>
               </Box>
@@ -183,15 +204,15 @@ export default function Register() {
               ¿Ya tienes una cuenta?
             </Typography>
             <Stack direction="row" spacing={2} sx={{ width: "30%" }}>
-            <Link href="/login" passHref>
-              <Button
-                type="submit"
-                variant="contained"
-                fullWidth
-                sx={{ backgroundColor: "#A15CAC" }}
-              >
-                Ingresar
-              </Button>
+              <Link href="/login" passHref>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  fullWidth
+                  sx={{ backgroundColor: "#A15CAC" }}
+                >
+                  Ingresar
+                </Button>
               </Link>
             </Stack>
           </Box>
