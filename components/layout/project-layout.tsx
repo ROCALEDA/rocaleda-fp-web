@@ -20,14 +20,14 @@ export default function Layout({ children  }: LayoutProps) {
                 backgroundRepeat: 'no-repeat'
             }}
         >
-            <ResponsiveAppBar/>
+            <div data-testid="responsiveAppBarTestId"><ResponsiveAppBar/></div>
             <Box
                 sx={{
                     marginTop: '40px',
                     marginLeft: '20px'
                 }}
             >
-                <EnterpriseBreadcrumbs/>
+            <div data-testid="enterpriseBreadcrumbsTestId"><EnterpriseBreadcrumbs/></div>    
                 {children}
             </Box>
         </Box>

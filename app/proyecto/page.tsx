@@ -1,10 +1,10 @@
-import Layout from "@/components/layout/proyect-layout";
-import ListProyect from "@/components/list-proyect/list-proyect";
+import Layout from "@/components/layout/project-layout";
+import ListProject from "@/components/list-project/list-project";
 
 export default function ProyectPage() {
     return (
         <Layout>
-        <ListProyect/>
+        <ListProject/>
         </Layout>
     );
 }

@@ -7,7 +7,7 @@ import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 
 function handleClick(event: React.MouseEvent<HTMLDivElement, MouseEvent>) {
     event.preventDefault();
-    console.info('You clicked a breadcrumb.');
+    //console.info('You clicked a breadcrumb.');
 }
 
 export default function EnterpriseBreadcrumbs() {

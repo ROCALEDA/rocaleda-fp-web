@@ -1,11 +1,11 @@
 "use client";
 import React, { useEffect, useState } from 'react';
 import { Grid, Paper, Typography,Button } from "@mui/material";
-import { getCustomerProjects } from "@/api/apiService";
+import { getCustomerProjects } from "@/api/auth";
 import Link from "next/link";
-import DetailProject from "@/components/proyect-detail/proyect-detail";
+import DetailProject from "@/components/project-detail/project-detail";
 
-export default function ListProyect() {
+export default function ListProject() {
 
 
     const fetchProjects = async () => {
