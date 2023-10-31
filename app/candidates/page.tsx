@@ -1,4 +1,4 @@
-import Candidates from "@/components/candidatos/candidatos";
+import Candidates from "@/components/candidates/candidates";
 
 function CandidatesPage() {
   return <Candidates />;
