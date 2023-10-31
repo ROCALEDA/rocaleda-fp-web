@@ -1,14 +1,17 @@
+import { Session } from "next-auth";
 import API_URL from "./config";
 
-const fetchData = async (
+export const fetchData = async (
   endpoint: string,
   method: string = "GET",
-  body?: any
+  body?: any,
+  session?: Session
 ) => {
   const options: RequestInit = {
     method: method,
     headers: {
       "Content-Type": "application/json",
+      authorization: `Bearer ${session?.user?.token}`,
     },
   };
 
@@ -20,48 +23,10 @@ const fetchData = async (
   const data = await response.json();
 
   if (!response.ok) {
-    console.log("data", data);
-    const errorMessage = data.detail?.[0].msg || data.detail || "Error occurred";
+    const errorMessage =
+      data.detail?.[0].msg || data.detail || "Error occurred";
     throw new Error(errorMessage);
   }
 
   return { status: response.status, data };
-};
-
-export const getSomeData = async () => {
-  return fetchData("users?page=2");
-};
-
-export const getOtherData = async () => {
-  return fetchData("other-endpoint");
-};
-
-export const login = async (email: string, password: string) => {
-  return fetchData("auth", "POST", { email, password });
-};
-
-interface ApiResponse {
-  status: number;
-  data: any; 
-  error?: string; 
-}
-
-export const registerCompany = async (email: string, phone: string, password: string, name: string): Promise<ApiResponse> => {
-    return await fetchData("customer", "POST", { email, phone, password, name });
-};
-
-
-export const registerCandidate = async (email: string, phone: string, password: string, fullname: string, soft_skills: string[], tech_skills: string[]): Promise<ApiResponse> => {
-    return await fetchData("candidate", "POST", {
-      email,
-      phone,
-      password,
-      fullname,
-      soft_skills,
-      tech_skills
-    });
-};
-
-export const getCustomerProjects = async (): Promise<ApiResponse> => {
-  return fetchData("customer/projects");
 };
