@@ -1,17 +1,17 @@
+import { Session } from "next-auth";
 import API_URL from "./config";
-import { getToken } from "next-auth/jwt";
 
 export const fetchData = async (
   endpoint: string,
   method: string = "GET",
-  body?: any
+  body?: any,
+  session?: Session
 ) => {
-  console.log("getToken", await getToken);
   const options: RequestInit = {
     method: method,
     headers: {
       "Content-Type": "application/json",
-      // authorization: `Bearer ${getServerSession()?.user?.token}`,
+      authorization: `Bearer ${session?.user?.token}`,
     },
   };
 
