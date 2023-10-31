@@ -6,6 +6,7 @@ export const fetchData = async (
   method: string = "GET",
   body?: any
 ) => {
+  console.log("getToken", await getToken);
   const options: RequestInit = {
     method: method,
     headers: {

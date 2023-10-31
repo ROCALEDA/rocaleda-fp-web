@@ -13,13 +13,21 @@ const handler = NextAuth({
       async authorize(credentials, req) {
         if (credentials) {
           const res = await login(credentials?.email, credentials?.password);
-          return res.data;
+          const user = res.data;
+          if (user) {
+            return user;
+          } else {
+            return null;
+          }
         }
       },
     }),
   ],
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, account, user }) {
+      console.log("jwwwwjwjwjwjwt", token);
+      console.log("account", user);
+
       return { ...token, ...user };
     },
     async session({ session, token }) {

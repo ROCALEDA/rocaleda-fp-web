@@ -16,7 +16,7 @@ import { useFormik } from "formik";
 import { useRouter } from "next/navigation";
 
 import { enqueueSnackbar } from "notistack";
-import { signIn, signOut, useSession } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 
 const validationSchema = Yup.object({
   email: Yup.string()
@@ -27,6 +27,7 @@ const validationSchema = Yup.object({
 
 export default function Login() {
   const { data: session, status } = useSession();
+  console.log("login session", session?.user);
 
   const [loading, setLoading] = useState(false);
   const router = useRouter();
@@ -54,6 +55,16 @@ export default function Login() {
 
       if (responseNextAuth?.ok) {
         enqueueSnackbar(`Sesión iniciada (${status})`, { variant: "success" });
+        // 1 admin
+        // 2 customer
+        // 3 candidate
+        if (session?.user.role_id == 2) {
+          router.push("/dashboard-cliente");
+        } else if (session?.user.role_id == 1) {
+          router.push("/dashboard-admin");
+        } else if (session?.user.role_id == 3) {
+          router.push("/dashboard-candidate");
+        }
       }
 
       if (responseNextAuth?.error) {
@@ -62,8 +73,6 @@ export default function Login() {
         });
         return;
       }
-
-      router.push("/proyectos");
     } catch (error) {
       const errorMessage = (error as Error).message;
       enqueueSnackbar(errorMessage, { variant: "error" });
