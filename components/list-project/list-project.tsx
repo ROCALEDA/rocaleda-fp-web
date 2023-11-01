@@ -1,21 +1,27 @@
 "use client";
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Grid, Paper, Typography,Button } from "@mui/material";
-import { getCustomerProjects } from "@/api/auth";
 import Link from "next/link";
 import DetailProject from "@/components/project-detail/project-detail";
+import SelectedProject from "@/components/selected-project/selected-project";
+
+
+type Project = {
+    id: number;
+    name: string;
+    is_team_complete: boolean;
+    total_positions: number;
+    positions: {
+        id: number;
+        is_open: boolean;
+        name: string;
+    }[];
+};
+
 
 export default function ListProject() {
 
-
-    const fetchProjects = async () => {
-        try {
-            const { data } = await getCustomerProjects();
-            console.log(data);
-        } catch (error) {
-            console.error("Error fetching customer projects:", error);
-        }
-    };
+    const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
     return (
         <Grid container>
@@ -45,14 +51,16 @@ export default function ListProject() {
                 </Button>
             </Link>      
             </Grid>
-            <Grid item xs={12} sm={12}>
-            <DetailProject/>
-            </Grid>
+                <Grid item xs={12} sm={12}>
+                    <DetailProject setSelectedProject={setSelectedProject} />
+                </Grid>
             </Grid>
             </Paper>
         </Grid>
         <Grid item xs={12} sm={6}>
-        {/* agregar detalle */}
+            <Grid item xs={12} sm={12}>
+                <SelectedProject project={selectedProject}/>
+            </Grid>
         </Grid>
         </Grid>
     );

@@ -1,3 +1,4 @@
+import { getSession } from "next-auth/react";
 import { fetchData } from "./apiService";
 
 interface ApiResponse {
@@ -37,8 +38,8 @@ export const registerCandidate = async (
   });
 };
 
-export const getCustomerProjects = async (
+export const getCustomerProjects = async (): Promise<ApiResponse> => {
+  const session = await getSession();
   
-): Promise<ApiResponse> => {
-  return fetchData("customer/projects");
+  return fetchData("customer/projects", "GET", undefined, session);
 };

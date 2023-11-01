@@ -1,9 +1,11 @@
 "use client";
-import React, {useState} from 'react';
+import React, {useState , useEffect} from 'react';
 import { Card, CardContent, Typography,Chip } from '@mui/material';
 import PeopleIcon from '@mui/icons-material/PersonOutlineOutlined';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
+import { getCustomerProjects } from "@/api/auth";
+
 
 const defaultData =[
     {
@@ -57,10 +59,42 @@ const defaultData =[
     }
 ]
 
-export default function DetailProject({ data = defaultData }) {
+interface Position {
+    id: number;
+    is_open: boolean;
+    name: string;
+  }
+  
+  interface Project {
+    id: number;
+    name: string;
+    is_team_complete: boolean;
+    total_positions: number;
+    positions: Position[];
+  }
+  
+  interface DetailProjectProps {
+    data?: Project[];
+    setSelectedProject: (project: Project) => void;
+  }
+
+export default function DetailProject({ data = defaultData, setSelectedProject }: DetailProjectProps ) {
+    const [projects, setProjects] = useState<Project[]>(data);
     const theme = useTheme();
     const isSmallScreen = useMediaQuery(theme.breakpoints.down('xs'));
-    const [selectedProject, setSelectedProject] = useState(null);
+
+    useEffect(() => {
+        const fetchProjects = async () => {
+            try {
+                const response = await getCustomerProjects();
+                setProjects(response.data);  // Actualizamos el estado con datos obtenidos
+            } catch (error) {
+                console.error("Error fetching projects:", error);
+            }
+        };
+
+        fetchProjects();
+    }, []);
 
     return (
         <>
@@ -106,18 +140,6 @@ export default function DetailProject({ data = defaultData }) {
                     </div>
                 );
             })}
-            {/* Tarjeta de detalle del proyecto */}
-            {selectedProject && (
-                <Card style={{ marginLeft: '20px' }} elevation={3}>
-                    <CardContent>
-                        <Typography variant="h5">
-                            {selectedProject.name}
-                        </Typography>
-                        <Chip size='small'label={selectedProject.is_team_complete ? "Equipo completo" : "Equipo pendiente"}  />
-                        {/* ... otros detalles del proyecto seleccionado ... */}
-                    </CardContent>
-                </Card>
-            )}
         </>
     );
 }
