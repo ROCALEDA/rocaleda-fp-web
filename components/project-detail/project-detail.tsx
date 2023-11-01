@@ -1,5 +1,5 @@
 "use client";
-import React from 'react';
+import React, {useState} from 'react';
 import { Card, CardContent, Typography,Chip } from '@mui/material';
 import PeopleIcon from '@mui/icons-material/PersonOutlineOutlined';
 import { useTheme } from '@mui/material/styles';
@@ -60,6 +60,7 @@ const defaultData =[
 export default function DetailProject({ data = defaultData }) {
     const theme = useTheme();
     const isSmallScreen = useMediaQuery(theme.breakpoints.down('xs'));
+    const [selectedProject, setSelectedProject] = useState(null);
 
     return (
         <>
@@ -82,7 +83,10 @@ export default function DetailProject({ data = defaultData }) {
                                 transform: 'translateY(-50%)'
                             }}
                         ></div>
-                        <Card sx={{ minWidth: 425 }}>
+                        <Card 
+                            key={project.id}
+                            onClick={() => setSelectedProject(project)}
+                            sx={{ minWidth: 425 }}>
                             <CardContent style={{
                                 display: 'flex',
                                 flexDirection: isSmallScreen ? 'column' : 'row',
@@ -95,13 +99,25 @@ export default function DetailProject({ data = defaultData }) {
                                 </Typography>
                                 <div style={{ display: 'flex', gap: '10px', marginTop: isSmallScreen ? '0' : '8px' }}>
                                     <Chip size="small" icon={<PeopleIcon fontSize="small" />} label={project.total_positions} sx={{ '& .MuiChip-label': { fontSize: isSmallScreen ? '0.8rem' : '1rem' } }} />
-                                    <Chip size="small" {...chipProps} sx={{ '& .MuiChip-label': { fontSize: isSmallScreen ? '0.8rem' : '1rem' } }} />
+                                    <Chip size="small" {...chipProps} color={chipProps.color as "success" | "warning" | "default" | "primary" | "secondary" | "error" | "info"} sx={{ '& .MuiChip-label': { fontSize: isSmallScreen ? '0.8rem' : '1rem' } }} />
                                 </div>
                             </CardContent>
                         </Card>
                     </div>
                 );
             })}
+            {/* Tarjeta de detalle del proyecto */}
+            {selectedProject && (
+                <Card style={{ marginLeft: '20px' }} elevation={3}>
+                    <CardContent>
+                        <Typography variant="h5">
+                            {selectedProject.name}
+                        </Typography>
+                        <Chip size='small'label={selectedProject.is_team_complete ? "Equipo completo" : "Equipo pendiente"}  />
+                        {/* ... otros detalles del proyecto seleccionado ... */}
+                    </CardContent>
+                </Card>
+            )}
         </>
     );
 }
