@@ -49,7 +49,7 @@ export default function Layout({ children  }: LayoutProps) {
                     marginTop: '40px'
                 }}
             >
-                <CustomBreadcrumbs routes={routes} paddingLeft="120px" />
+                <CustomBreadcrumbs routes={routes} paddingLeft="105px" />
                 {children}
             </Box>
         </Box>
