@@ -6,7 +6,12 @@ jest.mock('../../api/auth', () => ({
   getCustomerProjects: jest.fn()
 }));
 
-jest.mock('../../components/project-detail/project-detail', () => () => <div data-testid='detailProjectComponent'> Mock DetailProject </div>);
+
+jest.mock('../../components/project-detail/project-detail', () => {
+    const ProjectDetail = () => <div data-testid='detailProjectComponent'> Mock DetailProject </div>;
+    ProjectDetail.displayName = 'ProjectDetail';
+    return ProjectDetail;
+});
 
 describe('<ListProject />', () => {
   it('renders the component correctly', () => {
