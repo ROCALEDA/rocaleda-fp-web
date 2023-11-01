@@ -1,5 +1,3 @@
-import { getSession as getAuthSession } from "next-auth/react";
-import type { Session } from "next-auth";
 import { fetchData } from "./apiService";
 
 interface ApiResponse {
@@ -37,12 +35,4 @@ export const registerCandidate = async (
     soft_skills,
     tech_skills,
   });
-};
-
-
-
-export const getCustomerProjects = async (): Promise<ApiResponse> => {
-  const session = await getAuthSession();
-  
-  return fetchData("customer/projects", "GET", undefined, session as Session);
 };

@@ -8,10 +8,9 @@ interface LayoutProps {
 
 export default function Layout({ children  }: LayoutProps) {
     return (
-        <Box
-        component='div' 
+        <Box 
         role="img"
-        aria-label="Balloon"
+        alt="Balloon"
             sx={{
                 backgroundImage: 'linear-gradient(to right, transparent 50%, transparent 50%), url(/images/cloud3.jpg)',
                 backgroundSize: '50% 100%',
