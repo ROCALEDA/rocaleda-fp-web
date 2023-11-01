@@ -1,6 +1,6 @@
 import { Box } from '@mui/material';
 import { ReactNode } from "react";
-import ResponsiveAppBar from "@/components/navbar/navbar";
+import ResponsiveAppBar from "@/components/navbar/empresa";
 
 interface LayoutProps {
     children: ReactNode;
