@@ -1,5 +1,3 @@
-import { getSession as getAuthSession } from "next-auth/react";
-import type { Session } from "next-auth";
 import { fetchData } from "./apiService";
 
 interface ApiResponse {

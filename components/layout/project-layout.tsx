@@ -1,11 +1,17 @@
 import { Box } from '@mui/material';
 import { ReactNode } from "react";
 import ResponsiveAppBar from "@/components/navbar/empresa";
-import EnterpriseBreadcrumbs from "@/components/breadcrumbs/empresas";
+import CustomBreadcrumbs from "@/components/breadcrumbs/breadcrumbs";
 
 interface LayoutProps {
     children: ReactNode;
-  }
+}
+
+const routes = [
+    { name: 'Empresas', path: '/' },
+    { name: 'Proyectos', path: '/proyectos' }
+];
+
 
 export default function Layout({ children  }: LayoutProps) {
     return (
@@ -27,7 +33,7 @@ export default function Layout({ children  }: LayoutProps) {
                     marginLeft: '20px'
                 }}
             >
-            <div data-testid="enterpriseBreadcrumbsTestId"><EnterpriseBreadcrumbs/></div>    
+            <div data-testid="CustomBreadcrumbsTestId"><CustomBreadcrumbs routes={routes} paddingLeft="0px" /></div>    
                 {children}
             </Box>
         </Box>

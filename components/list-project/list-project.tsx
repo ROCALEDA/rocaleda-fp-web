@@ -38,7 +38,7 @@ export default function ListProject() {
             </Grid>
             <Grid item xs={4} sm={2}  marginTop={'45px'} display="flex" alignItems="center" justifyContent="flex-end">
             
-            <Link href="/crea_proyecto" passHref>
+            <Link href="/proyecto/register" passHref>
                 <Button 
                     variant="outlined" 
                     color="primary" 
