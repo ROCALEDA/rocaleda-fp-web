@@ -89,7 +89,7 @@ function Navbar() {
                 ) : (
                   <>
                     <Link href="/proyecto"><StyledOptionButton>Proyectos</StyledOptionButton></Link>
-                    <Link href="/candidato"><StyledOptionButton>Candidatos</StyledOptionButton></Link>
+                    <Link href="/candidatos"><StyledOptionButton>Candidatos</StyledOptionButton></Link>
                   </>
                 )}
             </div>
@@ -111,7 +111,7 @@ function Navbar() {
                     <Link href="/proyecto">Proyectos</Link>
                 </MenuItem>
                 <MenuItem onClick={handleClose}>
-                    <Link href="/candidato">Candidatos</Link>
+                    <Link href="/candidatos">Candidatos</Link>
                 </MenuItem>
             </Menu>
         </AppBar>

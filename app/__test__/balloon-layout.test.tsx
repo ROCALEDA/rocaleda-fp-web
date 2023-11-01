@@ -5,7 +5,7 @@ import Layout from "@/components/layout/balloon-layout";
 describe('<Layout />', () => {
   it('renders without crashing', () => {
     expect(() => {
-      render(<Layout />);
+      render(<Layout>{}</Layout>,{});
     }).not.toThrow();
   });
 });
