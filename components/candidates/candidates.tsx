@@ -4,9 +4,8 @@ import { Box, Breadcrumbs, Container, Link, Typography } from "@mui/material";
 import { useSession } from "next-auth/react";
 import Navbar from "../navbar/navbar";
 
-export default function Projects() {
+export default function Candidates() {
   const { data: session } = useSession();
-  console.log("data SESSION", session);
 
   return (
     <Box>

@@ -1,8 +1,8 @@
 "use client";
+import Link from "next/link";
 
 import {
   AppBar,
-  Avatar,
   Box,
   Button,
   Container,
@@ -10,7 +10,6 @@ import {
   Menu,
   MenuItem,
   Toolbar,
-  Tooltip,
   Typography,
 } from "@mui/material";
 import Image from "next/image";
@@ -18,37 +17,31 @@ import { useState } from "react";
 import { useSession } from "next-auth/react";
 
 import MenuIcon from "@mui/icons-material/Menu";
-import AdbIcon from "@mui/icons-material/Adb";
 import LanguageSelector from "../language-selector.tsx/language-selector";
-
-const pages = ["Products", "Pricing", "Blog"];
-const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 export default function Navbar() {
   const { data: session } = useSession();
+  const pages = [
+    { roles: [1], name: "Proyectos", link: "/projects" },
+    { roles: [1, 2], name: "Candidatos", link: "/candidates" },
+    { roles: [3], name: "Entrevistas", link: "/interviews" },
+  ];
+
   const user = session?.user;
-  console.log("data SESSION", session);
+
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
-  const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
-  };
-  const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorElUser(event.currentTarget);
   };
 
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
   };
 
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
-  };
-
   function getRoleLogo(role_id?: number) {
     const roleLogos: any = {
-      1: "/images/logo_admins.jpeg",
+      1: "/images/logo_admin.jpeg",
       2: "/images/logo_empresas.jpeg",
       3: "/images/logo_candidatos.jpeg",
       default: "/images/logo.png",
@@ -60,12 +53,13 @@ export default function Navbar() {
 
   return (
     <AppBar position="static" color="transparent">
+      USER ROLE{user?.role_id}
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Box sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}>
             <Image
               src={roleLogo}
-              alt="Quire logo"
+              alt="Quire logo desktop"
               width={250}
               height={70}
               style={{ objectFit: "contain" }}
@@ -100,13 +94,16 @@ export default function Navbar() {
                 display: { xs: "block", md: "none" },
               }}
             >
-              {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center" color="black">
-                    {page}
-                  </Typography>
-                </MenuItem>
-              ))}
+              {pages.map((page) => {
+                return session?.user?.role_id &&
+                  page.roles.includes(session.user.role_id) ? (
+                  <MenuItem key={page.name} onClick={handleCloseNavMenu}>
+                    <Typography textAlign="center" color="black">
+                      {page.name}
+                    </Typography>
+                  </MenuItem>
+                ) : null;
+              })}
             </Menu>
           </Box>
           <Box
@@ -114,50 +111,31 @@ export default function Navbar() {
           >
             <Image
               src={roleLogo}
-              alt="Quire logo"
+              alt="Quire logo mobile"
               width={250}
               height={70}
               style={{ objectFit: "contain" }}
             />
           </Box>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            {pages.map((page) => (
-              <Button
-                key={page}
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: "white", display: "block" }}
-              >
-                {page}
-              </Button>
-            ))}
+            {pages.map((page) => {
+              return session?.user?.role_id &&
+                page.roles.includes(session.user.role_id) ? (
+                <Link key={page.name} href={page.link}>
+                  <Button
+                    key={page.name}
+                    onClick={handleCloseNavMenu}
+                    sx={{ my: 2, display: "block" }}
+                  >
+                    {page.name}
+                  </Button>
+                </Link>
+              ) : null;
+            })}
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
             <LanguageSelector />
-            <Menu
-              sx={{ mt: "45px" }}
-              id="menu-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
-            >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center" color={"black"}>
-                    {setting}
-                  </Typography>
-                </MenuItem>
-              ))}
-            </Menu>
           </Box>
         </Toolbar>
       </Container>

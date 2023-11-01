@@ -27,7 +27,6 @@ const validationSchema = Yup.object({
 
 export default function Login() {
   const { data: session, status } = useSession();
-  console.log("login session", session?.user);
 
   const [loading, setLoading] = useState(false);
   const router = useRouter();
@@ -59,11 +58,11 @@ export default function Login() {
         // 2 customer
         // 3 candidate
         if (session?.user.role_id == 2) {
-          router.push("/dashboard-cliente");
+          router.push("/cliente");
         } else if (session?.user.role_id == 1) {
-          router.push("/dashboard-admin");
+          router.push("/admin");
         } else if (session?.user.role_id == 3) {
-          router.push("/dashboard-candidate");
+          router.push("/candidate");
         }
       }
 
