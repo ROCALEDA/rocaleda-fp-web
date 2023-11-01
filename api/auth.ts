@@ -41,8 +41,8 @@ export const registerCandidate = async (
 
 
 
-export const getCustomerProjects = async (): Promise<ApiResponse> => {
+/*export const getCustomerProjects = async (): Promise<ApiResponse> => {
   const session = await getAuthSession();
   
   return fetchData("customer/projects", "GET", undefined, session as Session);
-};
+};*/
