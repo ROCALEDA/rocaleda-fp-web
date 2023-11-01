@@ -8,8 +8,9 @@ describe('<ListProject />', () => {
   it('renders the component correctly', () => {
     render(<ListProject />);
 
-    expect(screen.getByText('Proyectos')).toBeInTheDocument();
-    expect(screen.getByText('Gestiona tus proyectos y tu equipo')).toBeInTheDocument();
-    expect(screen.getByText('CREAR')).toBeInTheDocument();
-  });
+        expect(screen.getByText("Proyectos")).toBeInTheDocument();
+        expect(screen.getByText("Gestiona tus proyectos y tu equipo")).toBeInTheDocument();
+
+        expect(screen.getByText("CREAR")).toBeInTheDocument();
+    });
 });
