@@ -53,7 +53,6 @@ export default function Navbar() {
 
   return (
     <AppBar position="static" color="transparent">
-      USER ROLE{user?.role_id}
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Box sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}>
