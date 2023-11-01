@@ -7,11 +7,10 @@ jest.mock('../../api/auth', () => ({
 }));
 
 
-jest.mock('../../components/project-detail/project-detail', () => {
-    const ProjectDetail = () => <div data-testid='detailProjectComponent'> Mock DetailProject </div>;
-    ProjectDetail.displayName = 'ProjectDetail';
-    return ProjectDetail;
-});
+const MockedDetailProject = () => <div data-testid="detailProjectComponent"> Mock DetailProject </div>;
+MockedDetailProject.displayName = "MockedDetailProject";
+
+jest.mock("../../components/project-detail/project-detail", () => MockedDetailProject);
 
 describe('<ListProject />', () => {
   it('renders the component correctly', () => {
