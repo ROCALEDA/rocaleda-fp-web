@@ -4,7 +4,7 @@ import { Card, CardContent, Typography,Chip } from '@mui/material';
 import PeopleIcon from '@mui/icons-material/PersonOutlineOutlined';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
-import { getCustomerProjects } from "@/api/auth";
+//import { getCustomerProjects } from "@/api/auth";
 
 
 const defaultData =[
@@ -83,18 +83,7 @@ export default function DetailProject({ data = defaultData, setSelectedProject }
     const theme = useTheme();
     const isSmallScreen = useMediaQuery(theme.breakpoints.down('xs'));
 
-    useEffect(() => {
-        const fetchProjects = async () => {
-            try {
-                const response = await getCustomerProjects();
-                setProjects(response.data);  // Actualizamos el estado con datos obtenidos
-            } catch (error) {
-                console.error("Error fetching projects:", error);
-            }
-        };
-
-        fetchProjects();
-    }, []);
+    
 
     return (
         <>
