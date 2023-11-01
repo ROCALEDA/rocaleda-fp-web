@@ -1,6 +1,7 @@
 import { Box } from '@mui/material';
 import { ReactNode } from "react";
 import ResponsiveAppBar from "@/components/navbar/empresa";
+import EnterpriseBreadcrumbs from "@/components/breadcrumbs/empresas";
 
 interface LayoutProps {
     children: ReactNode;
@@ -8,12 +9,9 @@ interface LayoutProps {
 
 export default function Layout({ children  }: LayoutProps) {
     return (
-        <Box
-        component='div' 
-        role="img"
-        aria-label="Balloon"
+        <Box 
             sx={{
-                backgroundImage: 'linear-gradient(to right, transparent 50%, transparent 50%), url(/images/cloud3.jpg)',
+                backgroundImage: 'linear-gradient(to right, transparent 50%, transparent 50%), url(/images/cloud4.png)',
                 backgroundSize: '50% 100%',
                 minHeight: '100vh',
                 backgroundPosition: 'right center',
@@ -22,26 +20,14 @@ export default function Layout({ children  }: LayoutProps) {
                 backgroundRepeat: 'no-repeat'
             }}
         >
-            <ResponsiveAppBar/>
-
+            <div data-testid="responsiveAppBarTestId"><ResponsiveAppBar/></div>
             <Box
                 sx={{
-                    position: 'absolute',
-                    top: '100px',
-                    left: 0,
-                    width: '150px',
-                    height: '250px',
-                    backgroundImage: 'url(/images/balloon.png)',
-                    backgroundSize: 'contain',
-                    backgroundRepeat: 'no-repeat'
-                }}
-            ></Box>
-
-            <Box
-                sx={{
-                    marginTop: '40px'
+                    marginTop: '40px',
+                    marginLeft: '20px'
                 }}
             >
+            <div data-testid="enterpriseBreadcrumbsTestId"><EnterpriseBreadcrumbs/></div>    
                 {children}
             </Box>
         </Box>
