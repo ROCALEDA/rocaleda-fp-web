@@ -1,12 +1,21 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
-import EnterpriseBreadcrumbs from '@/components/breadcrumbs/empresas';
+import { render, screen } from '@testing-library/react';
+import CustomBreadcrumbs from '@/components/breadcrumbs/breadcrumbs';
 
-describe('<EnterpriseBreadcrumbs />', () => {
-    it('renders the breadcrumbs correctly', () => {
-        render(<EnterpriseBreadcrumbs />);
-        
-        expect(screen.getByText("Empresas")).toBeInTheDocument();
-        expect(screen.getByText("Proyectos")).toBeInTheDocument();
+describe('<CustomBreadcrumbs />', () => {
+    const mockRoutes = [
+        { name: 'Inicio', path: '/' },
+        { name: 'Empresa', path: '/empresa' },
+        { name: 'Proyectos', path: '/proyectos' }
+    ];
+
+    beforeEach(() => {
+        render(<CustomBreadcrumbs routes={mockRoutes} paddingLeft="10px" />);
+    });
+
+    it('renders all routes correctly', () => {
+        mockRoutes.forEach(route => {
+            expect(screen.getByText(route.name)).toBeInTheDocument();
+        });
     });
 });

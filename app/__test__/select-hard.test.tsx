@@ -1,6 +1,7 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import BasicSelect from "@/components/select-hard/select";
+import { SelectProps } from "@/components/select-hard/select";
 
 describe("BasicSelect Component", () => {
   const mockOptions = [
@@ -10,12 +11,24 @@ describe("BasicSelect Component", () => {
   ];
 
   it("renders the provided label", () => {
-    render(<BasicSelect text="Select an option" options={mockOptions} />);
+    const props: SelectProps = {
+      text: "Select an option",
+      options: mockOptions,
+      selectedOptions: [],
+      onSelectionChange: () => {},
+    };
+    render(<BasicSelect {...props} />);
     expect(screen.getByLabelText(/Select an option/i)).toBeInTheDocument();
   });
 
   it("renders provided options", async () => {
-    render(<BasicSelect text="Select an option" options={mockOptions} />);
+    const props: SelectProps = {
+      text: "Select an option",
+      options: mockOptions,
+      selectedOptions: [],
+      onSelectionChange: () => {},
+    };
+    render(<BasicSelect {...props} />);
 
     const dropdown = screen.getByRole("combobox");
     userEvent.click(dropdown);
@@ -27,7 +40,13 @@ describe("BasicSelect Component", () => {
   });
 
   it("allows selection of multiple options", async () => {
-    render(<BasicSelect text="Select an option" options={mockOptions} />);
+    const props: SelectProps = {
+      text: "Select an option",
+      options: mockOptions,
+      selectedOptions: [],
+      onSelectionChange: () => {},
+    };
+    render(<BasicSelect {...props} />);
 
     const dropdown = screen.getByRole("combobox");
     userEvent.click(dropdown);
@@ -42,7 +61,13 @@ describe("BasicSelect Component", () => {
     userEvent.click(dropdown);
   });
   it("renders chips for selected options", async () => {
-    render(<BasicSelect text="Select an option" options={mockOptions} />);
+    const props: SelectProps = {
+      text: "Select an option",
+      options: mockOptions,
+      selectedOptions: [],
+      onSelectionChange: () => {},
+    };
+    render(<BasicSelect {...props} />);
     const dropdown = screen.getByRole("combobox");
     userEvent.click(dropdown);
     await waitFor(() => {
@@ -53,7 +78,13 @@ describe("BasicSelect Component", () => {
     expect(chip).toBeInTheDocument();
   });
   it("changes the style of selected menu items", async () => {
-    render(<BasicSelect text="Select an option" options={mockOptions} />);
+    const props: SelectProps = {
+      text: "Select an option",
+      options: mockOptions,
+      selectedOptions: [],
+      onSelectionChange: () => {},
+    };
+    render(<BasicSelect {...props} />);
     const dropdown = screen.getByRole("combobox");
     userEvent.click(dropdown);
     await waitFor(() => {
@@ -64,7 +95,13 @@ describe("BasicSelect Component", () => {
     // Add an assertion for the style changes you expect
   });
   it("allows deselecting a selected option", async () => {
-    render(<BasicSelect text="Select an option" options={mockOptions} />);
+    const props: SelectProps = {
+      text: "Select an option",
+      options: mockOptions,
+      selectedOptions: [],
+      onSelectionChange: () => {},
+    };
+    render(<BasicSelect {...props} />);
     const dropdown = screen.getByRole("combobox");
     userEvent.click(dropdown);
     await waitFor(() => {
@@ -72,6 +109,5 @@ describe("BasicSelect Component", () => {
       userEvent.click(option1);  // Select
       userEvent.click(option1);  // Deselect
     });
-    // Add assertions to verify that the option has been deselected
   });
 });
