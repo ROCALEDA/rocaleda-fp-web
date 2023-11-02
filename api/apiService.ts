@@ -5,13 +5,13 @@ export const fetchData = async (
   endpoint: string,
   method: string = "GET",
   body?: any,
-  session?: Session
+  session?: Session | null
 ) => {
   const options: RequestInit = {
     method: method,
     headers: {
       "Content-Type": "application/json",
-      authorization: `Bearer ${session?.user?.token}`,
+      Authorization: `Bearer ${session?.user?.token}`,
     },
   };
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import ListProject from '@/components/list-project/list-project';
+import ListProject from '@/components/projects/list-project';
 
 
 
