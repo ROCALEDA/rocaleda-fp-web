@@ -1,7 +1,6 @@
 import React from "react";
-import { getByText, render, screen, waitFor } from "@testing-library/react";
+import { render, waitFor } from "@testing-library/react";
 import Candidates from "@/components/candidates/candidates";
-import CandidatesTable from "@/components/candidates/candidates-table";
 
 // Mocking the global fetch function
 global.fetch = jest.fn();
@@ -59,7 +58,7 @@ describe("<Candidates />", () => {
       .spyOn(global, "fetch")
       .mockResolvedValue({ json: jest.fn().mockResolvedValue(emptyData) });
 
-    const { getByText } = render(<CandidatesTable />);
+    const { getByText } = render(<Candidates />);
     await waitFor(() => {
       expect(getByText("No hay candidatos para mostrar")).toBeInTheDocument();
     });
@@ -76,7 +75,7 @@ describe("<Candidates />", () => {
       .spyOn(global, "fetch")
       .mockResolvedValue({ json: jest.fn().mockResolvedValue(mockData) });
 
-    const { getByText } = render(<CandidatesTable />);
+    const { getByText } = render(<Candidates />);
     await waitFor(() => {
       expect(getByText("749")).toBeInTheDocument();
       expect(getByText("910")).toBeInTheDocument();
