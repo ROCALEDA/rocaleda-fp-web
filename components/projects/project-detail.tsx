@@ -6,7 +6,7 @@ import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useSession } from "next-auth/react";
 import API_URL from "@/api/config";
-
+import { useRouter } from "next/navigation";
 
 
 interface Position {
@@ -35,9 +35,12 @@ export default function DetailProject({ setSelectedProject }: DetailProjectProps
     const isSmallScreen = useMediaQuery(theme.breakpoints.down('xs'));
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+    const router = useRouter();
 
     useEffect(() => {
-        if (session) {
+        if (!session) {
+            router.push('/login');
+        } else {
             setIsLoading(true);
             fetch(`${API_URL}/customer/projects`, {
                 headers: {
@@ -56,7 +59,7 @@ export default function DetailProject({ setSelectedProject }: DetailProjectProps
                 setIsLoading(false);
             });
         }
-    }, [session]);
+    }, [session, router]);
 
     if (isLoading) return <p>Loading...</p>;
     if (error) return <p>{error}</p>;
