@@ -58,7 +58,7 @@ export default function Login() {
         // 2 customer
         // 3 candidate
         if (session?.user.role_id == 2) {
-          router.push("/cliente");
+          router.push("/projects");
         } else if (session?.user.role_id == 1) {
           router.push("/admin");
         } else if (session?.user.role_id == 3) {

@@ -4,60 +4,10 @@ import { Card, CardContent, Typography,Chip } from '@mui/material';
 import PeopleIcon from '@mui/icons-material/PersonOutlineOutlined';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
-//import { getCustomerProjects } from "@/api/auth";
+import { useSession } from "next-auth/react";
+import API_URL from "@/api/config";
 
 
-const defaultData =[
-    {
-        "id": 1,
-        "name": "Proyecto prueba",
-        "is_team_complete": false,
-        "total_positions": 2,
-        "positions": [
-            {
-                "id": 1,
-                "is_open": true,
-                "name": "Desarrollador Frontend"
-            },
-            {
-                "id": 2,
-                "is_open": true,
-                "name": "Desarrollador Backend"
-            }
-        ]
-    },
-    {
-        "id": 3,
-        "name": "My little first Proyect",
-        "is_team_complete": true,
-        "total_positions": 1,
-        "positions": [
-            {
-                "id": 5,
-                "is_open": true,
-                "name": "FrontEnd Engineer"
-            }
-        ]
-    },
-    {
-        "id": 11,
-        "name": "Mi proyectoy",
-        "is_team_complete": false,
-        "total_positions": 2,
-        "positions": [
-            {
-                "id": 6,
-                "is_open": true,
-                "name": "Desarrollador Frontend"
-            },
-            {
-                "id": 7,
-                "is_open": true,
-                "name": "Desarrollador Backend"
-            }
-        ]
-    }
-]
 
 interface Position {
     id: number;
@@ -75,30 +25,46 @@ interface Position {
   
   interface DetailProjectProps {
     data?: Project[];
-    setSelectedProject: (project: Project) => void;
-  }
+    setSelectedProject?: (project: Project) => void;
+}
 
-export default function DetailProject({ data = defaultData, setSelectedProject }: DetailProjectProps ) {
-    const [projects, setProjects] = useState<Project[]>(data);
+export default function DetailProject({ setSelectedProject }: DetailProjectProps ) {
+    const { data: session } = useSession();
+    const [projects, setProjects] = useState<Project[]>([]);
     const theme = useTheme();
     const isSmallScreen = useMediaQuery(theme.breakpoints.down('xs'));
+    const [isLoading, setIsLoading] = useState<boolean>(true);
+    const [error, setError] = useState<string | null>(null);
 
-    /*useEffect(() => {
-        const fetchProjects = async () => {
-            try {
-                const response = await getCustomerProjects();
-                setProjects(response.data);  // Actualizamos el estado con datos obtenidos
-            } catch (error) {
-                console.error("Error fetching projects:", error);
-            }
-        };
+    useEffect(() => {
+        if (session) {
+            setIsLoading(true);
+            fetch(`${API_URL}/customer/projects`, {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${session?.user?.token}`,
+                },
+            })
+            .then((response) => response.json())
+            .then((data) => {
+                setProjects(data);
+                setIsLoading(false);
+            })
+            .catch((error) => {
+                console.error("Error al obtener los proyectos:", error);
+                setError("Error al cargar los datos");
+                setIsLoading(false);
+            });
+        }
+    }, [session]);
 
-        fetchProjects();
-    }, []);*/
+    if (isLoading) return <p>Loading...</p>;
+    if (error) return <p>{error}</p>;
+    if (!projects.length) return <p>No hay proyectos para mostrar</p>;
 
     return (
         <>
-            {data.map((project) => {
+            {projects.map((project) => {
                 const chipProps = project.is_team_complete
                     ? { label: "Equipo completo", color: "success" }
                     : { label: "Equipo pendiente", color: "warning" };

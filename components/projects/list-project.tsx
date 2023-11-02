@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Grid, Paper, Typography,Button } from "@mui/material";
 import Link from "next/link";
 import DetailProject from "@/components/projects/project-detail";
@@ -22,6 +22,22 @@ type Project = {
 export default function ListProject() {
 
     const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+    const cardRef: React.RefObject<HTMLDivElement> = useRef(null);
+    const detailRef: React.RefObject<HTMLDivElement> = useRef(null);
+
+    useEffect(() => {
+        function handleClickOutside(event: MouseEvent) {
+            if (cardRef.current && !cardRef.current.contains(event.target as Node) && detailRef.current && !detailRef.current.contains(event.target as Node)) {
+                setSelectedProject(null);
+            }
+        }
+    
+        window.addEventListener("click", handleClickOutside);
+    
+        return () => {
+            window.removeEventListener("click", handleClickOutside);
+        };
+    }, []);
 
     return (
         <Grid container>
@@ -51,14 +67,14 @@ export default function ListProject() {
                 </Button>
             </Link>      
             </Grid>
-                <Grid item xs={12} sm={12}>
+                <Grid item xs={12} sm={12} ref={cardRef}>
                     <DetailProject setSelectedProject={setSelectedProject} />
                 </Grid>
             </Grid>
             </Paper>
         </Grid>
         <Grid item xs={12} sm={6}>
-            <Grid item xs={12} sm={12}>
+            <Grid item xs={12} sm={12} ref={detailRef}>
                 <SelectedProject project={selectedProject}/>
             </Grid>
         </Grid>
