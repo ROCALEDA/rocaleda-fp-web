@@ -1,4 +1,4 @@
-import Register from "@/components/candidate-register/register";
+import Register from "@/components/candidates/register";
 import AuthLayout from "@/components/layout/auth-layout";
 
 export default function RegisterPage() {
