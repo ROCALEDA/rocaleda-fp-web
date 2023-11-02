@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import DetailProject from '@/components/project-detail/project-detail';
+import DetailProject from '@/components/projects/project-detail';
 
 describe('<DetailProject />', () => {
     it('renders the projects correctly', () => {

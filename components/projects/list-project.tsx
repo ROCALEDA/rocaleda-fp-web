@@ -2,8 +2,8 @@
 import React, { useState } from 'react';
 import { Grid, Paper, Typography,Button } from "@mui/material";
 import Link from "next/link";
-import DetailProject from "@/components/project-detail/project-detail";
-import SelectedProject from "@/components/selected-project/selected-project";
+import DetailProject from "@/components/projects/project-detail";
+import SelectedProject from "@/components/projects/selected-project";
 
 
 type Project = {
@@ -38,7 +38,7 @@ export default function ListProject() {
             </Grid>
             <Grid item xs={4} sm={2}  marginTop={'45px'} display="flex" alignItems="center" justifyContent="flex-end">
             
-            <Link href="/proyecto/register" passHref>
+            <Link href="/projects/register" passHref>
                 <Button 
                     variant="outlined" 
                     color="primary" 
