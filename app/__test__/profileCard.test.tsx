@@ -1,6 +1,6 @@
 import React from "react";
 import { render } from "@testing-library/react";
-import ProfileCard from "@/components/profileCard/profile_card";
+import ProfileCard from "@/components/project-register/profileCard";
 
 describe('<ProfileCard />', () => {
   it('renders without crashing', () => {

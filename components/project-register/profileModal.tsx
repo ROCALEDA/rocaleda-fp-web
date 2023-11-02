@@ -1,5 +1,5 @@
 "use client";
-import React, { useState} from 'react';
+import React from 'react';
 import { Modal, Box, Typography, TextField, Select, MenuItem, Button, Chip } from '@mui/material';
 import InputLabel from '@mui/material/InputLabel';
 import CancelIcon from '@mui/icons-material/Cancel'; 
@@ -163,8 +163,9 @@ const ProfileModal: React.FC<ProfileModalProps> = ({ open, onClose, onAdd ,exist
             error={!!errors.profileName}
             helperText={errors.profileName} 
             />
-          <InputLabel id="demo-multiple-chip-label" style={{ marginTop: '40px' }}>Habilidades técnicas</InputLabel>
+          <InputLabel id="tech-skills-label" style={{ marginTop: '40px' }}>Habilidades técnicas</InputLabel>
           <Select
+            labelId="tech-skills-label"
             label = "Habilidades técnicas"
             multiple
             fullWidth
@@ -192,8 +193,9 @@ const ProfileModal: React.FC<ProfileModalProps> = ({ open, onClose, onAdd ,exist
         </MenuItem>
     ))}
           </Select>
-          <InputLabel id="demo-multiple-chip-label2" style={{ marginTop: '40px'}}>Habilidades blandas</InputLabel>
+          <InputLabel id="soft-skills-label" style={{ marginTop: '40px'}}>Habilidades blandas</InputLabel>
           <Select
+            labelId="soft-skills-label"
             multiple
             fullWidth
             value={softSkills}
@@ -247,7 +249,7 @@ const ProfileModal: React.FC<ProfileModalProps> = ({ open, onClose, onAdd ,exist
                       backgroundColor: "#864D8F",
                     },
                   }}>
-                    {onEdit ? "GUARDAR" : "AÑADIR"}
+                    {existingProfile ? "GUARDAR" : "AÑADIR"}
             </Button>
           </Box>
         </Box>

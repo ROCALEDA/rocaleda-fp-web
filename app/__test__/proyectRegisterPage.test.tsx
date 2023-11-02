@@ -1,13 +1,12 @@
 import React from "react";
 import { render} from "@testing-library/react";
-import ProyectPage from "../projects/page";
+import RegisterPage from "../projects/register/page";
 
 
-describe('<ProyectPage />', () => {
+describe('<RegisterPage />', () => {
     it('renders without crashing', () => {
         expect(() => {
-            render(<ProyectPage />);
+            render(<RegisterPage />);
         }).not.toThrow();
     });
 });
-
