@@ -72,7 +72,7 @@ export default function CandidatesTable() {
   }, [session, searchSoftSkills, searchTechSkills]);
 
   if (isLoading) return <p>Loading...</p>;
-  if (!candidates) return <p>No profile data</p>;
+  if (!candidates) return <p>No hay candidatos para mostrar</p>;
 
   return (
     <Paper sx={{ width: "100%", overflow: "hidden" }}>
