@@ -1,24 +1,8 @@
 import "./globals.css";
 import type { Metadata } from "next";
-import { getServerSession } from "next-auth/next";
-import { Outfit, Philosopher } from "next/font/google";
-
 import ThemeRegistry from "./ThemeRegistry";
 import IntegrationNotistack from "@/components/toast/toast-provider";
 import ClientSessionProvider from "./context/client-provider";
-
-const outfit = Outfit({
-  subsets: ["latin"],
-  variable: "--font-inter",
-  display: "swap",
-});
-
-const philosopher = Philosopher({
-  subsets: ["latin"],
-  weight: ["400", "700"],
-  variable: "--font-roboto-mono",
-  display: "swap",
-});
 
 export const metadata: Metadata = {
   title: "ABC Jobs",
@@ -31,7 +15,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${outfit.variable} ${philosopher.variable}`}>
+    <html lang="en">
       <body>
         <ClientSessionProvider>
           <ThemeRegistry options={{ key: "mui" }}>
