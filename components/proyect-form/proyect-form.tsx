@@ -9,7 +9,7 @@ import EditModal from "@/components/editEmployees/EditModal"
 import ProfileCard from "@/components/profileCard/profile_card";
 import EditProfileModal from "@/components/editProfile/EditProfile";
 import * as yup from 'yup';
-import { registerProject } from "@/api/apiService";
+import { registerProject } from "@/api/auth";
 import { enqueueSnackbar } from "notistack";
 
 interface CreateProjectFormProps {

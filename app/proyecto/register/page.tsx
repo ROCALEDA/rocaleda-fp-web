@@ -1,9 +1,10 @@
 import Layout from "@/components/layout/balloon-layout";
+import RegisterProyect from "@/components/project-register/project-register";
 
-export default function RegisterProyect() {
+export default function RegisterPage() {
     return (
         <Layout>
-        <h1>Crear Proyecto</h1>
+        <RegisterProyect />
         </Layout>
     );
 }
