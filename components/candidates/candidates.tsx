@@ -2,59 +2,49 @@
 
 import {
   Box,
-  Breadcrumbs,
-  Container,
   Link,
   Stack,
+  Container,
   Typography,
+  Breadcrumbs,
 } from "@mui/material";
-import { useSession } from "next-auth/react";
-import Navbar from "../navbar/navbar";
-import CandidatesTable from "./candidates-table";
-import { useFormik } from "formik";
 import * as Yup from "yup";
+import { useFormik } from "formik";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { enqueueSnackbar } from "notistack";
-import BasicSelect from "../select-hard/select";
 
-const tech_skill = [
-  { value: "1", label: "Frontend" },
-  { value: "2", label: "Backend" },
-  { value: "3", label: "ReactJS" },
-  { value: "4", label: "NodeJS" },
-  { value: "5", label: "NextJS" },
-  { value: "6", label: "Python" },
-  { value: "7", label: "Flask" },
-  { value: "8", label: "AWS" },
-  { value: "9", label: "Architecture" },
-  { value: "10", label: "NestJS" },
-  { value: "11", label: "Angular" },
-  { value: "12", label: "GCP" },
-  { value: "13", label: "Azure" },
-  { value: "14", label: "DevOps" },
-  { value: "15", label: "Java" },
-  { value: "16", label: "SpringBoot" },
-  { value: "17", label: "FastAPI" },
-  { value: "18", label: "Data Science" },
-  { value: "19", label: "SQL" },
-  { value: "20", label: "NoSQL" },
-  { value: "21", label: "MongoDB" },
-  { value: "22", label: "Redis" },
-  { value: "23", label: "CSS" },
-  { value: "24", label: "Typescript" },
-];
-const soft_skill = [
-  { value: "1", label: "Leadership" },
-  { value: "2", label: "Responsibility" },
-  { value: "3", label: "Ownership" },
-  { value: "4", label: "Communication" },
-  { value: "5", label: "Teamwork" },
-  { value: "6", label: "Adaptability" },
-  { value: "7", label: "Empathy" },
-  { value: "8", label: "Management" },
-];
+import Navbar from "../navbar/navbar";
+import { philosopher } from "@/app/theme/fonts";
+import BasicSelect from "../select-hard/select";
+import CandidatesTable from "./candidates-table";
+import { soft_skills, tech_skills } from "@/utils/skills";
+import { useCallback, useEffect, useState } from "react";
 
 export default function Candidates() {
-  const { data: session } = useSession();
+  const [techSkills, setTechSkills] = useState<string[]>([]);
+  const [softSkills, setSoftSkills] = useState<string[]>([]);
+
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams()!;
+
+  const createQueryString = useCallback(() => {
+    const params = new URLSearchParams(searchParams);
+    const techSkillsParam = techSkills.join(",");
+    const softSkillsParam = softSkills.join(",");
+    if (softSkills.length > 0) {
+      params.set("soft_skills", softSkillsParam);
+    } else {
+      params.delete("soft_skills");
+    }
+    if (techSkills.length > 0) {
+      params.set("tech_skills", techSkillsParam);
+    } else {
+      params.delete("tech_skills");
+    }
+
+    return params.toString();
+  }, [searchParams, softSkills, techSkills]);
 
   const validationSchema = Yup.object().shape({
     techSkills: Yup.array().min(1, "Selecciona al menos una habilidad técnica"),
@@ -82,10 +72,15 @@ export default function Candidates() {
       }
     },
   });
+
+  useEffect(() => {
+    router.push(pathname + "?" + createQueryString());
+  }, [techSkills, softSkills]);
+
   return (
     <Box>
       <Navbar />
-      <Container maxWidth="md">
+      <Container maxWidth="lg">
         <Stack direction="column" spacing={4} paddingTop={4}>
           <Breadcrumbs aria-label="breadcrumb">
             <Link underline="hover" color="inherit" href="/">
@@ -96,26 +91,32 @@ export default function Candidates() {
           <Typography
             variant="h3"
             gutterBottom
-            style={{ fontFamily: "Philosopher, sans-serif" }}
+            fontFamily={philosopher.style.fontFamily}
           >
             Candidatos
           </Typography>
-          <Typography
-            variant="h6"
-            gutterBottom
-            style={{ fontFamily: "Philosopher, sans-serif" }}
-          >
+          <Typography variant="h6" gutterBottom color="secondary.main">
             Aquí puedes elegir a los candidatos que se ajustan a los perfiles
             que estás buscando
           </Typography>
-          <BasicSelect
-            text="Habilidades Técnicas"
-            options={tech_skill}
-            selectedOptions={formik.values.techSkills}
-            onSelectionChange={(selected) =>
-              formik.setFieldValue("techSkills", selected)
-            }
-          />
+          <Stack direction="row">
+            <BasicSelect
+              text="Habilidades Técnicas"
+              options={tech_skills}
+              selectedOptions={formik.values.techSkills}
+              onSelectionChange={(selected) => {
+                setTechSkills(selected);
+              }}
+            />
+            <BasicSelect
+              text="Habilidades Blandas"
+              options={soft_skills}
+              selectedOptions={formik.values.softSkills}
+              onSelectionChange={(selected) => {
+                setSoftSkills(selected);
+              }}
+            />
+          </Stack>
           <CandidatesTable />
         </Stack>
       </Container>

@@ -2,14 +2,14 @@
 import Link from "next/link";
 
 import {
-  AppBar,
   Box,
+  Menu,
+  AppBar,
   Button,
+  Toolbar,
+  MenuItem,
   Container,
   IconButton,
-  Menu,
-  MenuItem,
-  Toolbar,
   Typography,
 } from "@mui/material";
 import Image from "next/image";

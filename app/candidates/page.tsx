@@ -1,7 +1,5 @@
 import Candidates from "@/components/candidates/candidates";
 
-function CandidatesPage() {
+export default async function CandidatesPage() {
   return <Candidates />;
 }
-
-export default CandidatesPage;

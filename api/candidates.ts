@@ -4,16 +4,8 @@ import { fetchData } from "./apiService";
 export const getCandidates = async (
   tech_skills: string,
   soft_skills: string,
-  session: Session
+  session: Session | null
 ) => {
-  return fetchData(
-    "candidate" +
-      new URLSearchParams({
-        tech_skills,
-        soft_skills,
-      }),
-    "GET",
-    null,
-    session
-  );
+  console.log("FETCHING");
+  return fetchData("candidate", "GET", null, session);
 };
