@@ -85,7 +85,7 @@ export default function DetailProject({ setSelectedProject }: DetailProjectProps
                         ></div>
                         <Card 
                             key={project.id}
-                            onClick={() => setSelectedProject(project)}
+                            onClick={() => setSelectedProject ? setSelectedProject(project) : null}
                             sx={{ minWidth: 425 }}>
                             <CardContent style={{
                                 display: 'flex',
