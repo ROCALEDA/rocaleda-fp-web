@@ -1,6 +1,6 @@
 import { Box } from '@mui/material';
 import { ReactNode } from "react";
-import ResponsiveAppBar from "@/components/navbar/empresa";
+import Navbar from "../navbar/navbar";
 import CustomBreadcrumbs from "@/components/breadcrumbs/breadcrumbs";
 
 interface LayoutProps {
@@ -9,7 +9,7 @@ interface LayoutProps {
 
 const routes = [
     { name: 'Empresas', path: '/' },
-    { name: 'Proyectos', path: '/proyectos' }
+    { name: 'Proyectos', path: '/projects' }
 ];
 
 
@@ -26,7 +26,7 @@ export default function Layout({ children  }: LayoutProps) {
                 backgroundRepeat: 'no-repeat'
             }}
         >
-            <div data-testid="responsiveAppBarTestId"><ResponsiveAppBar/></div>
+            <div data-testid="responsiveAppBarTestId"><Navbar/></div>
             <Box
                 sx={{
                     marginTop: '40px',
