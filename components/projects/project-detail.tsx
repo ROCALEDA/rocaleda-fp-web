@@ -1,4 +1,5 @@
-"use client";
+
+//import { useRouter } from "next/navigation";
 import React, {useState , useEffect} from 'react';
 import { Card, CardContent, Typography,Chip } from '@mui/material';
 import PeopleIcon from '@mui/icons-material/PersonOutlineOutlined';
@@ -35,9 +36,13 @@ export default function DetailProject({ setSelectedProject }: DetailProjectProps
     const isSmallScreen = useMediaQuery(theme.breakpoints.down('xs'));
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+    //const router = useRouter();
 
     useEffect(() => {
-        if (session) {
+        if (!session) {
+            //router.push('/login');
+            window.location.href = '/login';
+        } else {
             setIsLoading(true);
             fetch(`${API_URL}/customer/projects`, {
                 headers: {
