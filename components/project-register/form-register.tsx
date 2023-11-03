@@ -250,14 +250,14 @@ const router = useRouter();
                     />
                     ))
             )}
-
+            <div data-testid="profile-modal">
             <ProfileModal 
                 open={openProfileModal} 
                 onClose={handleCloseProfileModal}
                 onAdd={handleAddProfile}
                 onEdit={editProfile}
                 existingProfile={profileToEdit ? profileToEdit : undefined}   
-            />
+            /></div>
             <Button 
                 variant="outlined" 
                 color="primary"
@@ -281,6 +281,7 @@ const router = useRouter();
             ) : (
                 <ul>
                     {employees.map((employee, index) => (
+                        
                         <EmployeeCard 
                             key={employee.name} {...employee} 
                             onEditClick={handleEditClick}
@@ -296,13 +297,14 @@ const router = useRouter();
                 onClick={() => setOpenFunctionaryModal(true)}>
               AÑADIR FUNCIONARIO
             </Button>
+            <div data-testid="employee-modal">
             <EmployeesModal 
                 open={openFunctionaryModal} 
                 onClose={() => setOpenFunctionaryModal(false)} 
                 onAddEmployee={handleAddEmployee}
                 onEditEmployee={editEmployee}
                 employeeToEdit={employeeToEdit}
-            />
+            /></div>
         
             
         </Box>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import EmployeesModal from "@/components/project-register/employeesModal";
 
 describe('EmployeesModal', () => {
@@ -28,6 +28,16 @@ describe('EmployeesModal', () => {
       fireEvent.click(screen.getByText('CANCELAR'));
       expect(onCloseMock).toHaveBeenCalledTimes(1); 
   });
+  it('should add a new employee when data is valid', async () => {
+    const onAddSpy = jest.fn();
+    const { getByLabelText, getByText } = render(<EmployeesModal open={true} onClose={() => {}} onAddEmployee={onAddSpy} />);
+
+    fireEvent.change(getByLabelText(/Nombre del funcionario/i), { target: { value: 'Juan Perez' } });
+    fireEvent.change(getByLabelText(/Nombre del perfil/i), { target: { value: 'Manager' } });
+    fireEvent.click(getByText('AÑADIR'));
+
+    await waitFor(() => expect(onAddSpy).toHaveBeenCalledWith({ name: 'Juan Perez', role: 'Manager' }));
+});
 
 
 });
