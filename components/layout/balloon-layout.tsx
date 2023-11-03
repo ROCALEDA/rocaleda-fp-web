@@ -1,6 +1,6 @@
 import { Box } from '@mui/material';
 import { ReactNode } from "react";
-import ResponsiveAppBar from "@/components/navbar/empresa";
+import Navbar from "../navbar/navbar";
 import CustomBreadcrumbs from "@/components/breadcrumbs/breadcrumbs";
 
 interface LayoutProps {
@@ -9,8 +9,8 @@ interface LayoutProps {
 
 const routes = [
     { name: 'Empresas', path: '/' },
-    { name: 'Proyectos', path: '/proyecto' },
-    { name: 'Crear proyecto', path: '/proyecto/register' }
+    { name: 'Proyectos', path: '/projects' },
+    { name: 'Crear proyecto', path: '/projects/register' }
 ];
 
 export default function Layout({ children  }: LayoutProps) {
@@ -29,7 +29,7 @@ export default function Layout({ children  }: LayoutProps) {
                 backgroundRepeat: 'no-repeat'
             }}
         >
-            <ResponsiveAppBar/>
+            <Navbar/>
 
             <Box
                 sx={{

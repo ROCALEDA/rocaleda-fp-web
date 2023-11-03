@@ -1,7 +1,8 @@
 import * as React from 'react';
 import Typography from '@mui/material/Typography';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
-import Link from '@mui/material/Link';
+import Link from 'next/link';
+import MUILink from '@mui/material/Link';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 
 interface RouteType {
@@ -27,9 +28,9 @@ export default function CustomBreadcrumbs({ routes, paddingLeft }: BreadcrumbsPr
                 );
             }
             return (
-                <Link key={index} underline="hover" color="inherit" href={route.path}>
-                    {route.name}
-                </Link>
+                <Link key={index} href={route.path} passHref>
+                    <MUILink underline="hover" color="inherit">{route.name}</MUILink>
+        </Link>
             );
         })}
     </Breadcrumbs>

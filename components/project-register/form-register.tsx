@@ -1,5 +1,5 @@
 "use client";
-import React, { useState} from 'react';
+import React, { useState } from 'react';
 import { Box, Typography,TextField,Button} from "@mui/material";
 import styles from "./form-register.module.css";
 import { useFormik } from 'formik';
@@ -8,6 +8,11 @@ import ProfileCard from "./profileCard";
 import ProfileModal from "./profileModal";
 import EmployeeCard from "./employeesCard";
 import EmployeesModal from "./employeesModal";
+import { useSession } from "next-auth/react";
+import API_URL from "@/api/config";
+import { enqueueSnackbar } from "notistack";
+import { useRouter } from 'next/navigation';
+
 
 const validationSchema = Yup.object().shape({
     nombre: Yup.string().required('El nombre es obligatorio'),
@@ -29,6 +34,17 @@ interface FormValues {
 }
 
 export default function FormRegisterProyect(props: FormRegisterProyectProps) {
+    const { data: session } = useSession();
+
+    const resetForm = () => {
+        formik.resetForm();
+        setProfiles([]);
+        setEmployees([]);
+        props.setProyectName('')
+        props.setProyectDescription('')
+        props.setProfiles([]);
+        props.setEmployees([]);
+    };
 
     const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         formik.handleChange(event);
@@ -46,13 +62,49 @@ export default function FormRegisterProyect(props: FormRegisterProyectProps) {
         });
     };
 
-    const handleSubmit = (values: FormValues) => {
-        console.log(values);
-        props.setProyectName(values.nombre);
-        props.setProyectDescription(values.description);
-        props.setProfiles(profiles);
-        props.setEmployees(employees);
+    const handleSubmit = async (values: FormValues) => {
+        const dataToSend = {
+            name: formik.values.nombre,
+            description: formik.values.description,
+            profiles: profiles.map(p => ({
+                name: p.profileName,
+                soft_skills: p.softSkills,
+                tech_skills: p.techSkills,
+                amount: p.numberOfProfiles
+            })),
+            employees: employees.map(e => ({
+                full_name: e.name,
+                profile_name: e.role
+            }))
+        };
+    
+        try {
+            //console.log('Datos a enviar:', JSON.stringify(dataToSend));
+            const response = await fetch(`${API_URL}/customer/project`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${session?.user?.token}`
+                },
+                body: JSON.stringify(dataToSend)
+            });
+    
+            if (!response.ok) {
+                enqueueSnackbar(`Error ${response.status}: ${response.statusText}`, { variant: "error" });
+                throw new Error('Error al enviar el proyecto');
+            }
+    
+            const responseData = await response.json();
+            enqueueSnackbar('Proyecto creado:', { variant: "success" });
+            router.push("/projects");
+            //console.log('Proyecto creado:', responseData);
+    
+        } catch (error) {
+            enqueueSnackbar('Error al enviar el formulario:', { variant: "error" });
+            //console.error('Error al enviar el formulario:', error);
+        }
     };
+    
 
 
     const formik = useFormik({
@@ -150,6 +202,8 @@ const handleEditClick = (employee: { name: string, role: string }) => {
     setOpenFunctionaryModal(true);
 };
 
+const router = useRouter();
+
     return (
         <>
         <Typography variant="h5" gutterBottom className={styles.tituloConFondo}><span>1. Datos Básicos</span></Typography>
@@ -214,9 +268,6 @@ const handleEditClick = (employee: { name: string, role: string }) => {
             </Button>
 
         </Box>
-
-
-
         {/* FUNCIONARIOS */}
         <Typography variant="h5" gutterBottom style={{ marginTop: '20px' }} className={styles.tituloConFondo3}>
         <span>3. Funcionarios</span> <span style={{ color: '#A0AEC0', fontSize:15 }}>(opcional)</span>
@@ -256,13 +307,14 @@ const handleEditClick = (employee: { name: string, role: string }) => {
             
         </Box>
 
-        
         {/* Cancelar y Crear Proyecto */}
         <Box display="flex" justifyContent="space-between" marginTop="20px">
         <Button 
             variant="outlined" 
             sx={{mt: 3,mr: 1,mb: 2}}
-            onClick={() => {}}>Cancelar</Button>
+            onClick={
+                resetForm
+                }>Cancelar</Button>
         <Button 
             type="submit" 
             variant="contained" 
