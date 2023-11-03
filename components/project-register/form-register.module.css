@@ -1,0 +1,57 @@
+.tituloConFondo {
+    position: relative;
+    display: inline-block;
+    z-index: 2;
+}
+
+.tituloConFondo2 {
+    position: relative;
+    display: inline-block;
+    z-index: 2;
+    
+}
+
+.tituloConFondo3 {
+    position: relative;
+    display: inline-block;
+    z-index: 2;
+}
+
+.tituloConFondo span::before {
+    content: "";
+    position: absolute;
+    top: 78%;
+    left: -2px;
+    right: 0;
+    width: 133px;
+    height: 15px;  
+    transform: translateY(-50%); 
+    background-color: #F5E0C8;
+    z-index: -1; 
+}
+
+.tituloConFondo2 span::before {
+    content: "";
+    position: absolute;
+    top: 78%;
+    left: -2px; 
+    right: 0;
+    width: 70px;
+    height: 15px; 
+    transform: translateY(-50%);
+    background-color: #F5E0C8;
+    z-index: -1;  
+}
+
+.tituloConFondo3 span::before {
+    content: "";
+    position: absolute;
+    top: 78%;
+    left: -2px; 
+    right: 0;
+    width: 73px;
+    height: 15px; 
+    transform: translateY(-50%);
+    background-color: #F5E0C8;
+    z-index: -1;  
+}

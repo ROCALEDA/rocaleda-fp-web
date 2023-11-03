@@ -1,10 +1,17 @@
 import { Box } from '@mui/material';
 import { ReactNode } from "react";
-import ResponsiveAppBar from "@/components/navbar/empresa";
+import Navbar from "../navbar/navbar";
+import CustomBreadcrumbs from "@/components/breadcrumbs/breadcrumbs";
 
 interface LayoutProps {
     children: ReactNode;
   }
+
+const routes = [
+    { name: 'Empresas', path: '/' },
+    { name: 'Proyectos', path: '/projects' },
+    { name: 'Crear proyecto', path: '/projects/register' }
+];
 
 export default function Layout({ children  }: LayoutProps) {
     return (
@@ -15,12 +22,14 @@ export default function Layout({ children  }: LayoutProps) {
             sx={{
                 backgroundImage: 'linear-gradient(to right, transparent 50%, transparent 50%), url(/images/cloud3.jpg)',
                 backgroundSize: '50% 100%',
-                backgroundPosition: 'right',
+                minHeight: '100vh',
+                backgroundPosition: 'right center',
                 position: 'relative',
+                height: 'auto !important',
                 backgroundRepeat: 'no-repeat'
             }}
         >
-            <ResponsiveAppBar/>
+            <Navbar/>
 
             <Box
                 sx={{
@@ -40,6 +49,7 @@ export default function Layout({ children  }: LayoutProps) {
                     marginTop: '40px'
                 }}
             >
+                <CustomBreadcrumbs routes={routes} paddingLeft="105px" />
                 {children}
             </Box>
         </Box>

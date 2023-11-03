@@ -37,6 +37,28 @@ export const registerCandidate = async (
   });
 };
 
+interface Profile {
+  name: string;
+  soft_skills: string[];
+  tech_skills: string[];
+  amount: number;
+}
+
+interface Employee {
+  full_name: string;
+  profile_name: string;
+}
+
+interface ProjectData {
+  name: string;
+  description: string;
+  profiles: Profile[];
+  employees: Employee[];
+}
+
+export const registerProject = async (projectData: ProjectData): Promise<ApiResponse> => {
+  return await fetchData("customer/project", "POST", projectData);
+};
 
 
 /*export const getCustomerProjects = async (): Promise<ApiResponse> => {

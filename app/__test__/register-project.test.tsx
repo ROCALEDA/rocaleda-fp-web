@@ -1,6 +1,6 @@
-import React from "react";
-import { render} from "@testing-library/react";
-import Layout from "@/components/layout/balloon-layout";
+import React from 'react';
+import { render, screen } from '@testing-library/react';
+import RegisterProyect from '@/components/project-register/project-register';
 import { SessionProvider } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 
@@ -9,7 +9,7 @@ jest.mock("next/navigation", () => ({
     useRouter: jest.fn(),
   }));
 
-describe('<Layout />', () => {
+describe('<RegisterProyect />', () => {
   beforeEach(() => {
     global.fetch = jest.fn(() =>
         Promise.resolve({
@@ -27,6 +27,7 @@ describe('<Layout />', () => {
 afterEach(() => {
     jest.clearAllMocks();
 });
+
   it('renders without crashing', () => {
     const mockSession = {
       user: {
@@ -36,9 +37,13 @@ afterEach(() => {
       }
   };
     expect(() => {
-      render(
-      
-        <SessionProvider session={mockSession}><Layout>{}</Layout></SessionProvider>,{});
+        render(
+          <SessionProvider session={mockSession}>
+            <RegisterProyect />
+          </SessionProvider>
+        );
     }).not.toThrow();
   });
+
+
 });
