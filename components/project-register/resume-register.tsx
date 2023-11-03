@@ -2,6 +2,7 @@
 import React from 'react';
 import { Card, CardContent, Typography, Box, Chip} from '@mui/material';
 import PeopleIcon from '@mui/icons-material/PersonOutlineOutlined';
+import { philosopher } from "@/app/theme/fonts"; 
 
 type Profile = {
     profileName: string;
@@ -14,7 +15,6 @@ type Employee = {
 };
 
 type CustomCardProps = {
-    number?: number;
     proyectName: string;
     proyectDescription: string;
     profiles: Profile[];
@@ -23,16 +23,19 @@ type CustomCardProps = {
 
 
 export default function ResumeRegisterProyect({
-        number=5,
-        proyectName="No hay nombre de proyecto",
-        proyectDescription='No hay descripción de proyecto',
-        profiles=[{"profileName":"Frontend Developer", "numberOfProfiles":2}, {"profileName":"Backend Developer","numberOfProfiles":3}],
-        employees=[{"name":"Luisa Velez", "role": "Project Manager"},{"name":"Luisa Velez2", "role": "Project Manager"}]
+        proyectName,
+        proyectDescription,
+        profiles,
+        employees
       }: CustomCardProps) {
+
+        const totalProfiles = profiles.reduce((acc, profile) => acc + profile.numberOfProfiles, 0);
+        const totalEntities = totalProfiles + employees.length;
+
         return ( 
           <Box margin={5}>
             {/* Nombre Proyecto creado */}
-          <Typography variant="h4" gutterBottom sx={{ fontFamily: 'Philosopher', mt: 10 }} >Tu proyecto</Typography>
+          <Typography variant="h4" gutterBottom fontFamily={philosopher.style.fontFamily} sx={{ mt: 10 }} >Tu proyecto</Typography>
           <Card sx={{ width: { xs: '90%', xl: '50%'}, p:2 }}>
           <CardContent>
             <Box display="flex"  alignItems="center">
@@ -43,12 +46,13 @@ export default function ResumeRegisterProyect({
             </Box>
             {/* Descripción Proyecto creada */}
             <Box display="flex" flexDirection="column" alignItems="flex-start" mt={2}>
-            <Chip 
+            <Chip
+              size="small" 
               icon={<PeopleIcon sx={{ "&&": { color: "#864D8F" } }}/>} 
-              label= {number}
+              label= {totalEntities}
               sx={{ backgroundColor: '#FAE8FF',
               '& .MuiChip-label': {
-                  fontSize: '1.2rem', 
+                  fontSize: '0.8rem', 
                 }}}/>
               
               <Typography variant="body1" color="textSecondary" sx={{ mt: 1 }}>
