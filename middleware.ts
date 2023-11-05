@@ -38,7 +38,6 @@ export async function middleware(request: NextRequest) {
     "/projects/create": [2],
     "/interviews": [3],
   };
-  console.log("pathname before", pathname);
 
   if (user && routesByRole.hasOwnProperty(pathname)) {
     const allowedRoles = routesByRole[pathname as keyof typeof routesByRole];
