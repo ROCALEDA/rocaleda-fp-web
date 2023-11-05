@@ -13,6 +13,8 @@ type TUser = {
 };
 
 export async function middleware(request: NextRequest) {
+  console.log("Middleware working");
+
   const { pathname }: { pathname: string } = request.nextUrl;
 
   const user = (await getToken({ req: request })) as TUser | null;
@@ -35,12 +37,15 @@ export async function middleware(request: NextRequest) {
     "/projects": [1, 2],
     "/projects/create": [2],
   };
+  console.log("pathname before", pathname);
 
   if (user && routesByRole.hasOwnProperty(pathname)) {
     const allowedRoles = routesByRole[pathname as keyof typeof routesByRole];
     if (allowedRoles && !allowedRoles.includes(user.role_id)) {
       return Redirect();
     }
+  } else {
+    return Redirect();
   }
 }
 
