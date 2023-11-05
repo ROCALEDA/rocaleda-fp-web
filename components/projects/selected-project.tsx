@@ -55,7 +55,7 @@ export default function SelectedProject({ project }: SelectedProjectProps) {
                             <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-start' }}>
                             <Typography color="textSecondary">Perfil - {position.name}</Typography>
                             </div>
-                            <Chip size="small" icon={<PeopleIcon fontSize="small" />} label={project.total_positions} sx={{ '& .MuiChip-label': { fontSize: isSmallScreen ? '0.8rem' : '1rem' } }} />
+                            {/*<Chip size="small" icon={<PeopleIcon fontSize="small" />} label={project.total_positions} sx={{ '& .MuiChip-label': { fontSize: isSmallScreen ? '0.8rem' : '1rem' } }} />*/}
                             </div>
                         </AccordionSummary>
                         <AccordionDetails>

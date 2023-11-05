@@ -53,7 +53,7 @@ export default function Navbar() {
   var roleLogo = getRoleLogo(user?.role_id);
 
   async function handleLogout() {
-    await signOut({ redirect: true, callbackUrl: "/login" });
+    await signOut({ redirect: true, callbackUrl: "/" });
   }
 
   return (
