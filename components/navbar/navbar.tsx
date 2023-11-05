@@ -14,10 +14,11 @@ import {
 } from "@mui/material";
 import Image from "next/image";
 import { useState } from "react";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 
 import MenuIcon from "@mui/icons-material/Menu";
 import LanguageSelector from "../language-selector.tsx/language-selector";
+import { LogoutOutlined } from "@mui/icons-material";
 
 export default function Navbar() {
   const { data: session } = useSession();
@@ -51,8 +52,16 @@ export default function Navbar() {
 
   var roleLogo = getRoleLogo(user?.role_id);
 
+  async function handleLogout() {
+    await signOut({ redirect: true, callbackUrl: "/login" });
+  }
+
   return (
-    <AppBar position="static" color="transparent">
+    <AppBar
+      position="static"
+      color="transparent"
+      sx={{ backgroundColor: "white" }}
+    >
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Box sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}>
@@ -135,6 +144,14 @@ export default function Navbar() {
 
           <Box sx={{ flexGrow: 0 }}>
             <LanguageSelector />
+          </Box>
+          <Box sx={{ flexGrow: 0 }}>
+            <Button
+              variant="text"
+              color="primary"
+              startIcon={<LogoutOutlined />}
+              onClick={handleLogout}
+            />
           </Box>
         </Toolbar>
       </Container>

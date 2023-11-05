@@ -83,8 +83,8 @@ export default function Candidates() {
       <Container maxWidth="lg">
         <Stack direction="column" spacing={4} paddingTop={4}>
           <Breadcrumbs aria-label="breadcrumb">
-            <Link underline="hover" color="inherit" href="/">
-              Empresas
+            <Link underline="hover" color="inherit" href="/home">
+              Home
             </Link>
             <Typography color="text.primary">Candidatos</Typography>
           </Breadcrumbs>

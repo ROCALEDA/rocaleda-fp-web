@@ -53,21 +53,12 @@ export default function Login() {
       });
 
       if (responseNextAuth?.ok) {
-        enqueueSnackbar(`Sesión iniciada (${status})`, { variant: "success" });
-        // 1 admin
-        // 2 customer
-        // 3 candidate
-        if (session?.user.role_id == 2) {
-          router.push("/projects");
-        } else if (session?.user.role_id == 1) {
-          router.push("/admin");
-        } else if (session?.user.role_id == 3) {
-          router.push("/candidate");
-        }
+        enqueueSnackbar(`Sesión iniciada`, { variant: "success" });
+        router.push("/home");
       }
 
       if (responseNextAuth?.error) {
-        enqueueSnackbar(responseNextAuth.error.split(","), {
+        enqueueSnackbar(responseNextAuth.error, {
           variant: "error",
         });
         return;
