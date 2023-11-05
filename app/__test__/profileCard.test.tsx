@@ -1,10 +1,10 @@
 import React from "react";
-import { render, fireEvent,waitFor } from "@testing-library/react";
+import { render, fireEvent, waitFor } from "@testing-library/react";
 import ProfileCard from "@/components/project-register/profileCard";
-import userEvent from '@testing-library/user-event';
+import userEvent from "@testing-library/user-event";
 
-describe('<ProfileCard />', () => {
-  it('renders without crashing', () => {
+describe("<ProfileCard />", () => {
+  it("renders without crashing", () => {
     expect(() => {
       render(
         <ProfileCard
@@ -20,7 +20,7 @@ describe('<ProfileCard />', () => {
       );
     }).not.toThrow();
   });
-  it('calls onDelete when the delete button is clicked', async () => {
+  it("calls onDelete when the delete button is clicked", async () => {
     const handleDelete = jest.fn();
     const { getByLabelText } = render(
       <ProfileCard
@@ -34,14 +34,12 @@ describe('<ProfileCard />', () => {
         onDelete={handleDelete}
       />
     );
-  
-    userEvent.click(getByLabelText('delete'));
-  
-    await waitFor(() => 
-      expect(handleDelete).toHaveBeenCalledWith("John Doe")
-    );
+
+    userEvent.click(getByLabelText("delete"));
+
+    await waitFor(() => expect(handleDelete).toHaveBeenCalledWith("John Doe"));
   });
-  it('calls onEdit when the edit button is clicked', async () => {
+  it("calls onEdit when the edit button is clicked", async () => {
     const handleEdit = jest.fn();
     const profileData = {
       profileName: "John Doe",
@@ -49,7 +47,7 @@ describe('<ProfileCard />', () => {
       softSkills: ["Communication", "Teamwork"],
       numberOfProfiles: 2,
     };
-  
+
     const { getByRole } = render(
       <ProfileCard
         profile={profileData}
@@ -57,15 +55,9 @@ describe('<ProfileCard />', () => {
         onDelete={() => {}}
       />
     );
-  
-    userEvent.click(getByRole('button', { name: 'edit' }));
-  
-    await waitFor(() =>
-      expect(handleEdit).toHaveBeenCalledWith(profileData)
-    );
+
+    userEvent.click(getByRole("button", { name: "edit" }));
+
+    await waitFor(() => expect(handleEdit).toHaveBeenCalledWith(profileData));
   });
-  
-  
-
-
 });
