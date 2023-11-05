@@ -27,9 +27,6 @@ export async function middleware(request: NextRequest) {
 
   const authRoutes = ["/login", "/register-company", "/register-candidate"];
   if (!!user && authRoutes.includes(pathname)) {
-    console.log("RedirectAUTH", authRoutes.includes(pathname));
-    console.log("pathname", pathname);
-
     return Redirect();
   }
 
