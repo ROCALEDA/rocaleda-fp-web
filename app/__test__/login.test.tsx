@@ -1,56 +1,66 @@
-// Login.test.js
 import React from "react";
-import { render, fireEvent, waitFor } from "@testing-library/react";
-import { login } from "@/api/apiService";
+import { render, fireEvent, screen, waitFor } from "@testing-library/react";
 import Login from "@/components/login/login";
-import { useRouter } from 'next/navigation';
+import userEvent from "@testing-library/user-event";
 
-jest.mock('next/navigation', () => ({
+jest.mock("next/link", () => ({
+  __esModule: true,
+  default: ({ children }) => <a>{children}</a>,
+}));
+
+jest.mock("next/router", () => ({
   useRouter: jest.fn(),
 }));
 
+jest.mock("next/navigation", () => ({
+  useRouter: jest.fn(),
+}));
+
+jest.mock("next-auth/react", () => ({
+  useSession: jest.fn().mockReturnValue({
+    data: {
+      user: {
+        name: "Test User",
+        email: "test@example.com",
+        role_id: 1, // Puedes ajustar este valor según lo que necesites para la prueba
+      },
+    },
+    status: "authenticated",
+  }),
+  signIn: jest.fn(),
+}));
+
+jest.mock("notistack", () => ({
+  enqueueSnackbar: jest.fn(),
+}));
+
 describe("<Login />", () => {
-  beforeEach(() => {
-    (useRouter as jest.Mock).mockReturnValue({
-      route: '/',
-      pathname: '/',
-      query: '',
-      asPath: '',
+  it("renders correctly", () => {
+    render(<Login />);
+    expect(screen.getByText("Iniciar sesión")).toBeInTheDocument();
+  });
+
+  it("shows validation errors when trying to submit an empty form", async () => {
+    render(<Login />);
+    fireEvent.click(screen.getByText("Ingresar"));
+    await waitFor(() => {
+      expect(screen.getByText("Email is required")).toBeInTheDocument();
+      expect(screen.getByText("Password is required")).toBeInTheDocument();
     });
-  })
-
-  test("renders the login form", () => {
-    const { getByText } = render(<Login />);
-    // expect(getByText("Iniciar sesión")).toBeInTheDocument();
   });
+  it("renders correctly the signup buttons", () => {
+    render(<Login />);
 
-  test("shows error on invalid submission", async () => {
-    const { getByText, getByLabelText, findByText } = render(<Login />);
-    const emailInput = getByLabelText("Correo");
-    const passwordInput = getByLabelText("Password");
-    const submitButton = getByText("Ingresar");
-
-    // Simulate a form submission without entering data
-    fireEvent.click(submitButton);
-
-    // Assert error messages show up
-    // await waitFor(() => {
-    //   expect(findByText("Email is required")).toBeInTheDocument();
-    //   expect(findByText("Password is required")).toBeInTheDocument();
-    // });
+    // Check for the presence of text
+    expect(screen.queryByText("Quiero ser candidato")).toBeInTheDocument();
+    expect(screen.queryByText("Soy una empresa")).toBeInTheDocument();
+    const candidateSignupButton = screen.getByText("Quiero ser candidato");
+    userEvent.click(candidateSignupButton);
   });
+  it("renders correctly the login buttons", () => {
+    render(<Login />);
 
-  test("calls the login function on valid submission", async () => {
-    const mockResponse = { data: { token: "fake_token" }, status: 200 };
-
-    const { getByText, getByLabelText } = render(<Login />);
-    const emailInput = getByLabelText("Correo");
-    const passwordInput = getByLabelText("Password");
-    const submitButton = getByText("Ingresar");
-
-    fireEvent.change(emailInput, { target: { value: "test@example.com" } });
-    fireEvent.change(passwordInput, { target: { value: "password" } });
-
-    fireEvent.click(submitButton);
+    const loginButton = screen.getByText("Ingresar");
+    userEvent.click(loginButton);
   });
 });

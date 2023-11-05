@@ -16,7 +16,7 @@ import { useFormik } from "formik";
 import { useRouter } from "next/navigation";
 
 import { enqueueSnackbar } from "notistack";
-import { login } from "@/api/apiService";
+import { signIn, useSession } from "next-auth/react";
 
 const validationSchema = Yup.object({
   email: Yup.string()
@@ -26,6 +26,8 @@ const validationSchema = Yup.object({
 });
 
 export default function Login() {
+  const { data: session, status } = useSession();
+
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
@@ -36,24 +38,30 @@ export default function Login() {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      // Handle form submission here
-      console.log(values);
       await onLogin(values);
     },
   });
 
   const onLogin = async (values: { email: string; password: string }) => {
     setLoading(true);
+
     try {
-      const { data, status } = await login(values.email, values.password);
-      console.log(data);
-      enqueueSnackbar(`Sesión iniciada (${status})`, { variant: "success" });
-      if (data.token) {
-        localStorage.setItem("token", data.token);
-        router.push("/proyectos");
-      } else {
-        // Handle errors
-        console.error("Authentication failed");
+      const responseNextAuth = await signIn("credentials", {
+        email: values.email,
+        password: values.password,
+        redirect: false,
+      });
+
+      if (responseNextAuth?.ok) {
+        enqueueSnackbar(`Sesión iniciada`, { variant: "success" });
+        router.push("/home");
+      }
+
+      if (responseNextAuth?.error) {
+        enqueueSnackbar(responseNextAuth.error, {
+          variant: "error",
+        });
+        return;
       }
     } catch (error) {
       const errorMessage = (error as Error).message;
@@ -131,12 +139,12 @@ export default function Login() {
               ¿Aún no tienes una cuenta?
             </Typography>
             <Stack direction="row" spacing={2}>
-              <Link href="/candidate" passHref>
+              <Link href="/signup/candidate" passHref>
                 <Button sx={{ backgroundColor: "#F4E8C9", color: "black" }}>
                   Quiero ser candidato
                 </Button>
               </Link>
-              <Link href="/register" passHref>
+              <Link href="/signup/company" passHref>
                 <Button sx={{ backgroundColor: "#F4E8C9", color: "black" }}>
                   Soy una empresa
                 </Button>
