@@ -4,6 +4,7 @@ import { Grid, Paper, Typography, Button } from "@mui/material";
 import Link from "next/link";
 import DetailProject from "@/components/projects/project-detail";
 import SelectedProject from "@/components/projects/selected-project";
+import { useSession } from "next-auth/react";
 
 type Project = {
   id: number;
@@ -21,6 +22,9 @@ export default function ListProject() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const cardRef: React.RefObject<HTMLDivElement> = useRef(null);
   const detailRef: React.RefObject<HTMLDivElement> = useRef(null);
+
+  const { data: session } = useSession();
+  const userRole = session?.user?.role_id;
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -70,6 +74,7 @@ export default function ListProject() {
               alignItems="center"
               justifyContent="flex-end"
             >
+              {userRole === 2 && (
               <Link href="/projects/create" passHref>
                 <Button
                   variant="outlined"
@@ -81,7 +86,7 @@ export default function ListProject() {
                 >
                   CREAR
                 </Button>
-              </Link>
+              </Link>)}
             </Grid>
             <Grid item xs={12} sm={12} ref={cardRef}>
               <DetailProject setSelectedProject={setSelectedProject} />
