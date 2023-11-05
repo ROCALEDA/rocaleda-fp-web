@@ -44,7 +44,8 @@ export async function middleware(request: NextRequest) {
     if (allowedRoles && !allowedRoles.includes(user.role_id)) {
       return Redirect();
     }
-  } else {
+  }
+  if (!user && routesByRole.hasOwnProperty(pathname)) {
     return Redirect();
   }
 }
