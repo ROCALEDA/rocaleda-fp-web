@@ -41,7 +41,29 @@ describe('<ProfileCard />', () => {
       expect(handleDelete).toHaveBeenCalledWith("John Doe")
     );
   });
+  it('calls onEdit when the edit button is clicked', async () => {
+    const handleEdit = jest.fn();
+    const profileData = {
+      profileName: "John Doe",
+      techSkills: ["JavaScript", "React"],
+      softSkills: ["Communication", "Teamwork"],
+      numberOfProfiles: 2,
+    };
   
+    const { getByRole } = render(
+      <ProfileCard
+        profile={profileData}
+        onEdit={handleEdit}
+        onDelete={() => {}}
+      />
+    );
+  
+    userEvent.click(getByRole('button', { name: 'edit' }));
+  
+    await waitFor(() =>
+      expect(handleEdit).toHaveBeenCalledWith(profileData)
+    );
+  });
   
   
 
