@@ -66,7 +66,9 @@ export default function Home() {
                 Conoce tus historial de entrevistas y entrevistas agendadas
               </Typography>
               <Link href="/interviews">
-                <Button variant="contained">Ver entrevistas</Button>
+                <Button variant="contained" disabled>
+                  Ver entrevistas
+                </Button>
               </Link>
             </Box>
           </Grid>

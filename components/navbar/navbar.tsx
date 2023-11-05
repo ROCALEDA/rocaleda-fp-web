@@ -23,7 +23,7 @@ import { LogoutOutlined } from "@mui/icons-material";
 export default function Navbar() {
   const { data: session } = useSession();
   const pages = [
-    { roles: [1], name: "Proyectos", link: "/projects" },
+    { roles: [1, 2], name: "Proyectos", link: "/projects" },
     { roles: [1, 2], name: "Candidatos", link: "/candidates" },
     { roles: [3], name: "Entrevistas", link: "/interviews" },
   ];
