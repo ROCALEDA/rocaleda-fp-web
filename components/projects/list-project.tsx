@@ -70,7 +70,7 @@ export default function ListProject() {
               alignItems="center"
               justifyContent="flex-end"
             >
-              <Link href="/projects/register" passHref>
+              <Link href="/projects/create" passHref>
                 <Button
                   variant="outlined"
                   color="primary"
