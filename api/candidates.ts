@@ -6,6 +6,5 @@ export const getCandidates = async (
   soft_skills: string,
   session: Session | null
 ) => {
-  console.log("FETCHING");
   return fetchData("candidate", "GET", null, session);
 };

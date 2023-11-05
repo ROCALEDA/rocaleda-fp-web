@@ -38,7 +38,7 @@ const validationSchema = Yup.object().shape({
     .required("Este campo es obligatorio"),
 });
 
-export default function Register() {
+export default function SignUpCompany() {
   const router = useRouter();
   const formik = useFormik({
     initialValues: {

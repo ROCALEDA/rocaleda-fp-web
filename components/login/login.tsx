@@ -53,21 +53,12 @@ export default function Login() {
       });
 
       if (responseNextAuth?.ok) {
-        enqueueSnackbar(`Sesión iniciada (${status})`, { variant: "success" });
-        // 1 admin
-        // 2 customer
-        // 3 candidate
-        if (session?.user.role_id == 2) {
-          router.push("/projects");
-        } else if (session?.user.role_id == 1) {
-          router.push("/admin");
-        } else if (session?.user.role_id == 3) {
-          router.push("/candidate");
-        }
+        enqueueSnackbar(`Sesión iniciada`, { variant: "success" });
+        router.push("/home");
       }
 
       if (responseNextAuth?.error) {
-        enqueueSnackbar(responseNextAuth.error.split(","), {
+        enqueueSnackbar(responseNextAuth.error, {
           variant: "error",
         });
         return;
@@ -148,12 +139,12 @@ export default function Login() {
               ¿Aún no tienes una cuenta?
             </Typography>
             <Stack direction="row" spacing={2}>
-              <Link href="/candidate" passHref>
+              <Link href="/signup/candidate" passHref>
                 <Button sx={{ backgroundColor: "#F4E8C9", color: "black" }}>
                   Quiero ser candidato
                 </Button>
               </Link>
-              <Link href="/register" passHref>
+              <Link href="/signup/company" passHref>
                 <Button sx={{ backgroundColor: "#F4E8C9", color: "black" }}>
                   Soy una empresa
                 </Button>

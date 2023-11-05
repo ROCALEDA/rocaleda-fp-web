@@ -28,50 +28,60 @@ export default function CandidatesTable() {
   const { data: session } = useSession();
   const [candidates, setCandidates] = useState<TCandidate[]>();
   const [isLoading, setLoading] = useState(true);
-  const [page, setPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
   const handleChangePage = (event: unknown, newPage: number) => {
-    setPage(newPage);
+    setCurrentPage(newPage + 1);
+    fetchCandidates();
   };
 
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     setRowsPerPage(+event.target.value);
-    setPage(0);
+    setCurrentPage(1);
+  };
+
+  const fetchCandidates = async () => {
+    const queryParams = new URLSearchParams();
+    // Assuming soft_skills and tech_skills are variables containing values or null
+    if (searchSoftSkills) {
+      queryParams.append("soft_skills", searchSoftSkills);
+    }
+    if (searchTechSkills) {
+      queryParams.append("tech_skills", searchTechSkills);
+    }
+
+    queryParams.append("page", currentPage.toString());
+    queryParams.append("limit", rowsPerPage.toString());
+
+    const url = `${API_URL}/candidate${
+      queryParams.toString() ? `?${queryParams.toString()}` : ""
+    }`;
+
+    fetch(`${url}`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${session?.user?.token}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((data: { data: TCandidate[]; total_pages: number }) => {
+        setCandidates(data.data);
+        setTotalPages(data.total_pages);
+        setLoading(false);
+      });
   };
 
   useEffect(() => {
     if (session) {
-      const queryParams = new URLSearchParams();
-      // Assuming soft_skills and tech_skills are variables containing values or null
-      if (searchSoftSkills) {
-        queryParams.append("soft_skills", searchSoftSkills);
-      }
-      if (searchTechSkills) {
-        queryParams.append("tech_skills", searchTechSkills);
-      }
-
-      const url = `${API_URL}/candidate${
-        queryParams.toString() ? `?${queryParams.toString()}` : ""
-      }`;
-
-      fetch(`${url}`, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${session?.user?.token}`,
-        },
-      })
-        .then((res) => res.json())
-        .then((data: { data: TCandidate[] }) => {
-          setCandidates(data.data);
-          setLoading(false);
-        });
+      fetchCandidates();
     }
-  }, [session, searchSoftSkills, searchTechSkills]);
+  }, [session, searchSoftSkills, searchTechSkills, rowsPerPage, currentPage]);
 
-  if (isLoading) return <p>Loading...</p>;
+  if (isLoading) return <p>Cargando...</p>;
   if (!candidates) return <p>No hay candidatos para mostrar</p>;
 
   return (
@@ -87,45 +97,43 @@ export default function CandidatesTable() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {candidates
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((candidate) => (
-                <TableRow
-                  tabIndex={-1}
-                  key={candidate.user_id}
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                >
-                  <TableCell align="left">{candidate.user_id}</TableCell>
-                  <TableCell component="th" scope="row">
-                    {candidate.tech_skills.map((techSkill) => (
-                      <Chip
-                        key={techSkill.id}
-                        label={techSkill.name}
-                        sx={{ backgroundColor: "#FAE8FF" }}
-                      ></Chip>
-                    ))}
-                  </TableCell>
-                  <TableCell component="th" scope="row">
-                    {candidate.soft_skills.map((softSkill) => (
-                      <Chip
-                        key={softSkill.id}
-                        label={softSkill.name}
-                        sx={{ backgroundColor: "#FEF7E7" }}
-                      ></Chip>
-                    ))}
-                  </TableCell>
-                  <TableCell align="left">Español</TableCell>
-                </TableRow>
-              ))}
+            {candidates.map((candidate) => (
+              <TableRow
+                tabIndex={-1}
+                key={candidate.user_id}
+                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+              >
+                <TableCell align="left">{candidate.user_id}</TableCell>
+                <TableCell component="th" scope="row">
+                  {candidate.tech_skills.map((techSkill) => (
+                    <Chip
+                      key={techSkill.id}
+                      label={techSkill.name}
+                      sx={{ backgroundColor: "#FAE8FF" }}
+                    ></Chip>
+                  ))}
+                </TableCell>
+                <TableCell component="th" scope="row">
+                  {candidate.soft_skills.map((softSkill) => (
+                    <Chip
+                      key={softSkill.id}
+                      label={softSkill.name}
+                      sx={{ backgroundColor: "#FEF7E7" }}
+                    ></Chip>
+                  ))}
+                </TableCell>
+                <TableCell align="left">Español</TableCell>
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
       </TableContainer>
       <TablePagination
-        rowsPerPageOptions={[5, 10, 25]}
+        rowsPerPageOptions={[5, 10]}
         component="div"
-        count={candidates.length}
+        count={totalPages * rowsPerPage}
         rowsPerPage={rowsPerPage}
-        page={page}
+        page={currentPage - 1}
         onPageChange={handleChangePage}
         onRowsPerPageChange={handleChangeRowsPerPage}
       />

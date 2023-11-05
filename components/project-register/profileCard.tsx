@@ -42,10 +42,10 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ profile, onEdit, onDelete }) 
             </div>
 
                 <div>
-                    <IconButton onClick={() => onEdit(profile)}>
+                    <IconButton onClick={() => onEdit(profile)} aria-label="edit">
                         <EditIcon color="primary" />
                     </IconButton>
-                    <IconButton onClick={() => onDelete(profileName)}>
+                    <IconButton onClick={() => onDelete(profileName)} aria-label="delete">
                         <DeleteIcon color="error" />
                     </IconButton>
                 </div>
