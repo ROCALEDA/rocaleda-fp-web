@@ -94,7 +94,7 @@ export default function DetailProject({
               onClick={() =>
                 setSelectedProject ? setSelectedProject(project) : null
               }
-              sx={{ minWidth: 425 }}
+              sx={{ minWidth: 425, cursor: "pointer" }}
             >
               <CardContent
                 style={{
