@@ -1,13 +1,6 @@
 "use client";
 
-import {
-  Box,
-  Link,
-  Stack,
-  Container,
-  Typography,
-  Breadcrumbs,
-} from "@mui/material";
+import { Box, Stack, Container, Typography } from "@mui/material";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
@@ -19,6 +12,7 @@ import BasicSelect from "../select-hard/select";
 import CandidatesTable from "./candidates-table";
 import { soft_skills, tech_skills } from "@/utils/skills";
 import { useCallback, useEffect, useState } from "react";
+import CustomBreadcrumbs from "../breadcrumbs/breadcrumbs";
 
 export default function Candidates() {
   const [techSkills, setTechSkills] = useState<string[]>([]);
@@ -77,17 +71,17 @@ export default function Candidates() {
     router.push(pathname + "?" + createQueryString());
   }, [techSkills, softSkills]);
 
+  const routes = [
+    { name: "Home", path: "/home" },
+    { name: "Candidatos", path: "/candidates" },
+  ];
+
   return (
     <Box>
       <Navbar />
       <Container maxWidth="lg">
         <Stack direction="column" spacing={4} paddingTop={4}>
-          <Breadcrumbs aria-label="breadcrumb">
-            <Link underline="hover" color="inherit" href="/home">
-              Home
-            </Link>
-            <Typography color="text.primary">Candidatos</Typography>
-          </Breadcrumbs>
+          <CustomBreadcrumbs routes={routes}></CustomBreadcrumbs>
           <Typography
             variant="h3"
             gutterBottom

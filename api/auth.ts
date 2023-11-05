@@ -56,13 +56,8 @@ interface ProjectData {
   employees: Employee[];
 }
 
-export const registerProject = async (projectData: ProjectData): Promise<ApiResponse> => {
+export const registerProject = async (
+  projectData: ProjectData
+): Promise<ApiResponse> => {
   return await fetchData("customer/project", "POST", projectData);
 };
-
-
-/*export const getCustomerProjects = async (): Promise<ApiResponse> => {
-  const session = await getAuthSession();
-  
-  return fetchData("customer/projects", "GET", undefined, session as Session);
-};*/
