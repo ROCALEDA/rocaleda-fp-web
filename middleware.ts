@@ -33,7 +33,7 @@ export async function middleware(request: NextRequest) {
   const routesByRole = {
     "/candidates": [1, 2],
     "/projects": [1, 2],
-    "/projects/register": [2],
+    "/projects/create": [2],
   };
 
   if (user && routesByRole.hasOwnProperty(pathname)) {
@@ -45,5 +45,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/candidates", "/projects", "/projects/register", "/home"],
+  matcher: ["/candidates", "/projects", "/projects/create", "/home"],
 };
