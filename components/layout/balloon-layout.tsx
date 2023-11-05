@@ -8,9 +8,9 @@ interface LayoutProps {
 }
 
 const routes = [
-  { name: "Home", path: "/home" },
+  { name: "Home", path: "/" },
   { name: "Proyectos", path: "/projects" },
-  { name: "Crear proyecto", path: "/projects/register" },
+  { name: "Crear proyecto", path: "/projects/create" },
 ];
 
 export default function Layout({ children }: LayoutProps) {
