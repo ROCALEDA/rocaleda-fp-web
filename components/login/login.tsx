@@ -139,12 +139,12 @@ export default function Login() {
               ¿Aún no tienes una cuenta?
             </Typography>
             <Stack direction="row" spacing={2}>
-              <Link href="/candidate" passHref>
+              <Link href="/signup/candidate" passHref>
                 <Button sx={{ backgroundColor: "#F4E8C9", color: "black" }}>
                   Quiero ser candidato
                 </Button>
               </Link>
-              <Link href="/register" passHref>
+              <Link href="/signup/company" passHref>
                 <Button sx={{ backgroundColor: "#F4E8C9", color: "black" }}>
                   Soy una empresa
                 </Button>

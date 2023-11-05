@@ -71,7 +71,7 @@ export default function CandidatesTable() {
     }
   }, [session, searchSoftSkills, searchTechSkills]);
 
-  if (isLoading) return <p>Loading...</p>;
+  if (isLoading) return <p>Cargando...</p>;
   if (!candidates) return <p>No hay candidatos para mostrar</p>;
 
   return (

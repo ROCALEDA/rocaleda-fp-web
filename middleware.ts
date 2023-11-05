@@ -33,34 +33,25 @@ export async function middleware(request: NextRequest) {
     return Redirect();
   }
 
-  console.log("MIDDLEWARE", user);
-  console.log("PATHNAME", pathname);
-
   const routesByRole = {
     "/candidates": [1, 2],
     "/projects": [1, 2],
-    "/projects/create": [2],
+    "/projects/register": [2],
   };
 
   if (user && routesByRole.hasOwnProperty(pathname)) {
     const allowedRoles = routesByRole[pathname as keyof typeof routesByRole];
     if (allowedRoles && !allowedRoles.includes(user.role_id)) {
-      console.log("POQUEEE", allowedRoles);
       return Redirect();
     }
-    console.log("IF SI");
-  } else {
-    console.log("IF NO");
   }
-  console.log("AJA");
 }
 
 export const config = {
   matcher: [
     "/login",
-    "/register-company",
-    "/register-candidate",
-    "/register-candidate",
+    "/signup/company",
+    "/signup/candidate",
     "/candidates",
     "/projects",
     "/home",

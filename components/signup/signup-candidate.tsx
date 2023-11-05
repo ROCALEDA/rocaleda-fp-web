@@ -76,7 +76,7 @@ const soft_skill = [
   { value: "8", label: "Management" },
 ];
 
-export default function Register() {
+export default function SignUpCandidate() {
   const router = useRouter();
   const formik = useFormik({
     initialValues: {

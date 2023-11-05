@@ -1,7 +1,7 @@
 import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import Register from "@/components/client-register/register";
+import Register from "@/components/signup/signup-company";
 import { useRouter } from "next/navigation";
 
 jest.mock("next/navigation", () => ({
