@@ -25,7 +25,7 @@ export async function middleware(request: NextRequest) {
     }
   };
 
-  const authRoutes = ["/login", "/register-company", "/register-candidate"];
+  const authRoutes = ["/login", "/signup/candidate", "/signup/company"];
   if (!!user && authRoutes.includes(pathname)) {
     return Redirect();
   }
@@ -45,12 +45,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: [
-    "/login",
-    "/signup/company",
-    "/signup/candidate",
-    "/candidates",
-    "/projects",
-    "/home",
-  ],
+  matcher: ["/candidates", "/projects", "/home"],
 };
