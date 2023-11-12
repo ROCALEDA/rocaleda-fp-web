@@ -1,6 +1,6 @@
 import React from "react";
 import { render } from "@testing-library/react";
-import RegisterPage from "../projects/create/page";
+import RegisterPage from "../[locale]/projects/create/page";
 import { SessionProvider } from "next-auth/react";
 import { useRouter } from "next/navigation";
 

@@ -1,11 +1,15 @@
 "use client";
-import * as React from "react";
 import Link from "next/link";
-import { Box, Button, Container, Grid, Typography } from "@mui/material";
-import { philosopher } from "@/app/theme/fonts";
+import * as React from "react";
+import { useTranslations } from "next-intl";
 import { useSession } from "next-auth/react";
+import { Box, Button, Container, Grid, Typography } from "@mui/material";
+
+import { philosopher } from "@/app/[locale]/theme/fonts";
 
 export default function Home() {
+  const lang = useTranslations("Home");
+  console.log("LANG", lang);
   const { data: session } = useSession();
   const user = session?.user;
 
@@ -20,14 +24,13 @@ export default function Home() {
                 gutterBottom
                 fontFamily={philosopher.style.fontFamily}
               >
-                Candidatos
+                {lang("candidates.title")}
               </Typography>
               <Typography variant="h6" gutterBottom color="secondary.main">
-                Aquí puedes elegir a los candidatos que se ajustan a los
-                perfiles que estás buscando
+                {lang("candidates.description")}
               </Typography>
               <Link href="/candidates">
-                <Button variant="contained">Ver candidatos</Button>
+                <Button variant="contained">{lang("candidates.action")}</Button>
               </Link>
             </Box>
           </Grid>
@@ -40,14 +43,13 @@ export default function Home() {
                 gutterBottom
                 fontFamily={philosopher.style.fontFamily}
               >
-                Proyectos
+                {lang("projects.title")}
               </Typography>
               <Typography variant="h6" gutterBottom color="secondary.main">
-                Aquí puedes ver los proyectos creados, sus posiciones y
-                candidatos asociados
+                {lang("projects.description")}
               </Typography>
               <Link href="/projects">
-                <Button variant="contained">Ver proyectos</Button>
+                <Button variant="contained">{lang("projects.action")}</Button>
               </Link>
             </Box>
           </Grid>

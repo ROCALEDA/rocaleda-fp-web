@@ -1,6 +1,7 @@
 import { getToken } from "next-auth/jwt";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import createIntlMiddleware from "next-intl/middleware";
 
 type TUser = {
   email: string;
@@ -14,6 +15,17 @@ type TUser = {
 
 export async function middleware(request: NextRequest) {
   console.log("Middleware working");
+  const defaultLocale = request.headers.get("x-default-locale") || "en";
+
+  const handleI18nRouting = createIntlMiddleware({
+    locales: ["en", "es"],
+    defaultLocale,
+  });
+
+  const response = handleI18nRouting(request);
+
+  // Step 3: Alter the response
+  response.headers.set("x-default-locale", defaultLocale);
 
   const { pathname }: { pathname: string } = request.nextUrl;
 
@@ -29,7 +41,7 @@ export async function middleware(request: NextRequest) {
 
   const authRoutes = ["/login", "/signup/candidate", "/signup/company"];
   if (!!user && authRoutes.includes(pathname)) {
-    return Redirect();
+    Redirect();
   }
 
   const routesByRole = {
@@ -42,12 +54,13 @@ export async function middleware(request: NextRequest) {
   if (user && routesByRole.hasOwnProperty(pathname)) {
     const allowedRoles = routesByRole[pathname as keyof typeof routesByRole];
     if (allowedRoles && !allowedRoles.includes(user.role_id)) {
-      return Redirect();
+      Redirect();
     }
   }
   if (!user && routesByRole.hasOwnProperty(pathname)) {
-    return Redirect();
+    Redirect();
   }
+  return response;
 }
 
 export const config = {
