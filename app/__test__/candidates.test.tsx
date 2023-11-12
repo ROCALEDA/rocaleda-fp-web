@@ -2,10 +2,8 @@ import React from "react";
 import { render, waitFor } from "@testing-library/react";
 import Candidates from "@/components/candidates/candidates";
 
-// Mocking the global fetch function
 global.fetch = jest.fn();
 
-// Example usage: mocking a successful fetch response
 const mockData = { data: { data: [] } };
 const mockResponse = { json: () => Promise.resolve(mockData) };
 global.fetch.mockResolvedValue(mockResponse);
@@ -48,7 +46,7 @@ jest.mock("next-auth/react", () => ({
       user: {
         name: "Test User",
         email: "test@example.com",
-        role_id: 1, // Puedes ajustar este valor según lo que necesites para la prueba
+        role_id: 1,
       },
     },
     status: "authenticated",

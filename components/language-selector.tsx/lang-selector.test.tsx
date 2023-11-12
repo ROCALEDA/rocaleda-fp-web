@@ -1,8 +1,7 @@
 import React from "react";
 import { render, fireEvent, screen } from "@testing-library/react";
-import LanguageSelector from "./language-selector"; // Adjust the import path as necessary
+import LanguageSelector from "./language-selector";
 
-// Mocking the necessary hooks and modules
 jest.mock("next-intl/client", () => ({
   useRouter: () => ({
     replace: jest.fn(),
