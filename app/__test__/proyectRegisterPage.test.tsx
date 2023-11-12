@@ -1,11 +1,25 @@
 import React from "react";
 import { render } from "@testing-library/react";
-import RegisterPage from "../projects/create/page";
+import RegisterPage from "../[locale]/projects/create/page";
 import { SessionProvider } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
 jest.mock("next/navigation", () => ({
-  useRouter: jest.fn(),
+  usePathname: () => "/",
+  useRouter: () => ({
+    back: jest.fn(),
+    forward: jest.fn(),
+    refresh: jest.fn(),
+    push: jest.fn(),
+    prefetch: jest.fn(),
+    replace: jest.fn(),
+  }),
+  useParams: () => ({
+    locale: "en",
+  }),
+}));
+jest.mock("next-intl", () => ({
+  useLocale: () => "en",
 }));
 
 describe("<RegisterPage />", () => {

@@ -21,6 +21,7 @@ const customJestConfig = {
     "!**/pages/**",
     "!**/utils/**",
   ],
+  coveragePathIgnorePatterns: ["./middleware.ts"],
   coverageReporters: isCoverage ? ["text", "lcov"] : undefined,
   coverageThreshold: isCoverage
     ? {

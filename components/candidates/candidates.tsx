@@ -7,7 +7,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { enqueueSnackbar } from "notistack";
 
 import Navbar from "../navbar/navbar";
-import { philosopher } from "@/app/theme/fonts";
+import { philosopher } from "@/app/[locale]/theme/fonts";
 import BasicSelect from "../select-hard/select";
 import CandidatesTable from "./candidates-table";
 import { soft_skills, tech_skills } from "@/utils/skills";
@@ -58,9 +58,7 @@ export default function Candidates() {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      console.log("Valores enviados:", values);
       try {
-        console.log("filtrar candidatos", values);
       } catch (error: any) {
         enqueueSnackbar(error.message, { variant: "error" });
       }

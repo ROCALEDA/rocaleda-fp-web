@@ -1,0 +1,14 @@
+{
+  "Home": {
+    "candidates": {
+      "title": "Candidatos",
+      "description": "Elige a los mejores candidatos para tus proyectos",
+      "action": "Ver candidatos"
+    },
+    "projects": {
+      "title": "Proyectos",
+      "description": "Administra tus proyectos creados, sus posiciones y candidatos asociados",
+      "action": "Ver proyectos"
+    }
+  }
+}

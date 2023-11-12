@@ -80,7 +80,6 @@ export default function FormRegisterProyect(props: FormRegisterProyectProps) {
     };
 
     try {
-      //console.log('Datos a enviar:', JSON.stringify(dataToSend));
       const response = await fetch(`${API_URL}/customer/project`, {
         method: "POST",
         headers: {
@@ -100,10 +99,8 @@ export default function FormRegisterProyect(props: FormRegisterProyectProps) {
       const responseData = await response.json();
       enqueueSnackbar("Proyecto creado:", { variant: "success" });
       router.push("/projects");
-      //console.log('Proyecto creado:', responseData);
     } catch (error) {
       enqueueSnackbar("Error al enviar el formulario:", { variant: "error" });
-      //console.error('Error al enviar el formulario:', error);
     }
   };
 

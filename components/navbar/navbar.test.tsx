@@ -3,6 +3,25 @@ import { render, screen, fireEvent } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { useSession } from "next-auth/react";
 
+jest.mock("next/navigation", () => ({
+  usePathname: () => "/",
+  useRouter: () => ({
+    back: jest.fn(),
+    forward: jest.fn(),
+    refresh: jest.fn(),
+    push: jest.fn(),
+    prefetch: jest.fn(),
+    replace: jest.fn(),
+  }),
+  useParams: () => ({
+    locale: "en",
+  }),
+}));
+
+jest.mock("next-intl", () => ({
+  useLocale: () => "en",
+}));
+
 jest.mock("next-auth/react", () => {
   const originalModule = jest.requireActual("next-auth/react");
   const mockSession = {

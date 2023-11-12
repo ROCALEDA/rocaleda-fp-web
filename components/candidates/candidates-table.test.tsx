@@ -7,7 +7,6 @@ global.fetch = jest.fn(() =>
     json: () => Promise.resolve({ data: [], total_pages: 0 }),
   })
 );
-// Mock the necessary hooks and modules
 jest.mock("next-auth/react", () => ({
   useSession: jest.fn(() => ({ data: { user: { token: "mock-token" } } })),
 }));

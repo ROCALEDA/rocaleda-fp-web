@@ -1,0 +1,14 @@
+{
+  "Home": {
+    "candidates": {
+      "title": "Candidates",
+      "description": "Choose the best candidate for your projects",
+      "action": "View candidates"
+    },
+    "projects": {
+      "title": "Projects",
+      "description": "Create and manage your projects and roles the bests",
+      "action": "View projects"
+    }
+  }
+}
