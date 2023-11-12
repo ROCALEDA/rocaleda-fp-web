@@ -11,7 +11,6 @@ export default function Home() {
   const lang = useTranslations("Home");
   const { data: session } = useSession();
   const user = session?.user;
-  console.log("HOME NO CARGA");
 
   return (
     <Container maxWidth="lg">

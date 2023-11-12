@@ -3,6 +3,25 @@ import { render } from "@testing-library/react";
 import ProyectPage from "../[locale]/projects/page";
 import { SessionProvider } from "next-auth/react";
 
+jest.mock("next/navigation", () => ({
+  usePathname: () => "/",
+  useRouter: () => ({
+    back: jest.fn(),
+    forward: jest.fn(),
+    refresh: jest.fn(),
+    push: jest.fn(),
+    prefetch: jest.fn(),
+    replace: jest.fn(),
+  }),
+  useParams: () => ({
+    locale: "en",
+  }),
+}));
+
+jest.mock("next-intl", () => ({
+  useLocale: () => "en",
+}));
+
 describe("<ProyectPage />", () => {
   beforeEach(() => {
     global.fetch = jest.fn(() =>

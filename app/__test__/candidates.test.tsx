@@ -20,13 +20,26 @@ jest.mock("next/router", () => ({
 }));
 
 jest.mock("next/navigation", () => ({
-  useRouter: jest.fn(() => ({
+  useRouter: () => ({
+    back: jest.fn(),
+    forward: jest.fn(),
+    refresh: jest.fn(),
     push: jest.fn(),
-  })),
+    prefetch: jest.fn(),
+    replace: jest.fn(),
+  }),
+  useParams: () => ({
+    locale: "en",
+  }),
   usePathname: jest.fn(),
   useSearchParams: jest.fn(() => ({
     get: jest.fn(),
   })),
+  useLocale: () => "en",
+}));
+
+jest.mock("next-intl", () => ({
+  useLocale: () => "en",
 }));
 
 jest.mock("next-auth/react", () => ({

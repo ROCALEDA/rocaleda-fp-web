@@ -58,9 +58,7 @@ export default function Candidates() {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      console.log("Valores enviados:", values);
       try {
-        console.log("filtrar candidatos", values);
       } catch (error: any) {
         enqueueSnackbar(error.message, { variant: "error" });
       }

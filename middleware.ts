@@ -61,7 +61,6 @@ export async function middleware(request: NextRequest) {
     const allowedRoles =
       routesByRole[pathnameWithoutLocale as keyof typeof routesByRole];
     if (allowedRoles && !allowedRoles.includes(user.role_id)) {
-      console.log("no allowed");
       return Redirect();
     }
   }
