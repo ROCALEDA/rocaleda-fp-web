@@ -12,22 +12,17 @@ type TUser = {
   exp: number;
   jti: string;
 };
+let locales = ["en", "es"];
+
+const intlMiddleware = createIntlMiddleware({
+  locales: locales,
+  defaultLocale: "es",
+  localePrefix: "always",
+});
 
 export async function middleware(request: NextRequest) {
-  console.log("Middleware working");
-  const defaultLocale = request.headers.get("x-default-locale") || "en";
-
-  const handleI18nRouting = createIntlMiddleware({
-    locales: ["en", "es"],
-    defaultLocale,
-  });
-
-  const response = handleI18nRouting(request);
-
-  // Step 3: Alter the response
-  response.headers.set("x-default-locale", defaultLocale);
-
-  const { pathname }: { pathname: string } = request.nextUrl;
+  const { pathname, locale }: { pathname: string; locale: string | undefined } =
+    request.nextUrl;
 
   const user = (await getToken({ req: request })) as TUser | null;
 
@@ -39,9 +34,20 @@ export async function middleware(request: NextRequest) {
     }
   };
 
+  const pathnameHasLocale = locales.some(
+    (locale) => pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`
+  );
+
+  let pathnameWithoutLocale = pathname;
+
+  if (pathnameHasLocale) {
+    const localeRegex = new RegExp(`^/(${locales.join("|")})(/|$)`);
+    pathnameWithoutLocale = pathname.replace(localeRegex, "/");
+  }
+
   const authRoutes = ["/login", "/signup/candidate", "/signup/company"];
-  if (!!user && authRoutes.includes(pathname)) {
-    Redirect();
+  if (!!user && authRoutes.includes(pathnameWithoutLocale)) {
+    return Redirect();
   }
 
   const routesByRole = {
@@ -51,24 +57,22 @@ export async function middleware(request: NextRequest) {
     "/interviews": [3],
   };
 
-  if (user && routesByRole.hasOwnProperty(pathname)) {
-    const allowedRoles = routesByRole[pathname as keyof typeof routesByRole];
+  if (user && routesByRole.hasOwnProperty(pathnameWithoutLocale)) {
+    const allowedRoles =
+      routesByRole[pathnameWithoutLocale as keyof typeof routesByRole];
     if (allowedRoles && !allowedRoles.includes(user.role_id)) {
-      Redirect();
+      console.log("no allowed");
+      return Redirect();
     }
   }
-  if (!user && routesByRole.hasOwnProperty(pathname)) {
-    Redirect();
+
+  if (!user && routesByRole.hasOwnProperty(pathnameWithoutLocale)) {
+    return Redirect();
   }
-  return response;
+
+  return intlMiddleware(request);
 }
 
 export const config = {
-  matcher: [
-    "/candidates",
-    "/projects",
-    "/projects/create",
-    "/home",
-    "/interviews",
-  ],
+  matcher: ["/((?!api|_next|_vercel|.*\\..*).*)"],
 };

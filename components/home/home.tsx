@@ -9,9 +9,9 @@ import { philosopher } from "@/app/[locale]/theme/fonts";
 
 export default function Home() {
   const lang = useTranslations("Home");
-  console.log("LANG", lang);
   const { data: session } = useSession();
   const user = session?.user;
+  console.log("HOME NO CARGA");
 
   return (
     <Container maxWidth="lg">
