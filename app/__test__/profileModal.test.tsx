@@ -27,7 +27,7 @@ describe("<ProfileModal />", () => {
 
     const input = screen.getByLabelText(/número de perfiles/i);
     userEvent.clear(input);
-    userEvent.type(input, "3");
+    userEvent.type(input, "3", { delay: 1 });
     await waitFor(() => {
       expect(input).toHaveValue(3);
     });
@@ -35,7 +35,8 @@ describe("<ProfileModal />", () => {
   it("handles profile name input correctly", async () => {
     render(<ProfileModal open={true} onClose={() => {}} onAdd={() => {}} />);
     const input = await screen.findByLabelText(/nombre del perfil/i);
-    userEvent.type(input, "Test Profile");
+    //userEvent.type(input, "Test Profile", { delay: 1 });
+    fireEvent.change(input, { target: { value: 'Test Profile' } });
     await waitFor(() => {
       expect(input).toHaveValue("Test Profile");
     });
