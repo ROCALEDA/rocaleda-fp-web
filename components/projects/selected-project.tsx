@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import { Box, Card, CardContent, Typography, Chip, Accordion, AccordionSummary, AccordionDetails, FormControlLabel,Checkbox,Button } from '@mui/material';
+import { Box, Card, CardContent, Typography, Chip, Accordion, AccordionSummary, AccordionDetails, FormControlLabel,Checkbox,Button, Radio, RadioGroup } from '@mui/material';
 //import PeopleIcon from '@mui/icons-material/PersonOutlineOutlined';
 import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
 import { useTheme } from '@mui/material/styles';
@@ -42,7 +42,8 @@ export default function SelectedProject({ project }: SelectedProjectProps) {
     const theme = useTheme();
     const isSmallScreen = useMediaQuery(theme.breakpoints.down('xs'));
 
-    const [selectedCandidates, setSelectedCandidates] = useState<Record<number, number[]>>({});
+    //const [selectedCandidates, setSelectedCandidates] = useState<Record<number, number[]>>({});
+    const [selectedCandidates, setSelectedCandidates] = useState<Record<number, number | null>>({});
     const [selectionCompleted, setSelectionCompleted] = useState<Record<number, boolean>>({});
 
     const fetchCandidates = async (positionId: number) => {
@@ -88,16 +89,11 @@ export default function SelectedProject({ project }: SelectedProjectProps) {
     if (isLoading) return <p>Cargando...</p>;
     
 
-    const handleSelectCandidate = (positionId: number, candidateId: number, isSelected: boolean) => {
-        setSelectedCandidates(prevSelected => {
-            const selectedForPosition = new Set(prevSelected[positionId] || []);
-            if (isSelected) {
-                selectedForPosition.add(candidateId);
-            } else {
-                selectedForPosition.delete(candidateId);
-            }
-            return { ...prevSelected, [positionId]: Array.from(selectedForPosition) };
-        });
+    const handleSelectCandidate = (positionId: number, candidateId: number) => {
+        setSelectedCandidates(prevSelected => ({
+            ...prevSelected,
+            [positionId]: candidateId
+        }));
     };
     
 
@@ -134,46 +130,50 @@ export default function SelectedProject({ project }: SelectedProjectProps) {
                             </div>
                         </AccordionSummary>
                         <AccordionDetails>
-  {/* Contenedor para los candidatos seleccionados */}
-  <Box sx={{ display: selectionCompleted[position.id] ? 'block' : 'none' }}>
-      {selectedCandidates[position.id]?.map(candidateId => {
-          const candidate = candidates[position.id]?.find(c => c.user_id === candidateId); // Usar el nuevo estado `candidates`
-          return (
-              <Typography key={candidateId} style={{color: '#718096', fontSize: 16}}>
-                  <WorkspacePremiumIcon style={{ verticalAlign: 'middle', color: '#F3DA90' }} />
-                  {' '}{candidate?.fullname}
-              </Typography>
-          );
-      })}
-  </Box>
-  {/* Contenedor para los checkboxes */}
-  <Box sx={{ display: selectionCompleted[position.id] ? 'none' : 'flex', flexDirection: 'column' }}>
-      {candidates[position.id]?.map(candidate => ( // Usar el nuevo estado `candidates`
-          <FormControlLabel
-              key={candidate.user_id}
-              style={{color: '#718096', fontSize: 16}}
-              control={
-                  <Checkbox
-                      checked={selectedCandidates[position.id]?.includes(candidate.user_id) || false}
-                      onChange={(event) => handleSelectCandidate(position.id, candidate.user_id, event.target.checked)}
-                      sx={{ '&.Mui-checked': { color: '#A15CAC' } }}
-                  />
-              }
-              label={candidate.fullname}
-          />
-      ))}
-      <Box sx={{ width: 'fit-content', mt: 2 }}> 
-          <Button
-              type="submit"
-              variant="contained" 
-              sx={{ backgroundColor: "#A15CAC", "&:hover": { backgroundColor: "#864D8F" } }}
-              onClick={() => handleSelectionComplete(position.id)}
-          >
-              Seleccionar
-          </Button>
-      </Box>
-  </Box>
-</AccordionDetails>
+                        {/* Contenedor para los candidatos seleccionados */}
+                        <Box sx={{ display: selectionCompleted[position.id] ? 'block' : 'none' }}>
+                        {selectedCandidates[position.id] != null && (
+                                (() => {
+                                    const candidateId = selectedCandidates[position.id];
+                                    const candidate = candidates[position.id]?.find(c => c.user_id === candidateId);
+                                    return candidate ? (
+                                        <Typography key={candidateId} style={{color: '#718096', fontSize: 16}}>
+                                            <WorkspacePremiumIcon style={{ verticalAlign: 'middle', color: '#F3DA90' }} />
+                                            {' '}{candidate.fullname}
+                                        </Typography>
+                                    ) : null;
+                                })()
+                            )}
+                        </Box>
+                        {/* Contenedor para los checkboxes */}
+                        <Box sx={{ display: selectionCompleted[position.id] ? 'none' : 'flex', flexDirection: 'column' }}>
+                            <RadioGroup
+                                value={selectedCandidates[position.id] || ''}
+                                onChange={(event) => handleSelectCandidate(position.id, Number(event.target.value))}
+                            >
+                            {candidates[position.id]?.map(candidate => (
+                                <FormControlLabel
+                                    key={candidate.user_id}
+                                    value={candidate.user_id}
+                                    control={<Radio sx={{ '&.Mui-checked': { color: '#A15CAC' } }} />}
+                                    label={candidate.fullname}
+                                />
+                            ))}
+                            </RadioGroup>
+                        </Box>
+
+                        <Box sx={{ width: 'fit-content', mt: 2 }}> 
+                            <Button
+                                type="submit"
+                                variant="contained" 
+                                sx={{ backgroundColor: "#A15CAC", "&:hover": { backgroundColor: "#864D8F" } }}
+                                onClick={() => handleSelectionComplete(position.id)}
+                            >
+                                Seleccionar
+                            </Button>
+                        </Box>
+  
+                        </AccordionDetails>
                     </Accordion>
                 ))}
             </Box>
