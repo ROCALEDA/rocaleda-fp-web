@@ -20,7 +20,6 @@ type InterviewCardProps = {
 
 export default function InterviewCard({ interview }: InterviewCardProps) {
   const lang = useTranslations("Interviews");
-  console.log("interview", interview);
 
   return (
     <Card

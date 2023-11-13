@@ -46,7 +46,6 @@ export default function InterviewList() {
     }
   }, [session]);
 
-  console.log("INTERVIEW LIST", interviews);
   if (isLoading) return <p>Cargando...</p>;
 
   return (
