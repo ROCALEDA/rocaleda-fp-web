@@ -5,6 +5,7 @@ import Navbar from "@/components/navbar/navbar";
 import CustomBreadcrumbs from "../breadcrumbs/breadcrumbs";
 import { useTranslations } from "next-intl";
 import { philosopher } from "@/app/[locale]/theme/fonts";
+import InterviewList from "./interview-list";
 
 export default function Interviews() {
   const lang = useTranslations("Interviews");
@@ -27,9 +28,12 @@ export default function Interviews() {
           >
             {lang("title")}
           </Typography>
-          <Grid container spacing={2} paddingY={4}>
+          <Typography variant="h6" gutterBottom color="secondary.main">
+            {lang("description")}
+          </Typography>
+          <Grid container spacing={2} paddingX={0}>
             <Grid item xs={8} md={6}>
-              List
+              <InterviewList />
             </Grid>
             <Grid item md={6} display={{ xs: "none", lg: "block" }}>
               Detail

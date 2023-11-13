@@ -7,16 +7,17 @@
     },
     "projects": {
       "title": "Proyectos",
-      "description": "Administra tus proyectos creados, sus posiciones y candidatos asociados",
+      "description": "Gestiona tus proyectos creados, sus posiciones y candidatos asociados",
       "action": "Ver proyectos"
     },
     "interviews": {
       "title": "Entrevistas",
-      "description": "Administra tus entrevistas agendadas",
+      "description": "Gestiona tus entrevistas agendadas",
       "action": "Ver entrevistas"
     }
   },
   "Interviews": {
-    "title": "Entrevistas"
+    "title": "Entrevistas",
+    "description": "Gestiona tus entrevistas agendadas"
   }
 }

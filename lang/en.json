@@ -17,6 +17,7 @@
     }
   },
   "Interviews": {
-    "title": "Interviews"
+    "title": "Interviews",
+    "description": "Manage your scheduled interviews"
   }
 }
