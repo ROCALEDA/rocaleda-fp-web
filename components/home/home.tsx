@@ -61,15 +61,13 @@ export default function Home() {
                 gutterBottom
                 fontFamily={philosopher.style.fontFamily}
               >
-                Entrevistas
+                {lang("interviews.title")}
               </Typography>
               <Typography variant="h6" gutterBottom color="secondary.main">
-                Conoce tus historial de entrevistas y entrevistas agendadas
+                {lang("interviews.description")}
               </Typography>
               <Link href="/interviews">
-                <Button variant="contained" disabled>
-                  Ver entrevistas
-                </Button>
+                <Button variant="contained">{lang("interviews.action")}</Button>
               </Link>
             </Box>
           </Grid>

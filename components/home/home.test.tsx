@@ -61,7 +61,7 @@ describe("Home", () => {
     renderComponentWithSession(3);
     expect(screen.queryByText("candidates.title")).not.toBeInTheDocument();
     expect(screen.queryByText("projects.title")).not.toBeInTheDocument();
-    expect(screen.getByText("Entrevistas")).toBeInTheDocument();
+    expect(screen.getByText("interviews.title")).toBeInTheDocument();
   });
 
   it("renders correctly project button", () => {
@@ -77,5 +77,13 @@ describe("Home", () => {
     expect(
       screen.getByRole("link", { name: "candidates.action" })
     ).toHaveAttribute("href", "/candidates");
+  });
+
+  it("renders correctly interview button", () => {
+    renderComponentWithSession(3);
+
+    expect(
+      screen.getByRole("link", { name: "interviews.action" })
+    ).toHaveAttribute("href", "/interviews");
   });
 });
