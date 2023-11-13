@@ -1,11 +1,13 @@
 "use client";
-import React, {useState} from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, Card, CardContent, Typography, Chip, Accordion, AccordionSummary, AccordionDetails, FormControlLabel,Checkbox,Button } from '@mui/material';
 //import PeopleIcon from '@mui/icons-material/PersonOutlineOutlined';
 import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
 import { useTheme } from '@mui/material/styles';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import useMediaQuery from '@mui/material/useMediaQuery';
+import { useSession } from "next-auth/react";
+import API_URL from "@/api/config";
 
 interface Position {
     id: number;
@@ -26,42 +28,75 @@ interface Position {
   }
 
   interface Candidate {
-    id: number;
-    name: string;
+    user_id: number;
+    fullname: string;
   }
   
-
+const initialState: Record<number, Candidate[]> = {};
 
 export default function SelectedProject({ project }: SelectedProjectProps) {
+    const { data: session } = useSession();
+    const [isLoading, setIsLoading] = useState<boolean>(true);
+    const [error, setError] = useState<string | null>(null);
+    const [candidates, setCandidates] = useState<Record<number, Candidate[]>>(initialState);
     const theme = useTheme();
     const isSmallScreen = useMediaQuery(theme.breakpoints.down('xs'));
 
     const [selectedCandidates, setSelectedCandidates] = useState<Record<number, number[]>>({});
     const [selectionCompleted, setSelectionCompleted] = useState<Record<number, boolean>>({});
 
-    
+    const fetchCandidates = async (positionId: number) => {
+        if (!session) return;
+      
+        setIsLoading(true);
+        try {
+          const response = await fetch(`${API_URL}/positions/${positionId}/candidates`, {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${session.user.token}`, // Asegúrate de que el token está siendo accedido correctamente
+            },
+          });
+      
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+      
+          const candidatesData: Candidate[] = await response.json();
+          //console.log('Candidates data for position', positionId, candidatesData);
+          setCandidates(prevCandidates => ({
+            ...prevCandidates,
+            [positionId]: candidatesData, 
+          }));
+        } catch (error) {
+          console.error("Error al obtener los candidatos:", error);
+          setError("Error al cargar los datos de los candidatos");
+        } finally {
+          setIsLoading(false);
+        }
+      };
+
+      useEffect(() => {
+        if (!project) return;
+        
+        project.positions.filter(pos => pos.is_open).forEach((position) => {
+            fetchCandidates(position.id);
+        });
+    }, [project]);
+
 
     if (!project) return null;
-
-    const mockCandidates = [
-        { id: 1, name: 'Stephany Jimenez' },
-        { id: 2, name: 'Carlos Rodriguez' },
-        { id: 3, name: 'Isabel Ramirez' },
-    ];
-
-    const positionsWithCandidates = project.positions.map(pos => ({
-        ...pos,
-        candidates: mockCandidates 
-    }));
+    if (isLoading) return <p>Cargando...</p>;
+    
 
     const handleSelectCandidate = (positionId: number, candidateId: number, isSelected: boolean) => {
         setSelectedCandidates(prevSelected => {
-            const selectedForPosition = prevSelected[positionId] || [];
+            const selectedForPosition = new Set(prevSelected[positionId] || []);
             if (isSelected) {
-                return { ...prevSelected, [positionId]: [...selectedForPosition, candidateId] };
+                selectedForPosition.add(candidateId);
             } else {
-                return { ...prevSelected, [positionId]: selectedForPosition.filter(id => id !== candidateId) };
+                selectedForPosition.delete(candidateId);
             }
+            return { ...prevSelected, [positionId]: Array.from(selectedForPosition) };
         });
     };
     
@@ -88,7 +123,7 @@ export default function SelectedProject({ project }: SelectedProjectProps) {
             </Box>
                 {/* Acordeón con las posiciones disponibles */}
             <Box display="flex" flexDirection="column"  mt={2} mb={10}>
-                {positionsWithCandidates.filter(pos => pos.is_open).map((position) => (
+                {project.positions.filter(pos => pos.is_open).map((position) => (
                     <Accordion key={position.id} style={{ marginBottom: '5px' }}>
                         <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls={`panel${position.id}-content`} id={`panel${position.id}-header`}>
                             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%'}}>
@@ -99,51 +134,46 @@ export default function SelectedProject({ project }: SelectedProjectProps) {
                             </div>
                         </AccordionSummary>
                         <AccordionDetails>
-                            {/* checkbox y boton seleccionar*/}
-                            <Box sx={{ display: selectionCompleted[position.id] ? 'block' : 'none' }}>
-                                {selectedCandidates[position.id]?.map(candidateId => {
-                                    const candidate = mockCandidates.find(c => c.id === candidateId);
-                                    return (
-                                        <Typography key={candidateId} style={{color: '#718096', fontSize: 16}}>
-                                            <WorkspacePremiumIcon style={{ verticalAlign: 'middle', color: '#F3DA90' }} />
-                                            {' '}{candidate?.name}
-                                        </Typography>
-                                    );
-                                })}
-                            </Box>
-                            <Box sx={{ display: selectionCompleted[position.id] ? 'none' : 'flex', flexDirection: 'column' }}>
-                            {position.candidates.map(candidate => (
-                                <FormControlLabel
-                                    key={candidate.id}
-                                    style={{color: '#718096', fontSize: 16}}
-                                    control={
-                                        <Checkbox
-                                            checked={selectedCandidates[position.id]?.includes(candidate.id) || false}
-                                            onChange={(event) => handleSelectCandidate(position.id, candidate.id, event.target.checked)}
-                                            sx={{
-                                                
-                                                '&.Mui-checked': {
-                                                    color: '#A15CAC',
-                                                },
-                                            }}
-                                        />
-                                    }
-                                    label={candidate.name}
-                                />
-                            ))}
-                                <Box sx={{ width: 'fit-content', mt: 2 }}> 
-                                    <Button
-                                    type="submit"
-                                    variant="contained" 
-                                    sx = {{backgroundColor: "#A15CAC","&:hover": { backgroundColor: "#864D8F" }}} 
-                                    //onClick={() => console.log('Seleccionados:', selectedCandidates[position.id])}
-                                    onClick={() => handleSelectionComplete(position.id)}
-                                    >
-                                    Seleccionar
-                                    </Button>
-                                </Box>
-                            </Box>
-                        </AccordionDetails>
+  {/* Contenedor para los candidatos seleccionados */}
+  <Box sx={{ display: selectionCompleted[position.id] ? 'block' : 'none' }}>
+      {selectedCandidates[position.id]?.map(candidateId => {
+          const candidate = candidates[position.id]?.find(c => c.user_id === candidateId); // Usar el nuevo estado `candidates`
+          return (
+              <Typography key={candidateId} style={{color: '#718096', fontSize: 16}}>
+                  <WorkspacePremiumIcon style={{ verticalAlign: 'middle', color: '#F3DA90' }} />
+                  {' '}{candidate?.fullname}
+              </Typography>
+          );
+      })}
+  </Box>
+  {/* Contenedor para los checkboxes */}
+  <Box sx={{ display: selectionCompleted[position.id] ? 'none' : 'flex', flexDirection: 'column' }}>
+      {candidates[position.id]?.map(candidate => ( // Usar el nuevo estado `candidates`
+          <FormControlLabel
+              key={candidate.user_id}
+              style={{color: '#718096', fontSize: 16}}
+              control={
+                  <Checkbox
+                      checked={selectedCandidates[position.id]?.includes(candidate.user_id) || false}
+                      onChange={(event) => handleSelectCandidate(position.id, candidate.user_id, event.target.checked)}
+                      sx={{ '&.Mui-checked': { color: '#A15CAC' } }}
+                  />
+              }
+              label={candidate.fullname}
+          />
+      ))}
+      <Box sx={{ width: 'fit-content', mt: 2 }}> 
+          <Button
+              type="submit"
+              variant="contained" 
+              sx={{ backgroundColor: "#A15CAC", "&:hover": { backgroundColor: "#864D8F" } }}
+              onClick={() => handleSelectionComplete(position.id)}
+          >
+              Seleccionar
+          </Button>
+      </Box>
+  </Box>
+</AccordionDetails>
                     </Accordion>
                 ))}
             </Box>
