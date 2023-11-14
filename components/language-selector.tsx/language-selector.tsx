@@ -5,13 +5,14 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { usePathname, useRouter } from "next-intl/client";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useEffect } from "react";
 
 export default function LanguageSelector() {
   const locale = useLocale();
   const [lang, setLang] = React.useState("es");
   const pathname = usePathname();
+  const t = useTranslations("General");
 
   const router = useRouter();
 
@@ -29,15 +30,15 @@ export default function LanguageSelector() {
       sx={{ m: 1, minWidth: 120 }}
       size="small"
     >
-      <InputLabel id="select-language-label">Idioma</InputLabel>
+      <InputLabel id="select-language-label">{t("language")}</InputLabel>
       <Select
         labelId="select-language-label"
         value={lang}
         label="Idioma"
         onChange={handleChange}
       >
-        <MenuItem value="es">Español</MenuItem>
-        <MenuItem value="en">Inglés</MenuItem>
+        <MenuItem value="es">{t("es")}</MenuItem>
+        <MenuItem value="en">{t("en")}</MenuItem>
       </Select>
     </FormControl>
   );

@@ -19,13 +19,16 @@ import { signOut, useSession } from "next-auth/react";
 import MenuIcon from "@mui/icons-material/Menu";
 import LanguageSelector from "../language-selector.tsx/language-selector";
 import { LogoutOutlined } from "@mui/icons-material";
+import { useTranslations } from "next-intl";
 
 export default function Navbar() {
   const { data: session } = useSession();
+  const lang = useTranslations("Home");
+
   const pages = [
-    { roles: [1, 2], name: "Proyectos", link: "/projects" },
-    { roles: [1, 2], name: "Candidatos", link: "/candidates" },
-    { roles: [3], name: "Entrevistas", link: "/interviews" },
+    { roles: [1, 2], name: lang("projects.title"), link: "/projects" },
+    { roles: [1, 2], name: lang("candidates.title"), link: "/candidates" },
+    { roles: [3], name: lang("interviews.title"), link: "/interviews" },
   ];
 
   const user = session?.user;

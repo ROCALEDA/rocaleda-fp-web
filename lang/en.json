@@ -1,4 +1,9 @@
 {
+  "General": {
+    "language": "Language",
+    "en": "English",
+    "es": "Spanish"
+  },
   "Home": {
     "candidates": {
       "title": "Candidates",
@@ -9,6 +14,15 @@
       "title": "Projects",
       "description": "Create and manage your projects and roles the bests",
       "action": "View projects"
+    },
+    "interviews": {
+      "title": "Interviews",
+      "description": "Manage your scheduled interviews",
+      "action": "View interviews"
     }
+  },
+  "Interviews": {
+    "title": "Interviews",
+    "description": "Manage your scheduled interviews"
   }
 }

@@ -1,4 +1,9 @@
 {
+  "General": {
+    "language": "Idioma",
+    "en": "Inglés",
+    "es": "Español"
+  },
   "Home": {
     "candidates": {
       "title": "Candidatos",
@@ -7,8 +12,17 @@
     },
     "projects": {
       "title": "Proyectos",
-      "description": "Administra tus proyectos creados, sus posiciones y candidatos asociados",
+      "description": "Gestiona tus proyectos creados, sus posiciones y candidatos asociados",
       "action": "Ver proyectos"
+    },
+    "interviews": {
+      "title": "Entrevistas",
+      "description": "Gestiona tus entrevistas agendadas",
+      "action": "Ver entrevistas"
     }
+  },
+  "Interviews": {
+    "title": "Entrevistas",
+    "description": "Gestiona tus entrevistas agendadas"
   }
 }
