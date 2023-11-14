@@ -5,18 +5,7 @@ import Link from "next/link";
 import DetailProject from "@/components/projects/project-detail";
 import SelectedProject from "@/components/projects/selected-project";
 import { useSession } from "next-auth/react";
-
-type Project = {
-  id: number;
-  name: string;
-  is_team_complete: boolean;
-  total_positions: number;
-  positions: {
-    id: number;
-    is_open: boolean;
-    name: string;
-  }[];
-};
+import { Project } from "@/types/types";
 
 export default function ListProject() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
