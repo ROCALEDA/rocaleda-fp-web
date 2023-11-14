@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, useCallback  } from 'react';
+import React, { useState, useEffect, useCallback, MouseEvent, KeyboardEvent } from 'react';
 import { Box, Card, CardContent, Typography, Chip, Accordion, AccordionSummary, AccordionDetails, FormControlLabel,Button, Radio, RadioGroup } from '@mui/material';
 //import PeopleIcon from '@mui/icons-material/PersonOutlineOutlined';
 import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
@@ -9,6 +9,8 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import { useSession } from "next-auth/react";
 import API_URL from "@/api/config";
 import { Project, Candidate } from "@/types/types";
+import OpenModalButton from '../techtest/openModal';
+import TechTestModal from '../techtest/techtestModal';
 
 interface SelectedProjectProps {
     project: Project | null;
@@ -131,7 +133,18 @@ export default function SelectedProject({ project }: SelectedProjectProps) {
     }, [submitTrigger, submitSelectedCandidate]);
     
 
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const handleOpenModal = () => {
+        setIsModalOpen(true); 
+    };
+    
+    const handleCloseModal = () => {
+        setIsModalOpen(false); 
+    };
+
+    
     if (!project) return null;
+    if (project.is_team_complete) return null
     if (isLoading) return <p>Cargando...</p>;
     
     
@@ -209,8 +222,14 @@ export default function SelectedProject({ project }: SelectedProjectProps) {
                     </Accordion>
                 ))}
             </Box>
+            <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}> 
+                <OpenModalButton onOpen={handleOpenModal} />
+                <TechTestModal open={isModalOpen} onClose={handleCloseModal} />
+            </Box>
             </CardContent>
+            
         </Card>
+        
         </Box>
     );
 

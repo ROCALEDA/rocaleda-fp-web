@@ -15,24 +15,6 @@ export default function ListProject() {
   const { data: session } = useSession();
   const userRole = session?.user?.role_id;
 
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (
-        cardRef.current &&
-        !cardRef.current.contains(event.target as Node) &&
-        detailRef.current &&
-        !detailRef.current.contains(event.target as Node)
-      ) {
-        setSelectedProject(null);
-      }
-    }
-
-    window.addEventListener("click", handleClickOutside);
-
-    return () => {
-      window.removeEventListener("click", handleClickOutside);
-    };
-  }, []);
 
   return (
     <Grid container>
@@ -85,7 +67,8 @@ export default function ListProject() {
       </Grid>
       <Grid item xs={12} sm={6}>
         <Grid item xs={12} sm={12} ref={detailRef}>
-          <SelectedProject project={selectedProject} />
+          <SelectedProject 
+          project={selectedProject}/>
         </Grid>
       </Grid>
     </Grid>
