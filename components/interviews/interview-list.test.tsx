@@ -40,11 +40,6 @@ jest.mock("next-auth/react", () => ({
   signIn: jest.fn(),
 }));
 
-const renderWithIntl = async (locale = "en") => {
-  const messages = (await import(`../../lang/${locale}.json`)).default;
-  renderWithReactIntl(<Interviews />, messages, locale);
-};
-
 const renderWithReactIntl = (component, locale, messages) => {
   return render(
     <IntlProvider locale={locale} messages={messages}>

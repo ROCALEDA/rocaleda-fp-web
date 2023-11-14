@@ -4,11 +4,20 @@ import { render, screen } from "@testing-library/react";
 import Interviews from "./interviews"; // Adjust the import path as necessary
 import InterviewList from "./interview-list";
 
-jest.mock("../navbar/navbar", () => () => <div>Navbar Mock</div>);
-jest.mock("../breadcrumbs/breadcrumbs", () => () => (
-  <div>Breadcrumbs Mock</div>
-));
-jest.mock("./interview-list", () => () => <div>List Mock</div>);
+jest.mock("../navbar/navbar", () => {
+  const NavbarMock = () => <div>Navbar Mock</div>;
+  return NavbarMock;
+});
+
+jest.mock("../breadcrumbs/breadcrumbs", () => {
+  const BreadcrumbsMock = () => <div>Breadcrumbs Mock</div>;
+  return BreadcrumbsMock;
+});
+
+jest.mock("./interview-list", () => {
+  const ListMock = () => <div>List Mock</div>;
+  return ListMock;
+});
 
 jest.mock("next-auth/react", () => ({
   useSession: jest.fn().mockReturnValue({
