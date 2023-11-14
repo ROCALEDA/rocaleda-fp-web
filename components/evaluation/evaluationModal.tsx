@@ -5,33 +5,69 @@ import Image from 'next/image';
 import { philosopher } from "@/app/[locale]/theme/fonts";
 import { useSession } from "next-auth/react";
 import API_URL from "@/api/config";
-import { Project, PositionComplete } from "@/types/types";
+import { Project, PositionComplete, FormErrors } from "@/types/types";
+import * as yup from 'yup';
+import { enqueueSnackbar } from "notistack";
 
 interface EvalModalModalProps {
     open: boolean;
     onClose: () => void;
 }
 
+const validationSchema = yup.object({
+    project_id: yup.number().nullable().required('El proyecto es obligatorio'),
+    name: yup.string().required('El perfil es obligatorio'),
+    candidate_id: yup.number().nullable().required('El candidato es obligatorio'),
+    score: yup.number().min(0).max(100).required('La puntuación es obligatoria'),
+    observations: yup.string().trim().min(1, 'Las observaciones no pueden estar vacías').required('Las observaciones son obligatorias')
+});
 
 const EvalModal: React.FC<EvalModalModalProps> = ({ open, onClose }) => {
     const { data: session } = useSession();
-    const [selectedProject, setSelectedProject] = useState<number | "">('');
+    const [selectedProject, setSelectedProject] = useState<number | null>(null);
     const [selectedProfile, setSelectedProfile] = useState<number | ''>('');
     const [positions, setPositions] = useState<PositionComplete[]>([]);
     const [selectedCandidateName, setSelectedCandidateName] = useState('');
+    const [score, setScore] = useState(30);
+    const [observations, setObservations] = useState('');
+    const [closedProject, setProjects] = useState<Project[]>([]);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
+    const [errors, setErrors] = useState({
+        project_id: '',
+        name: '',
+        candidate_id: '',
+        score: '',
+        observations: ''
+    });
 
     const resetModal = () => {
-        setSelectedProject('');
+        setSelectedProject(null);
         setSelectedProfile('');
         setSelectedCandidateName('');
         setPositions([]);
+        setScore(30);
+        setErrors({
+            project_id: '',
+            name: '',
+            candidate_id: '',
+            score: '',
+            observations: ''
+        });
     };
 
+    
+
     const handleProjectChange = async (event: SelectChangeEvent<number>) => {
-        const projectId = event.target.value === "" ? "" : Number(event.target.value);
+        const projectId = event.target.value === "" ? null : Number(event.target.value);
         setSelectedProject(projectId);
         setSelectedProfile('');
         setSelectedCandidateName('');
+        setErrors(prev => ({ ...prev, project_id: '' }));
+        setErrors(prev => ({ ...prev, name: '' }));
+        setErrors(prev => ({ ...prev, candidate_id: '' }));
+        setErrors(prevErrors => ({ ...prevErrors, observations: '' }));
+
+
         if (projectId) {
             try {
                 const response = await fetch(`${API_URL}/positions/closed/${projectId}`, {
@@ -100,9 +136,7 @@ const EvalModal: React.FC<EvalModalModalProps> = ({ open, onClose }) => {
           label: '100',
         },
       ];
-      const [closedProject, setProjects] = useState<Project[]>([]);
-      const [isLoading, setIsLoading] = useState<boolean>(true);
-      const [error, setError] = useState<string | null>(null);
+      
 
       useEffect(() => {
         if (open && session) {
@@ -120,7 +154,7 @@ const EvalModal: React.FC<EvalModalModalProps> = ({ open, onClose }) => {
             })
             .catch((error) => {
               console.error("Error al obtener los proyectos:", error);
-              setError("Error al cargar los datos");
+              //setError("Error al cargar los datos");
               setIsLoading(false);
             });
         }
@@ -136,7 +170,67 @@ const EvalModal: React.FC<EvalModalModalProps> = ({ open, onClose }) => {
         };
     });
 
-    //console.log(completedProjectDetails);
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+    
+        const selectedPosition = positions.find(pos => pos.position_id === selectedProfile);
+        const candidateId = selectedPosition ? selectedPosition.candidate_id : null;
+        const positionName = selectedPosition ? selectedPosition.position_name : '';
+    
+        const formData = {
+            project_id: selectedProject,
+            name: positionName,
+            candidate_id: candidateId,
+            score,
+            observations
+        };
+        if (selectedProject) {
+            formData.project_id = selectedProject;
+        }
+    
+        try {
+            // Validar los datos del formulario
+            await validationSchema.validate(formData, { abortEarly: false });
+            console.log(formData);
+            const response = await fetch(`${API_URL}/positions/evaluations`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${session?.user?.token}`,
+                },
+                body: JSON.stringify(formData),
+                });
+
+            if (response.ok) {
+                    enqueueSnackbar("Evaluación enviada con éxito", { variant: "success" });
+                    resetModal(); 
+                    onClose(); 
+                } else {
+                    enqueueSnackbar(`Error ${response.status}: ${response.statusText}`, {
+                        variant: "error",
+                    });
+                }
+            
+        } catch (err) {
+            if (err instanceof yup.ValidationError) {
+                const newErrors = err.inner.reduce<FormErrors>((acc, currentError) => {
+                    const path = currentError.path || ""; 
+                    return {
+                        ...acc,
+                        [path]: currentError.message
+                    };
+                }, {
+                    project_id: '',
+                    name: '',
+                    candidate_id: '',
+                    score: '',
+                    observations: ''
+                });
+                setErrors(newErrors);
+                enqueueSnackbar('Error en la validación del formulario', { variant: 'error' });
+            }
+        }
+    };
 
     return (
         <Modal
@@ -146,6 +240,7 @@ const EvalModal: React.FC<EvalModalModalProps> = ({ open, onClose }) => {
           aria-describedby="tech-test-modal-description"
         >
           <Box sx={style} >
+          <form onSubmit={handleSubmit}>
             {/* Título */}
             <Box sx={{ position: 'relative', width: '100%', height: '80px' }}>
                 <Typography variant="h4" component="h2" sx={{ width: '100%', textAlign: 'center' }} fontFamily={philosopher.style.fontFamily}>
@@ -161,7 +256,7 @@ const EvalModal: React.FC<EvalModalModalProps> = ({ open, onClose }) => {
                         <Select
                         labelId="proyectos_customer"
                         id="proyecto-select"
-                        value={selectedProject}
+                        value={selectedProject ?? ""}
                         onChange={handleProjectChange}
                         >
                             {completedProjectDetails.map((project) => (
@@ -170,6 +265,7 @@ const EvalModal: React.FC<EvalModalModalProps> = ({ open, onClose }) => {
                                 </MenuItem>
                             ))}
                         </Select>
+                        <Typography color="error">{errors.project_id}</Typography>
                     </FormControl>
                     <FormControl variant="standard" sx={{ m: 1, width: '90%' }} size="small">
                         <InputLabel id="perfil_candidate">Perfil</InputLabel>
@@ -185,6 +281,7 @@ const EvalModal: React.FC<EvalModalModalProps> = ({ open, onClose }) => {
                         
                         ))}
                         </Select>
+                        <Typography color="error">{errors.name}</Typography>
                     </FormControl>
                     <FormControl variant="standard" sx={{ m: 1, width: '90%' }} size="small">
                         <TextField
@@ -194,6 +291,7 @@ const EvalModal: React.FC<EvalModalModalProps> = ({ open, onClose }) => {
                             value={selectedCandidateName}
                             InputProps={{readOnly: true}}
                         />
+                    <Typography color="error">{errors.candidate_id}</Typography>
                     </FormControl>
                     </Box>
 
@@ -203,33 +301,43 @@ const EvalModal: React.FC<EvalModalModalProps> = ({ open, onClose }) => {
                     </Box>
                 </Box>
             <FormControl fullWidth sx={{ m: 1,mt:4 }}>
-          <TextField id="standard-basic" label="Descripción de calificación" variant="standard" multiline maxRows={4}/>
-          </FormControl>
-        <Slider 
-            defaultValue={30} 
-            aria-label="Default" 
-            valueLabelDisplay="auto"
-            step={1} 
-            sx={{ mb: 2 ,mt:4}}
-            marks={marks}
-         />
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', width: '100%', mt: 8, mb: 4 }}>
-            <Button 
-                variant="outlined" 
-                //onClick={() => onClose()}
-                onClick={handleCancel} 
-                sx={{ flexGrow: 1, mr: 1 }} 
-            >
-                CANCELAR
-            </Button>
-            <Button 
-                variant="contained" 
-                sx={{ flexGrow: 1, ml: 4, backgroundColor: "#A15CAC", "&:hover": { backgroundColor: "#864D8F" } }}
-            >
-                CALIFICAR CANDIDATO
-            </Button>
-        </Box>
-            
+            <TextField 
+                id="standard-basic" 
+                label="Descripción de calificación" 
+                variant="standard"
+                onChange={(e) => setObservations(e.target.value)}  
+                multiline 
+                maxRows={4}/>
+                <Typography color="error">{errors.observations}</Typography>
+            </FormControl>
+                <Slider 
+                    defaultValue={30} 
+                    aria-label="Default" 
+                    valueLabelDisplay="auto"
+                    value={score}
+                    onChange={(e, value) => setScore(value as number)} 
+                    step={1} 
+                    sx={{ mb: 2 ,mt:4}}
+                    marks={marks}
+                />
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', width: '100%', mt: 8, mb: 4 }}>
+                    <Button 
+                        variant="outlined" 
+                        //onClick={() => onClose()}
+                        onClick={handleCancel} 
+                        sx={{ flexGrow: 1, mr: 1 }} 
+                    >
+                        CANCELAR
+                    </Button>
+                    <Button
+                        type="submit" 
+                        variant="contained" 
+                        sx={{ flexGrow: 1, ml: 4, backgroundColor: "#A15CAC", "&:hover": { backgroundColor: "#864D8F" } }}
+                    >
+                        CALIFICAR CANDIDATO
+                    </Button>
+                </Box>
+            </form>
           </Box>
         </Modal>
       );

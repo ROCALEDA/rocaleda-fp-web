@@ -29,3 +29,11 @@ export interface Candidate {
     candidate_id: number;
     candidate_name: string;
 }
+
+export interface FormErrors  {
+  project_id: string;
+  name: string;
+  candidate_id: string;
+  score: string;
+  observations: string;
+};
