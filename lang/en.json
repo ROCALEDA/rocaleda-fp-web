@@ -1,4 +1,9 @@
 {
+  "General": {
+    "language": "Language",
+    "en": "English",
+    "es": "Spanish"
+  },
   "Home": {
     "candidates": {
       "title": "Candidates",

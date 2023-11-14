@@ -7,6 +7,7 @@ import { Box, Container, Stack } from "@mui/material";
 import API_URL from "@/api/config";
 import { TInterview } from "@/types/interview";
 import InterviewCard from "./interview-card";
+import LoadingSkeleton from "./interview-card-skeleton";
 
 export default function InterviewList() {
   const { data: session } = useSession();
@@ -46,17 +47,17 @@ export default function InterviewList() {
     }
   }, [session]);
 
-  if (isLoading) return <p>Cargando...</p>;
-
   return (
     <Box>
-      <Container maxWidth="lg">
-        <Stack paddingY={4} direction="column" spacing={4}>
-          {interviews?.map((interview, key) => (
-            <InterviewCard key={key} interview={interview} />
-          ))}
-        </Stack>
-      </Container>
+      <Stack paddingY={4} direction="column" spacing={4}>
+        {isLoading
+          ? Array.from({ length: 7 }).map((_, index) => (
+              <LoadingSkeleton key={index} />
+            ))
+          : interviews?.map((interview, key) => (
+              <InterviewCard key={key} interview={interview} />
+            ))}
+      </Stack>
     </Box>
   );
 }

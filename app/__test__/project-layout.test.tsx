@@ -19,7 +19,8 @@ jest.mock("next/navigation", () => ({
 }));
 
 jest.mock("next-intl", () => ({
-  useLocale: () => "en",
+  useLocale: () => "es",
+  useTranslations: () => (key) => key, // Modify this line
 }));
 
 describe("<Layout />", () => {
