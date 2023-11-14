@@ -1,37 +1,78 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Modal, Box, Typography, TextField, MenuItem, Button, Slider,FormControl,InputLabel } from '@mui/material';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import Image from 'next/image';
 import { philosopher } from "@/app/[locale]/theme/fonts";
+import { useSession } from "next-auth/react";
+import API_URL from "@/api/config";
+import { Project, PositionComplete } from "@/types/types";
 
 interface EvalModalModalProps {
     open: boolean;
     onClose: () => void;
-  }
+}
 
 
 const EvalModal: React.FC<EvalModalModalProps> = ({ open, onClose }) => {
-    const [selectedProject, setSelectedProject] = React.useState<number | ''>('');
-    const [selectedProfile, setSelectedProfile] = React.useState<number | ''>('');
-    const [selectedCandidate, setSelectedCandidate] = React.useState<number | ''>('');
+    const { data: session } = useSession();
+    const [selectedProject, setSelectedProject] = useState<number | "">('');
+    const [selectedProfile, setSelectedProfile] = useState<number | ''>('');
+    const [positions, setPositions] = useState<PositionComplete[]>([]);
+    const [selectedCandidateName, setSelectedCandidateName] = useState('');
 
-    const handleProjectChange = (event: SelectChangeEvent<number>) => {
-        setSelectedProject(+event.target.value);
+    const resetModal = () => {
+        setSelectedProject('');
+        setSelectedProfile('');
+        setSelectedCandidateName('');
+        setPositions([]);
+    };
+
+    const handleProjectChange = async (event: SelectChangeEvent<number>) => {
+        const projectId = event.target.value === "" ? "" : Number(event.target.value);
+        setSelectedProject(projectId);
+        setSelectedProfile('');
+        setSelectedCandidateName('');
+        if (projectId) {
+            try {
+                const response = await fetch(`${API_URL}/positions/closed/${projectId}`, {
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${session?.user?.token}`,
+                    }});
+                if (response.ok) {
+                    const data: PositionComplete[] = await response.json();
+                    setPositions(data);
+                } else {
+                    console.error('Failed to fetch positions:', response.status);
+                }
+            } catch (error) {
+                console.error('Error fetching positions:', error);
+            }
+        }
     };
     
     const handleProfileChange = (event: SelectChangeEvent<number>) => {
-        setSelectedProfile(+event.target.value);
+        const profileId = event.target.value as number;
+        setSelectedProfile(profileId);
+
+        const selectedPosition = positions.find(pos => pos.position_id === profileId);
+        if (selectedPosition) {
+            setSelectedCandidateName(selectedPosition.candidate_name);
+        } else {
+            setSelectedCandidateName('');
+        }
     };
     
-    const handleCandidateChange = (event: SelectChangeEvent<number>) => {
-        setSelectedCandidate(+event.target.value);
-    };
 
-      const handleClose = (event: React.MouseEvent<HTMLElement> | React.KeyboardEvent<HTMLElement>, reason?: "backdropClick" | "escapeKeyDown") => {
+    const handleClose = (event: React.MouseEvent<HTMLElement> | React.KeyboardEvent<HTMLElement>, reason?: "backdropClick" | "escapeKeyDown") => {
         if (reason !== 'backdropClick' && reason !== 'escapeKeyDown') {
-          onClose();
+            onClose();
         }
-      };
+    };
+    const handleCancel = () => {
+        resetModal();
+        onClose();
+    };
 
     const style = {
         position: 'absolute',
@@ -59,6 +100,44 @@ const EvalModal: React.FC<EvalModalModalProps> = ({ open, onClose }) => {
           label: '100',
         },
       ];
+      const [closedProject, setProjects] = useState<Project[]>([]);
+      const [isLoading, setIsLoading] = useState<boolean>(true);
+      const [error, setError] = useState<string | null>(null);
+
+      useEffect(() => {
+        if (open && session) {
+          setIsLoading(true);
+          fetch(`${API_URL}/customer/projects`, {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${session?.user?.token}`,
+            },
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              setProjects(data);
+              setIsLoading(false);
+            })
+            .catch((error) => {
+              console.error("Error al obtener los proyectos:", error);
+              setError("Error al cargar los datos");
+              setIsLoading(false);
+            });
+        }
+      }, [open, session]);
+
+
+    const completedProjectDetails = closedProject
+    .filter(closedProject => closedProject.is_team_complete)
+    .map(closedProject => {
+        return {
+            id: closedProject.id,
+            name: closedProject.name
+        };
+    });
+
+    //console.log(completedProjectDetails);
+
     return (
         <Modal
           open={open}
@@ -85,9 +164,11 @@ const EvalModal: React.FC<EvalModalModalProps> = ({ open, onClose }) => {
                         value={selectedProject}
                         onChange={handleProjectChange}
                         >
-                            <MenuItem value={1}>Centro de estudiantes</MenuItem>
-                            <MenuItem value={2}>Proyecto y</MenuItem>
-                            <MenuItem value={3}>Proyecto x</MenuItem>
+                            {completedProjectDetails.map((project) => (
+                                <MenuItem key={project.id} value={project.id}>
+                                    {project.name}
+                                </MenuItem>
+                            ))}
                         </Select>
                     </FormControl>
                     <FormControl variant="standard" sx={{ m: 1, width: '90%' }} size="small">
@@ -97,25 +178,23 @@ const EvalModal: React.FC<EvalModalModalProps> = ({ open, onClose }) => {
                         id="profile-select"
                         value={selectedProfile}
                         onChange={handleProfileChange}
-                        >
-                            <MenuItem value={1}>Frontend Engineer</MenuItem>
-                            <MenuItem value={2}>Backend Engineer</MenuItem>
-                            <MenuItem value={3}>DevOps Engineer</MenuItem>
+                        >{positions.map((position) => (
+                            <MenuItem key={position.position_id} value={position.position_id}>
+                                    {position.position_name}
+                            </MenuItem>
+                        
+                        ))}
                         </Select>
                     </FormControl>
                     <FormControl variant="standard" sx={{ m: 1, width: '90%' }} size="small">
-                        <InputLabel id="name_candidate">Candidato</InputLabel>
-                        <Select
-                        labelId="name_candidate"
-                        id="candidate-select" 
-                        value={selectedCandidate}
-                        onChange={handleCandidateChange}
-                        >
-                            <MenuItem value={1}>Stephanny Jimenez</MenuItem>
-                            <MenuItem value={2}>Roberto Parra</MenuItem>
-                            <MenuItem value={3}>Daniela</MenuItem>
-                        </Select>
-                        </FormControl>
+                        <TextField
+                            id="candidate-name"
+                            label="Candidato"
+                            variant="standard"
+                            value={selectedCandidateName}
+                            InputProps={{readOnly: true}}
+                        />
+                    </FormControl>
                     </Box>
 
                     {/* Contenedor para la imagen */}
@@ -137,7 +216,8 @@ const EvalModal: React.FC<EvalModalModalProps> = ({ open, onClose }) => {
         <Box sx={{ display: 'flex', justifyContent: 'space-between', width: '100%', mt: 8, mb: 4 }}>
             <Button 
                 variant="outlined" 
-                onClick={() => onClose()} 
+                //onClick={() => onClose()}
+                onClick={handleCancel} 
                 sx={{ flexGrow: 1, mr: 1 }} 
             >
                 CANCELAR
