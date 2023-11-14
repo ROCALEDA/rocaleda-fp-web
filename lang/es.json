@@ -19,6 +19,11 @@
       "title": "Entrevistas",
       "description": "Gestiona tus entrevistas agendadas",
       "action": "Ver entrevistas"
+    },
+    "quickLinks": {
+      "title": "Enlaces rápidos",
+      "description": "Evalua a los candidatos de tus proyectos",
+      "action": "Calificar Candidatos"
     }
   },
   "Interviews": {
