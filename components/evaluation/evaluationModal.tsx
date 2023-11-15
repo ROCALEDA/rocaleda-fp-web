@@ -189,7 +189,6 @@ const EvalModal: React.FC<EvalModalModalProps> = ({ open, onClose }) => {
         }
     
         try {
-            // Validar los datos del formulario
             await validationSchema.validate(formData, { abortEarly: false });
             console.log(formData);
             const response = await fetch(`${API_URL}/positions/evaluations`, {
