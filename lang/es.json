@@ -23,6 +23,10 @@
   },
   "Interviews": {
     "title": "Entrevistas",
-    "description": "Gestiona tus entrevistas agendadas"
+    "description": "Gestiona tus entrevistas agendadas",
+    "date": "Fecha",
+    "company": "Compañía",
+    "result": "Resultado",
+    "no_results": "No hay resultados por mostrar"
   }
 }

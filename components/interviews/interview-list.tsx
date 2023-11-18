@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { useSession } from "next-auth/react";
 import { Box, Container, Stack } from "@mui/material";
@@ -9,7 +9,13 @@ import { TInterview } from "@/types/interview";
 import InterviewCard from "./interview-card";
 import LoadingSkeleton from "./interview-card-skeleton";
 
-export default function InterviewList() {
+type InterviewListProps = {
+  setSelectedInterview: Dispatch<SetStateAction<TInterview | undefined>>;
+};
+
+export default function InterviewList({
+  setSelectedInterview,
+}: InterviewListProps) {
   const { data: session } = useSession();
 
   const [interviews, setInterviews] = useState<TInterview[]>();
@@ -55,7 +61,15 @@ export default function InterviewList() {
               <LoadingSkeleton key={index} />
             ))
           : interviews?.map((interview, key) => (
-              <InterviewCard key={key} interview={interview} />
+              <div
+                key={key}
+                role="button"
+                tabIndex={0}
+                onClick={() => setSelectedInterview(interview)}
+                style={{ cursor: "pointer" }}
+              >
+                <InterviewCard key={key} interview={interview} />
+              </div>
             ))}
       </Stack>
     </Box>
