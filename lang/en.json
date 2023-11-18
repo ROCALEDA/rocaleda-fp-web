@@ -23,6 +23,10 @@
   },
   "Interviews": {
     "title": "Interviews",
-    "description": "Manage your scheduled interviews"
+    "description": "Manage your scheduled interviews",
+    "date": "Date",
+    "company": "Company",
+    "result": "Score",
+    "no_results": "There are no results for this interview"
   }
 }
