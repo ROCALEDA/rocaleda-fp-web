@@ -4,6 +4,16 @@
     "en": "Inglés",
     "es": "Español"
   },
+  "Login": {
+    "title": "Iniciar sesións",
+    "subtitle": "Estamos felices por verte nuevamente",
+    "registerMotivation": "¿Aún no tienes una cuenta?",
+    "candidateButton": "Quiero ser candidato",
+    "companyButton": "Soy una empresa",
+    "email": "Correo",
+    "password": "Contraseña",
+    "loading": "Cargando..."
+  },
   "Home": {
     "candidates": {
       "title": "Candidatos",
