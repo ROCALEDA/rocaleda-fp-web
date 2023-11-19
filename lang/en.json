@@ -4,6 +4,16 @@
     "en": "English",
     "es": "Spanish"
   },
+  "Login": {
+    "title": "Login",
+    "subtitle": "Welcome again",
+    "registerMotivation": "Don't have an account?",
+    "candidateButton": "I want to apply to a company",
+    "companyButton": "I have a company",
+    "email": "Email",
+    "password": "Password",
+    "loading": "Loading..."
+  },
   "Home": {
     "candidates": {
       "title": "Candidates",

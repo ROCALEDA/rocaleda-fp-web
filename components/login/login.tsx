@@ -14,9 +14,10 @@ import * as Yup from "yup";
 import { useState } from "react";
 import { useFormik } from "formik";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 
 import { enqueueSnackbar } from "notistack";
-import { signIn, useSession } from "next-auth/react";
+import { signIn } from "next-auth/react";
 
 const validationSchema = Yup.object({
   email: Yup.string()
@@ -26,7 +27,7 @@ const validationSchema = Yup.object({
 });
 
 export default function Login() {
-  const { data: session, status } = useSession();
+  const lang = useTranslations("Login");
 
   const [loading, setLoading] = useState(false);
   const router = useRouter();
@@ -78,12 +79,12 @@ export default function Login() {
           <Box sx={{ maxWidth: "500px", width: "100%" }}>
             <Card>
               <Box padding={4} textAlign="center" width="100%">
-                <Typography variant="h5">Iniciar sesión</Typography>
+                <Typography variant="h5">{lang("title")}</Typography>
                 <Box padding={4}>
                   <form onSubmit={formik.handleSubmit}>
                     <Stack direction="column" spacing={6}>
                       <TextField
-                        label="Correo"
+                        label={lang("email")}
                         name="email"
                         type="email"
                         variant="standard"
@@ -95,7 +96,7 @@ export default function Login() {
                         helperText={formik.touched.email && formik.errors.email}
                       />
                       <TextField
-                        label="Password"
+                        label={lang("password")}
                         name="password"
                         type="password"
                         autoComplete="current-password"
@@ -118,7 +119,7 @@ export default function Login() {
                           loading ? <CircularProgress size={20} /> : null
                         }
                       >
-                        {loading ? "Ingresando..." : "Ingresar"}
+                        {loading ? lang("loading") : lang("title")}
                       </Button>
                     </Stack>
                   </form>
@@ -131,22 +132,21 @@ export default function Login() {
       <Grid item xs={12} md={6}>
         <Stack direction="column" justifyContent="space-between">
           <Typography variant="h4" gutterBottom>
-            Estamos felices <br />
-            por verte nuevamente
+            {lang("subtitle")}
           </Typography>
           <Box paddingTop={4}>
             <Typography variant="h5" gutterBottom>
-              ¿Aún no tienes una cuenta?
+              {lang("registerMotivation")}
             </Typography>
             <Stack direction="row" spacing={2}>
               <Link href="/signup/candidate" passHref>
                 <Button sx={{ backgroundColor: "#F4E8C9", color: "black" }}>
-                  Quiero ser candidato
+                  {lang("candidateButton")}
                 </Button>
               </Link>
               <Link href="/signup/company" passHref>
                 <Button sx={{ backgroundColor: "#F4E8C9", color: "black" }}>
-                  Soy una empresa
+                  {lang("companyButton")}
                 </Button>
               </Link>
             </Stack>
