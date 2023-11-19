@@ -3,7 +3,6 @@
 import {
   Box,
   Card,
-  CardContent,
   Chip,
   Divider,
   Grid,
@@ -46,7 +45,7 @@ export default function InterviewCard({ interview }: InterviewCardProps) {
         <Grid item xs={5} sx={{ padding: 1 }}>
           <Stack direction="column">
             <Typography variant="h6">{interview.subject}</Typography>
-            <Typography variant="h6" gutterBottom color="secondary.main">
+            <Typography variant="caption" gutterBottom color="secondary.main">
               {interview.client_name}
             </Typography>
           </Stack>
