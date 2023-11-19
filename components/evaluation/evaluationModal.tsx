@@ -25,11 +25,8 @@ const validationSchema = yup.object({
 const EvalModal: React.FC<EvalModalModalProps> = ({ open, onClose }) => {
     const { data: session } = useSession();
     const [selectedProject, setSelectedProject] = useState<number | null>(null);
-    //const [selectedProfile, setSelectedProfile] = useState<number | ''>('');
-    //const [selectedProfile, setSelectedProfile] = useState({ id: null, text: '' });
     const [selectedProfile, setSelectedProfile] = useState<{ id: number | null, text: string }>({ id: null, text: '' });
     const [positions, setPositions] = useState<PositionComplete[]>([]);
-    //const [selectedCandidateName, setSelectedCandidateName] = useState('');
     const [score, setScore] = useState(30);
     const [observations, setObservations] = useState('');
     const [closedProject, setProjects] = useState<Project[]>([]);
@@ -44,8 +41,7 @@ const EvalModal: React.FC<EvalModalModalProps> = ({ open, onClose }) => {
 
     const resetModal = () => {
         setSelectedProject(null);
-        setSelectedProfile('');
-        //setSelectedCandidateName('');
+        //setSelectedProfile('');
         setPositions([]);
         setScore(30);
         setErrors({
