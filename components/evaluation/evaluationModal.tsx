@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Modal, Box, Typography, TextField, MenuItem, Button, Slider,FormControl,InputLabel } from '@mui/material';
+import { Modal, Box, Typography, TextField, MenuItem, Button, Slider,FormControl,InputLabel,Skeleton } from '@mui/material';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import Image from 'next/image';
 import { philosopher } from "@/app/[locale]/theme/fonts";
@@ -25,9 +25,11 @@ const validationSchema = yup.object({
 const EvalModal: React.FC<EvalModalModalProps> = ({ open, onClose }) => {
     const { data: session } = useSession();
     const [selectedProject, setSelectedProject] = useState<number | null>(null);
-    const [selectedProfile, setSelectedProfile] = useState<number | ''>('');
+    //const [selectedProfile, setSelectedProfile] = useState<number | ''>('');
+    //const [selectedProfile, setSelectedProfile] = useState({ id: null, text: '' });
+    const [selectedProfile, setSelectedProfile] = useState<{ id: number | null, text: string }>({ id: null, text: '' });
     const [positions, setPositions] = useState<PositionComplete[]>([]);
-    const [selectedCandidateName, setSelectedCandidateName] = useState('');
+    //const [selectedCandidateName, setSelectedCandidateName] = useState('');
     const [score, setScore] = useState(30);
     const [observations, setObservations] = useState('');
     const [closedProject, setProjects] = useState<Project[]>([]);
@@ -43,7 +45,7 @@ const EvalModal: React.FC<EvalModalModalProps> = ({ open, onClose }) => {
     const resetModal = () => {
         setSelectedProject(null);
         setSelectedProfile('');
-        setSelectedCandidateName('');
+        //setSelectedCandidateName('');
         setPositions([]);
         setScore(30);
         setErrors({
@@ -55,51 +57,37 @@ const EvalModal: React.FC<EvalModalModalProps> = ({ open, onClose }) => {
         });
     };
 
-    
-
-    const handleProjectChange = async (event: SelectChangeEvent<number>) => {
+    const handleProjectChange = (event: SelectChangeEvent<number>) => {
         const projectId = event.target.value === "" ? null : Number(event.target.value);
         setSelectedProject(projectId);
-        setSelectedProfile('');
-        setSelectedCandidateName('');
-        setErrors(prev => ({ ...prev, project_id: '' }));
-        setErrors(prev => ({ ...prev, name: '' }));
-        setErrors(prev => ({ ...prev, candidate_id: '' }));
-        setErrors(prevErrors => ({ ...prevErrors, observations: '' }));
-
-
-        if (projectId) {
-            try {
-                const response = await fetch(`${API_URL}/positions/closed/${projectId}`, {
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${session?.user?.token}`,
-                    }});
-                if (response.ok) {
-                    const data: PositionComplete[] = await response.json();
-                    setPositions(data);
-                } else {
-                    console.error('Failed to fetch positions:', response.status);
-                }
-            } catch (error) {
-                console.error('Error fetching positions:', error);
-            }
-        }
+    
+        setSelectedProfile({ id: null, text: '' });
+        //setSelectedCandidateName('');
+        setErrors({
+            project_id: '',
+            name: '',
+            candidate_id: '',
+            score: '',
+            observations: ''
+        });
     };
     
     const handleProfileChange = (event: SelectChangeEvent<number>) => {
-        const profileId = event.target.value as number;
-        setSelectedProfile(profileId);
-
+        const profileId = Number(event.target.value);
         const selectedPosition = positions.find(pos => pos.position_id === profileId);
         if (selectedPosition) {
-            setSelectedCandidateName(selectedPosition.candidate_name);
+            setSelectedProfile({
+                id: profileId,
+                text: `${selectedPosition.candidate_name} - ${selectedPosition.position_name}`
+            });
         } else {
-            setSelectedCandidateName('');
+            setSelectedProfile({ id: null, text: '' });
         }
     };
     
 
+    
+    
     const handleClose = (event: React.MouseEvent<HTMLElement> | React.KeyboardEvent<HTMLElement>, reason?: "backdropClick" | "escapeKeyDown") => {
         if (reason !== 'backdropClick' && reason !== 'escapeKeyDown') {
             onClose();
@@ -137,29 +125,66 @@ const EvalModal: React.FC<EvalModalModalProps> = ({ open, onClose }) => {
         },
       ];
       
-
       useEffect(() => {
-        if (open && session) {
+        const fetchProjects = async () => {
+          if (!open || !session) {
+            return;
+          }
           setIsLoading(true);
-          fetch(`${API_URL}/customer/projects`, {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${session?.user?.token}`,
-            },
-          })
-            .then((response) => response.json())
-            .then((data) => {
-              setProjects(data);
-              setIsLoading(false);
-            })
-            .catch((error) => {
-              console.error("Error al obtener los proyectos:", error);
-              //setError("Error al cargar los datos");
-              setIsLoading(false);
+          try {
+            const response = await fetch(`${API_URL}/customer/projects`, {
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${session?.user?.token}`,
+              },
             });
-        }
+      
+            if (!response.ok) {
+              throw new Error(`Error ${response.status}: ${response.statusText}`);
+            }
+            const projectsData = await response.json();
+            setProjects(projectsData);
+          } catch (error) {
+            console.error("Error al obtener los proyectos:", error);
+          } finally {
+            setIsLoading(false);
+          }
+        };
+      
+        fetchProjects();
       }, [open, session]);
 
+      useEffect(() => {
+        const fetchProfiles = async () => {
+          if (!selectedProject || !session) {
+            setPositions([]);
+            setIsLoading(false);
+            return;
+          }
+          setIsLoading(true); 
+          try {
+            const response = await fetch(`${API_URL}/positions/closed/${selectedProject}`, {
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${session?.user?.token}`,
+              },
+            });
+      
+            if (!response.ok) {
+              throw new Error(`Error ${response.status}: ${response.statusText}`);
+            }
+      
+            const profilesData = await response.json();
+            setPositions(profilesData);
+          } catch (error) {
+            console.error('Error fetching positions:', error);
+          } finally {
+            setIsLoading(false);
+          }
+        };
+      
+        fetchProfiles();
+      }, [selectedProject, session]);
 
     const completedProjectDetails = closedProject
     .filter(closedProject => closedProject.is_team_complete)
@@ -173,7 +198,7 @@ const EvalModal: React.FC<EvalModalModalProps> = ({ open, onClose }) => {
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
     
-        const selectedPosition = positions.find(pos => pos.position_id === selectedProfile);
+        const selectedPosition = positions.find(pos => pos.position_id === selectedProfile.id);
         const candidateId = selectedPosition ? selectedPosition.candidate_id : null;
         const positionName = selectedPosition ? selectedPosition.position_name : '';
     
@@ -184,9 +209,6 @@ const EvalModal: React.FC<EvalModalModalProps> = ({ open, onClose }) => {
             score,
             observations
         };
-        if (selectedProject) {
-            formData.project_id = selectedProject;
-        }
     
         try {
             await validationSchema.validate(formData, { abortEarly: false });
@@ -250,8 +272,9 @@ const EvalModal: React.FC<EvalModalModalProps> = ({ open, onClose }) => {
             <Box sx={{ display: 'flex', width: '100%' }}>
                 {/* Contenedor para los Selects */}
                 <Box sx={{ flexGrow: 1, mr: 2 }}>
-                    <FormControl variant="standard" sx={{ m: 1, width: '90%' }} size="small">
+                    <FormControl variant="standard" sx={{ m: 1, minWidth: 240 , width: '100%',pb:6 }} size="small">
                         <InputLabel id="proyectos_customer">Proyecto</InputLabel>
+                        {/* {isLoading ? (<Skeleton variant="rectangular" height={40} />) : ( */}
                         <Select
                         labelId="proyectos_customer"
                         id="proyecto-select"
@@ -264,36 +287,29 @@ const EvalModal: React.FC<EvalModalModalProps> = ({ open, onClose }) => {
                                 </MenuItem>
                             ))}
                         </Select>
+                       {/*  )} */}
                         <Typography color="error">{errors.project_id}</Typography>
                     </FormControl>
-                    <FormControl variant="standard" sx={{ m: 1, width: '90%' }} size="small">
-                        <InputLabel id="perfil_candidate">Perfil</InputLabel>
+                    <FormControl variant="standard" sx={{ m: 1, minWidth: 240 ,width: '100%' }} size="small">
+                        <InputLabel id="perfil_candidate">Colaborador</InputLabel>
+                        {isLoading ? (<Skeleton variant="rectangular" height={40} />) : (
                         <Select
                         labelId="perfil_candidate"
                         id="profile-select"
-                        value={selectedProfile}
+                        value={selectedProfile.id ?? ""}
                         onChange={handleProfileChange}
-                        >{positions.map((position) => (
+                        renderValue={selectedProfile.id !== null ? () => selectedProfile.text : undefined}
+                    >
+                        {positions.map((position) => (
                             <MenuItem key={position.position_id} value={position.position_id}>
-                                    {position.position_name}
-                            </MenuItem>
-                        
+                            {`${position.candidate_name} - ${position.position_name}`}
+                        </MenuItem>
                         ))}
-                        </Select>
+                    </Select>
+                        )}
                         <Typography color="error">{errors.name}</Typography>
                     </FormControl>
-                    <FormControl variant="standard" sx={{ m: 1, width: '90%' }} size="small">
-                        <TextField
-                            id="candidate-name"
-                            label="Candidato"
-                            variant="standard"
-                            value={selectedCandidateName}
-                            InputProps={{readOnly: true}}
-                        />
-                    <Typography color="error">{errors.candidate_id}</Typography>
-                    </FormControl>
                     </Box>
-
                     {/* Contenedor para la imagen */}
                     <Box>
                         <Image src="/images/figures.png" alt="Figure" width={180} height={180} />
@@ -324,14 +340,14 @@ const EvalModal: React.FC<EvalModalModalProps> = ({ open, onClose }) => {
                         variant="outlined" 
                         //onClick={() => onClose()}
                         onClick={handleCancel} 
-                        sx={{ flexGrow: 1, mr: 1 }} 
+                        sx={{ width: '48%', mr: '4%' }} 
                     >
                         CANCELAR
                     </Button>
                     <Button
                         type="submit" 
                         variant="contained" 
-                        sx={{ flexGrow: 1, ml: 4, backgroundColor: "#A15CAC", "&:hover": { backgroundColor: "#864D8F" } }}
+                        sx={{  width: '48%', backgroundColor: "#A15CAC", "&:hover": { backgroundColor: "#864D8F" } }}
                     >
                         CALIFICAR CANDIDATO
                     </Button>
