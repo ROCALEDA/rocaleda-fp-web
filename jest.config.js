@@ -5,8 +5,9 @@ const createJestConfig = nextJest({
 const isCoverage = process.env.JEST_COVERAGE === "true";
 
 const customJestConfig = {
+  testPathIgnorePatterns: ["<rootDir>/.next/", "<rootDir>/node_modules/"],
   moduleDirectories: ["node_modules", "<rootDir>/"],
-  testEnvironment: "jest-environment-jsdom",
+  testEnvironment: "jsdom",
   collectCoverage: true,
   collectCoverageFrom: [
     "**/*.{js,jsx,ts,tsx}",

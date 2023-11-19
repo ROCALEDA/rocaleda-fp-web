@@ -4,6 +4,16 @@
     "en": "Inglés",
     "es": "Español"
   },
+  "Login": {
+    "title": "Iniciar sesións",
+    "subtitle": "Estamos felices por verte nuevamente",
+    "registerMotivation": "¿Aún no tienes una cuenta?",
+    "candidateButton": "Quiero ser candidato",
+    "companyButton": "Soy una empresa",
+    "email": "Correo",
+    "password": "Contraseña",
+    "loading": "Cargando..."
+  },
   "Home": {
     "candidates": {
       "title": "Candidatos",
@@ -23,6 +33,10 @@
   },
   "Interviews": {
     "title": "Entrevistas",
-    "description": "Gestiona tus entrevistas agendadas"
+    "description": "Gestiona tus entrevistas agendadas",
+    "date": "Fecha",
+    "company": "Compañía",
+    "result": "Resultado",
+    "no_results": "No hay resultados por mostrar"
   }
 }

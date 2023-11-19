@@ -4,6 +4,16 @@
     "en": "English",
     "es": "Spanish"
   },
+  "Login": {
+    "title": "Login",
+    "subtitle": "Welcome again",
+    "registerMotivation": "Don't have an account?",
+    "candidateButton": "I want to apply to a company",
+    "companyButton": "I have a company",
+    "email": "Email",
+    "password": "Password",
+    "loading": "Loading..."
+  },
   "Home": {
     "candidates": {
       "title": "Candidates",
@@ -23,6 +33,10 @@
   },
   "Interviews": {
     "title": "Interviews",
-    "description": "Manage your scheduled interviews"
+    "description": "Manage your scheduled interviews",
+    "date": "Date",
+    "company": "Company",
+    "result": "Score",
+    "no_results": "There are no results for this interview"
   }
 }
