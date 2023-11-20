@@ -19,7 +19,7 @@ const validationSchema = yup.object({
     name: yup.string().required('El perfil es obligatorio'),
     candidate_id: yup.number().nullable().required('El candidato es obligatorio'),
     score: yup.number().min(0).max(100).required('La puntuación es obligatoria'),
-    observations: yup.string().trim().min(1, 'Las observaciones no pueden estar vacías').required('Las observaciones son obligatorias')
+    observations: yup.string().trim().min(1, 'Las observaciones no pueden estar vacías').required('Observación del desempeño del colaborador.')
 });
 
 const EvalModal: React.FC<EvalModalModalProps> = ({ open, onClose }) => {
@@ -41,7 +41,7 @@ const EvalModal: React.FC<EvalModalModalProps> = ({ open, onClose }) => {
 
     const resetModal = () => {
         setSelectedProject(null);
-        //setSelectedProfile('');
+        setSelectedProfile({ id: null, text: '' });
         setPositions([]);
         setScore(30);
         setErrors({
@@ -103,7 +103,7 @@ const EvalModal: React.FC<EvalModalModalProps> = ({ open, onClose }) => {
         boxShadow: 24,
         p: '50px',
         borderRadius: 2,
-        width: 600, 
+        width: 600,
         maxWidth: 'calc(100% - 40px)', 
         display: 'flex',
         flexDirection: 'column',
@@ -268,7 +268,7 @@ const EvalModal: React.FC<EvalModalModalProps> = ({ open, onClose }) => {
             <Box sx={{ display: 'flex', width: '100%' }}>
                 {/* Contenedor para los Selects */}
                 <Box sx={{ flexGrow: 1, mr: 2 }}>
-                    <FormControl variant="standard" sx={{ m: 1, minWidth: 240 , width: '100%',pb:6 }} size="small">
+                    <FormControl variant="standard" sx={{ m: 1, minWidth:'240px',width: '100%',pb:6 }} size="small">
                         <InputLabel id="proyectos_customer">Proyecto</InputLabel>
                         {/* {isLoading ? (<Skeleton variant="rectangular" height={40} />) : ( */}
                         <Select
@@ -286,7 +286,7 @@ const EvalModal: React.FC<EvalModalModalProps> = ({ open, onClose }) => {
                        {/*  )} */}
                         <Typography color="error">{errors.project_id}</Typography>
                     </FormControl>
-                    <FormControl variant="standard" sx={{ m: 1, minWidth: 240 ,width: '100%' }} size="small">
+                    <FormControl variant="standard" sx={{ m: 1, minWidth:240, width: '100%' }} size="small">
                         <InputLabel id="perfil_candidate">Colaborador</InputLabel>
                         {isLoading ? (<Skeleton variant="rectangular" height={40} />) : (
                         <Select
@@ -311,7 +311,7 @@ const EvalModal: React.FC<EvalModalModalProps> = ({ open, onClose }) => {
                         <Image src="/images/figures.png" alt="Figure" width={180} height={180} />
                     </Box>
                 </Box>
-            <FormControl fullWidth sx={{ m: 1,mt:4 }}>
+            <FormControl fullWidth sx={{ m: 1,mt:1, mb:4 }}>
             <TextField 
                 id="standard-basic" 
                 label="Descripción de calificación" 
@@ -321,6 +321,7 @@ const EvalModal: React.FC<EvalModalModalProps> = ({ open, onClose }) => {
                 maxRows={4}/>
                 <Typography color="error">{errors.observations}</Typography>
             </FormControl>
+            <Typography gutterBottom mt={2}> Score (0 - 100)</Typography>
                 <Slider 
                     defaultValue={30} 
                     aria-label="Default" 
@@ -328,7 +329,7 @@ const EvalModal: React.FC<EvalModalModalProps> = ({ open, onClose }) => {
                     value={score}
                     onChange={(e, value) => setScore(value as number)} 
                     step={1} 
-                    sx={{ mb: 2 ,mt:4}}
+                    sx={{ mb: 2}}
                     marks={marks}
                 />
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', width: '100%', mt: 8, mb: 4 }}>
