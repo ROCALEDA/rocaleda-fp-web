@@ -1,7 +1,6 @@
 export interface Candidate {
     user_id: number;
     fullname: string;
-    // ... cualquier otra propiedad de Candidate
   }
   
   export interface Position {
@@ -22,3 +21,19 @@ export interface Candidate {
         name: string;
       }[];
   }
+
+
+  export interface PositionComplete {
+    position_id: number;
+    position_name: string;
+    candidate_id: number;
+    candidate_name: string;
+}
+
+export interface FormErrors  {
+  project_id: string;
+  name: string;
+  candidate_id: string;
+  score: string;
+  observations: string;
+};

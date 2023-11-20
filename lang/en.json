@@ -29,6 +29,11 @@
       "title": "Interviews",
       "description": "Manage your scheduled interviews",
       "action": "View interviews"
+    },
+    "quickLinks": {
+      "title": "Quick links",
+      "description": "Evaluate the candidates for your projects",
+      "action": "Qualify Candidates"
     }
   },
   "Interviews": {
