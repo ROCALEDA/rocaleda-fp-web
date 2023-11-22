@@ -1,7 +1,5 @@
-import { render, screen } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
+import { render } from "../../utils/test-utils";
 import Home from "./home";
-import { SessionProvider } from "next-auth/react";
 
 jest.mock("next/navigation", () => ({
   useRouter: () => ({
@@ -27,52 +25,36 @@ jest.mock("next-intl", () => ({
 }));
 
 describe("Home", () => {
-  const renderComponentWithSession = (userRole) => {
-    const mockSession = {
-      user: {
-        name: "Test User",
-        email: "test@example.com",
-        role_id: userRole,
-      },
-    };
-
-    render(
-      <SessionProvider session={mockSession}>
-        <Home />
-      </SessionProvider>
-    );
-  };
-
   it("renders correctly for admin user (role 1)", () => {
-    renderComponentWithSession(1);
+    const screen = render(<Home />, { userRole: 1, locale: "en" });
     expect(screen.getByText("candidates.title")).toBeInTheDocument();
     expect(screen.getByText("projects.title")).toBeInTheDocument();
-    expect(screen.queryByText("Entrevistas")).not.toBeInTheDocument();
+    expect(screen.queryByText("interviews.title")).not.toBeInTheDocument();
   });
 
   it("renders correctly for company user (role 2)", () => {
-    renderComponentWithSession(2);
+    const screen = render(<Home />, { userRole: 2, locale: "en" });
     expect(screen.getByText("candidates.title")).toBeInTheDocument();
     expect(screen.getByText("projects.title")).toBeInTheDocument();
-    expect(screen.queryByText("Entrevistas")).not.toBeInTheDocument();
+    expect(screen.queryByText("interviews.title")).not.toBeInTheDocument();
   });
 
   it("renders correctly for candidate user (role 3)", () => {
-    renderComponentWithSession(3);
+    const screen = render(<Home />, { userRole: 3, locale: "en" });
     expect(screen.queryByText("candidates.title")).not.toBeInTheDocument();
     expect(screen.queryByText("projects.title")).not.toBeInTheDocument();
     expect(screen.getByText("interviews.title")).toBeInTheDocument();
   });
 
   it("renders correctly project button", () => {
-    renderComponentWithSession(2);
+    const screen = render(<Home />, { userRole: 2, locale: "en" });
     expect(
       screen.getByRole("link", { name: "projects.action" })
     ).toHaveAttribute("href", "/projects");
   });
 
   it("renders correctly candidate button", () => {
-    renderComponentWithSession(2);
+    const screen = render(<Home />, { userRole: 2, locale: "en" });
 
     expect(
       screen.getByRole("link", { name: "candidates.action" })
@@ -80,8 +62,7 @@ describe("Home", () => {
   });
 
   it("renders correctly interview button", () => {
-    renderComponentWithSession(3);
-
+    const screen = render(<Home />, { userRole: 3, locale: "en" });
     expect(
       screen.getByRole("link", { name: "interviews.action" })
     ).toHaveAttribute("href", "/interviews");
