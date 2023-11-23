@@ -13,6 +13,7 @@ import CandidatesTable from "./candidates-table";
 import { soft_skills, tech_skills } from "@/utils/skills";
 import { useCallback, useEffect, useState } from "react";
 import CustomBreadcrumbs from "../breadcrumbs/breadcrumbs";
+import { useTranslations } from "next-intl";
 
 export default function Candidates() {
   const [techSkills, setTechSkills] = useState<string[]>([]);
@@ -21,11 +22,13 @@ export default function Candidates() {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams()!;
+  const lang = useTranslations("Candidates");
 
   const createQueryString = useCallback(() => {
     const params = new URLSearchParams(searchParams);
     const techSkillsParam = techSkills.join(",");
     const softSkillsParam = softSkills.join(",");
+
     if (softSkills.length > 0) {
       params.set("soft_skills", softSkillsParam);
     } else {
@@ -71,7 +74,7 @@ export default function Candidates() {
 
   const routes = [
     { name: "Home", path: "/home" },
-    { name: "Candidatos", path: "/candidates" },
+    { name: lang("title"), path: "/candidates" },
   ];
 
   return (
@@ -85,15 +88,14 @@ export default function Candidates() {
             gutterBottom
             fontFamily={philosopher.style.fontFamily}
           >
-            Candidatos
+            {lang("title")}
           </Typography>
           <Typography variant="h6" gutterBottom color="secondary.main">
-            Aquí puedes elegir a los candidatos que se ajustan a los perfiles
-            que estás buscando
+            {lang("description")}
           </Typography>
           <Stack direction="row">
             <BasicSelect
-              text="Habilidades Técnicas"
+              text={lang("tech_skills")}
               options={tech_skills}
               selectedOptions={formik.values.techSkills}
               onSelectionChange={(selected) => {
@@ -101,7 +103,7 @@ export default function Candidates() {
               }}
             />
             <BasicSelect
-              text="Habilidades Blandas"
+              text={lang("soft_skills")}
               options={soft_skills}
               selectedOptions={formik.values.softSkills}
               onSelectionChange={(selected) => {

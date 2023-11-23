@@ -43,5 +43,15 @@
     "company": "Company",
     "result": "Score",
     "no_results": "There are no results for this interview"
+  },
+  "Candidates": {
+    "title": "Candidatos",
+    "description": "Choose the best candidates that fit your project needs",
+    "tech_skills": "Technical skills",
+    "soft_skills": "Soft skills",
+    "languages": "Languages",
+    "rows_page": "Rows per page",
+    "spanish": "Spanish",
+    "english": "English"
   }
 }

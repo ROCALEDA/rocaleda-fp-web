@@ -43,5 +43,15 @@
     "company": "Compañía",
     "result": "Resultado",
     "no_results": "No hay resultados por mostrar"
+  },
+  "Candidates": {
+    "title": "Candidatos",
+    "description": "Aquí puedes elegir a los candidatos que se ajustan a los perfiles que estás buscando",
+    "tech_skills": "Habilidades técnicas",
+    "soft_skills": "Habilidades blandas",
+    "languages": "Idiomas",
+    "rows_page": "Filas por página",
+    "spanish": "Español",
+    "english": "Inglés"
   }
 }
