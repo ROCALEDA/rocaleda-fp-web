@@ -1,4 +1,3 @@
-import "@testing-library/jest-dom";
 import React, { ReactNode } from "react";
 import { IntlProvider } from "next-intl";
 import { fireEvent, render, waitFor } from "@testing-library/react";
