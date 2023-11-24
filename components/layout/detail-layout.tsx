@@ -1,18 +1,12 @@
 import { Box } from "@mui/material";
 import { ReactNode } from "react";
-import Navbar from "../navbar/navbar";
 import CustomBreadcrumbs from "@/components/breadcrumbs/breadcrumbs";
 
 interface LayoutProps {
   children: ReactNode;
 }
 
-const routes = [
-  { name: "Home", path: "/home" },
-  { name: "Proyectos", path: "/projects" },
-];
-
-export default function Layout({ children }: LayoutProps) {
+export default function DetailLayout({ children }: LayoutProps) {
   return (
     <Box
       sx={{
@@ -26,20 +20,7 @@ export default function Layout({ children }: LayoutProps) {
         backgroundRepeat: "no-repeat",
       }}
     >
-      <div data-testid="responsiveAppBarTestId">
-        <Navbar />
-      </div>
-      <Box
-        sx={{
-          marginTop: "40px",
-          marginLeft: "20px",
-        }}
-      >
-        <div data-testid="CustomBreadcrumbsTestId">
-          <CustomBreadcrumbs routes={routes} paddingLeft="0px" />
-        </div>
-        {children}
-      </Box>
+      <Box>{children}</Box>
     </Box>
   );
 }

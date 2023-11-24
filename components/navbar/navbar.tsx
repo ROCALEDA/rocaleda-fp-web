@@ -63,7 +63,7 @@ export default function Navbar() {
     <AppBar
       position="static"
       color="transparent"
-      sx={{ backgroundColor: "white" }}
+      sx={{ backgroundColor: "white", boxShadow: 0 }}
     >
       <Container maxWidth="xl">
         <Toolbar disableGutters>

@@ -53,5 +53,39 @@
     "rows_page": "Filas por página",
     "spanish": "Español",
     "english": "Inglés"
+  },
+  "Projects": {
+    "title": "Proyectos",
+    "description": "Administra tus proyectos",
+    "loading": "Cargando",
+    "create": "Crear",
+    "cancel": "Cancelar",
+    "save": "Guardar",
+    "add": "Añadir",
+    "your_project": "Tu proyecto",
+    "team": "Equipo",
+    "team_complete": "Equipo completo",
+    "team_pending": "Equipo pendiente",
+    "profile": "Profile",
+    "create_detail": "Crea tu proyecto",
+    "no_projects": "No hay proyectos para mostrar",
+    "employee_name": "Nombre del funcionario",
+    "profile_name": "Nombre del perfil",
+    "employee_name_required": "El nombre del funcionario es requerido",
+    "employee_name_chars": "El nombre del funcionario no puede tener más de 100 caracteres",
+    "profile_name_required": "El nombre del perfil es requerido",
+    "profile_name_chars": "El nombre del perfil asociado no puede tener más de 30 caracteres",
+    "form": {
+      "basic": "1. Datos Básicos",
+      "profiles": "2. Perfiles",
+      "no_profile": "Aún no has agregado ningún perfil",
+      "create_profile": "Crear perfil",
+      "employees": "3. Funcionarios",
+      "no_employee": "Aún no has agregado ningún funcionario",
+      "add_employee": "Añadir funcionario",
+      "cancel": "Cancelar",
+      "create_project": "Crear proyecto",
+      "optional": "Opcional"
+    }
   }
 }
