@@ -1,4 +1,3 @@
-import "@testing-library/jest-dom";
 import React, { ReactNode } from "react";
 import { IntlProvider } from "next-intl";
 import { fireEvent, render, waitFor } from "@testing-library/react";
@@ -15,12 +14,6 @@ jest.mock("next/navigation", () => ({
 
 jest.mock("next-auth/react", () => ({
   signIn: jest.fn(),
-}));
-
-jest.mock("notistack", () => ({
-  useSnackbar: () => ({
-    enqueueSnackbar: jest.fn(),
-  }),
 }));
 
 const renderWithReactIntl = (component: ReactNode) => {
@@ -93,6 +86,49 @@ describe("Login validations", () => {
     const mockSignIn = signIn as jest.MockedFunction<typeof signIn>;
 
     mockSignIn.mockImplementation(() => Promise.resolve({ ok: true }));
+
+    await waitFor(() => {
+      expect(mockSignIn).toHaveBeenCalledWith("credentials", {
+        email: "test@example.com",
+        password: "password123",
+        redirect: false,
+      });
+    });
+    const mockRouter = useRouter();
+    await waitFor(() => {
+      expect(mockRouter.push).toHaveBeenCalledWith("/home");
+    });
+  });
+
+  it("Login with invalid credentials", async () => {
+    const screen = renderWithReactIntl(<Login />);
+
+    fireEvent.change(screen.getByLabelText("Email"), {
+      target: { value: "test@example.com" },
+    });
+
+    fireEvent.change(screen.getByLabelText("Password"), {
+      target: { value: "password123" },
+    });
+
+    fireEvent.click(screen.getByRole("button", { name: "Login" }));
+
+    const mockSignIn = signIn as jest.MockedFunction<typeof signIn>;
+
+    mockSignIn.mockImplementation(() =>
+      Promise.resolve({
+        error: "Invalid credentials",
+        status: 401,
+        ok: false,
+        url: null,
+      })
+    );
+
+    jest.mock("notistack", () => ({
+      useSnackbar: jest.fn(() => ({
+        enqueueSnackbar: jest.fn(),
+      })),
+    }));
 
     await waitFor(() => {
       expect(mockSignIn).toHaveBeenCalledWith("credentials", {

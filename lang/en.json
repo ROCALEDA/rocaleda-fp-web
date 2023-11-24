@@ -2,7 +2,8 @@
   "General": {
     "language": "Language",
     "en": "English",
-    "es": "Spanish"
+    "es": "Spanish",
+    "loading": "Loading..."
   },
   "Login": {
     "title": "Login",
@@ -29,6 +30,11 @@
       "title": "Interviews",
       "description": "Manage your scheduled interviews",
       "action": "View interviews"
+    },
+    "quickLinks": {
+      "title": "Quick links",
+      "description": "Evaluate the candidates for your projects",
+      "action": "Qualify Candidates"
     }
   },
   "Interviews": {
@@ -38,5 +44,51 @@
     "company": "Company",
     "result": "Score",
     "no_results": "There are no results for this interview"
+  },
+  "Candidates": {
+    "title": "Candidates",
+    "description": "Choose the best candidates that fit your project needs",
+    "tech_skills": "Technical skills",
+    "soft_skills": "Soft skills",
+    "languages": "Languages",
+    "rows_page": "Rows per page",
+    "spanish": "Spanish",
+    "english": "English"
+  },
+  "Projects": {
+    "title": "Projects",
+    "description": "Manage your projects, positions and candidates",
+    "loading": "Loading",
+    "create": "Create",
+    "cancel": "Cancel",
+    "save": "Save",
+    "add": "Add",
+    "your_project": "Your project",
+    "team": "Team",
+    "team_complete": "Complete team",
+    "team_pending": "Pending team",
+    "profile": "Profile",
+    "create_detail": "Create your project",
+    "no_projects": "No projects to show",
+    "employee_name": "Employee name",
+    "profile_name": "Profile name",
+    "employee_name_required": "Employee name is required",
+    "employee_name_chars": "Employee name cannot exceed 100 characters",
+    "profile_name_required": "Profile name is required",
+    "profile_name_chars": "Profile name cannot exceed 30 characters",
+    "form": {
+      "name": "Nombre",
+      "description": "Description",
+      "basic": "1. Basic data",
+      "profiles": "2. Profiles",
+      "no_profile": "You haven't added profiles",
+      "create_profile": "Create profile",
+      "employees": "3. Employees",
+      "no_employee": "You haven't added employees",
+      "add_employee": "Add employee",
+      "cancel": "Cancel",
+      "create_project": "Create project",
+      "optional": "Optional"
+    }
   }
 }

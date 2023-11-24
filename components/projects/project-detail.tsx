@@ -6,6 +6,7 @@ import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useSession } from "next-auth/react";
 import API_URL from "@/api/config";
+import { useTranslations } from "next-intl";
 
 interface Position {
   id: number;
@@ -29,6 +30,8 @@ interface DetailProjectProps {
 export default function DetailProject({
   setSelectedProject,
 }: DetailProjectProps) {
+  const lang = useTranslations("Projects");
+
   const { data: session } = useSession();
   const [projects, setProjects] = useState<Project[]>([]);
   const theme = useTheme();
@@ -59,16 +62,16 @@ export default function DetailProject({
     }
   }, [session]);
 
-  if (isLoading) return <p>Cargando...</p>;
+  if (isLoading) return <p>{lang("loading")}</p>;
   if (error) return <p>{error}</p>;
-  if (!projects.length) return <p>No hay proyectos para mostrar</p>;
+  if (!projects.length) return <p>{lang("no_projects")}</p>;
 
   return (
     <>
       {projects.map((project) => {
         const chipProps = project.is_team_complete
-          ? { label: "Equipo completo", color: "success" }
-          : { label: "Equipo pendiente", color: "warning" };
+          ? { label: lang("team_complete"), color: "success" }
+          : { label: lang("team_pending"), color: "warning" };
 
         return (
           <div

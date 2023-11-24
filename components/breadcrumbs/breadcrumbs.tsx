@@ -2,7 +2,6 @@ import * as React from "react";
 import Typography from "@mui/material/Typography";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
 import Link from "next/link";
-import MUILink from "@mui/material/Link";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 
 interface RouteType {
@@ -33,10 +32,8 @@ export default function CustomBreadcrumbs({
             );
           }
           return (
-            <Link key={index} href={route.path} passHref>
-              <MUILink underline="hover" color="inherit">
-                {route.name}
-              </MUILink>
+            <Link key={index} href={route.path}>
+              {route.name}
             </Link>
           );
         })}

@@ -15,7 +15,6 @@ import { useState } from "react";
 import { useFormik } from "formik";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-
 import { enqueueSnackbar } from "notistack";
 import { signIn } from "next-auth/react";
 
@@ -54,11 +53,11 @@ export default function Login() {
       });
 
       if (responseNextAuth?.ok) {
-        enqueueSnackbar(`Sesión iniciada`, { variant: "success" });
         router.push("/home");
       }
 
       if (responseNextAuth?.error) {
+        console.log("responseNextAuth", responseNextAuth);
         enqueueSnackbar(responseNextAuth.error, {
           variant: "error",
         });

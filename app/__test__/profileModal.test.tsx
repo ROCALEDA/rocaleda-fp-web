@@ -1,6 +1,6 @@
 import React from "react";
 import { render, fireEvent, screen, waitFor } from "@testing-library/react";
-import ProfileModal from "@/components/project-register/profileModal";
+import ProfileModal from "@/components/projects/create/profileModal";
 import userEvent from "@testing-library/user-event";
 
 describe("<ProfileModal />", () => {
@@ -36,7 +36,7 @@ describe("<ProfileModal />", () => {
     render(<ProfileModal open={true} onClose={() => {}} onAdd={() => {}} />);
     const input = await screen.findByLabelText(/nombre del perfil/i);
     //userEvent.type(input, "Test Profile", { delay: 1 });
-    fireEvent.change(input, { target: { value: 'Test Profile' } });
+    fireEvent.change(input, { target: { value: "Test Profile" } });
     await waitFor(() => {
       expect(input).toHaveValue("Test Profile");
     });

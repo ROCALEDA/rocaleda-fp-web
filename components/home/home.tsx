@@ -6,11 +6,23 @@ import { useSession } from "next-auth/react";
 import { Box, Button, Container, Grid, Typography } from "@mui/material";
 
 import { philosopher } from "@/app/[locale]/theme/fonts";
+import OpenModalButton from '../evaluation/openModal';
+import EvalModal from '../evaluation/evaluationModal';
+
 
 export default function Home() {
   const lang = useTranslations("Home");
   const { data: session } = useSession();
   const user = session?.user;
+
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
+    const handleOpenModal = () => {
+        setIsModalOpen(true); 
+    };
+    
+    const handleCloseModal = () => {
+        setIsModalOpen(false); 
+    };
 
   return (
     <Container maxWidth="lg">
@@ -72,6 +84,22 @@ export default function Home() {
             </Box>
           </Grid>
         )}
+        <Grid item xs={12} sm={6}>
+          <Box  paddingTop={8} paddingBottom={2}>
+            <Typography
+              variant="h3"
+              gutterBottom
+              fontFamily={philosopher.style.fontFamily}
+            >
+              {lang("quickLinks.title")} 
+            </Typography>
+            <Typography variant="h6" gutterBottom color="secondary.main">
+                {lang("quickLinks.description")}
+              </Typography>
+              <OpenModalButton onOpen={handleOpenModal} label = {lang("quickLinks.action")} />
+              <EvalModal open={isModalOpen} onClose={handleCloseModal} />
+          </Box>
+        </Grid>      
       </Grid>
     </Container>
   );

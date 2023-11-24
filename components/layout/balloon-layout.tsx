@@ -13,7 +13,7 @@ const routes = [
   { name: "Crear proyecto", path: "/projects/create" },
 ];
 
-export default function Layout({ children }: LayoutProps) {
+export default function BalloonLayout({ children }: LayoutProps) {
   return (
     <Box
       component="div"
