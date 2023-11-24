@@ -3,6 +3,7 @@ import React from "react";
 import { Card, CardContent, Typography, Box, Chip } from "@mui/material";
 import PeopleIcon from "@mui/icons-material/PersonOutlineOutlined";
 import { philosopher } from "@/app/[locale]/theme/fonts";
+import { useTranslations } from "next-intl";
 
 type Profile = {
   profileName: string;
@@ -27,6 +28,8 @@ export default function ResumeRegisterProyect({
   profiles,
   employees,
 }: CustomCardProps) {
+  const lang = useTranslations("Projects");
+
   const totalProfiles = profiles.reduce(
     (acc, profile) => acc + profile.numberOfProfiles,
     0
@@ -42,7 +45,7 @@ export default function ResumeRegisterProyect({
         fontFamily={philosopher.style.fontFamily}
         sx={{ mt: 10 }}
       >
-        Tu proyecto
+        {lang("your_project")}
       </Typography>
       <Card sx={{ width: { xs: "90%", xl: "50%" }, p: 2 }}>
         <CardContent>
@@ -76,7 +79,7 @@ export default function ResumeRegisterProyect({
             </Typography>
           </Box>
           <Typography variant="body1" sx={{ mt: 1 }}>
-            Equipo
+            {lang("team")}
           </Typography>
           {/* Perfiles creados */}
           <Box
@@ -119,7 +122,7 @@ export default function ResumeRegisterProyect({
                         }}
                       >
                         <Typography component="div" color="textSecondary">
-                          Perfil-{profile.profileName}
+                          {lang("profile")}-{profile.profileName}
                         </Typography>
                       </div>
                       <Chip

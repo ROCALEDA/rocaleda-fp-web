@@ -12,6 +12,7 @@ import { useSession } from "next-auth/react";
 import API_URL from "@/api/config";
 import { enqueueSnackbar } from "notistack";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 
 const validationSchema = Yup.object().shape({
   nombre: Yup.string().required("El nombre es obligatorio"),
@@ -33,6 +34,8 @@ interface FormValues {
 }
 
 export default function FormRegisterProyect(props: FormRegisterProyectProps) {
+  const lang = useTranslations("Projects");
+
   const { data: session } = useSession();
 
   const resetForm = () => {
@@ -214,7 +217,7 @@ export default function FormRegisterProyect(props: FormRegisterProyectProps) {
   return (
     <>
       <Typography variant="h5" gutterBottom className={styles.tituloConFondo}>
-        <span>1. Datos Básicos</span>
+        <span> {lang("form.basic")} </span>
       </Typography>
       <form onSubmit={formik.handleSubmit}>
         <Box p={3}>
@@ -222,7 +225,7 @@ export default function FormRegisterProyect(props: FormRegisterProyectProps) {
             fullWidth
             id="nombre"
             name="nombre"
-            label="Nombre"
+            label={lang("form.name")}
             variant="standard"
             value={formik.values.nombre}
             onChange={handleNameChange}
@@ -233,7 +236,7 @@ export default function FormRegisterProyect(props: FormRegisterProyectProps) {
             fullWidth
             id="description"
             name="description"
-            label="Descripción"
+            label={lang("form.description")}
             variant="standard"
             margin="normal"
             multiline
@@ -253,12 +256,12 @@ export default function FormRegisterProyect(props: FormRegisterProyectProps) {
           className={styles.tituloConFondo2}
           style={{ marginTop: "20px" }}
         >
-          <span>2. Perfiles</span>
+          <span>{lang("form.no_profile")}</span>
         </Typography>
         <Box p={3}>
           {profiles.length === 0 ? (
             <Typography variant="subtitle1" gutterBottom color="secondary">
-              Aún no has agregado ningún perfil
+              {lang("form.no_profile")}
             </Typography>
           ) : (
             profiles.map((profile, index) => (
@@ -286,7 +289,7 @@ export default function FormRegisterProyect(props: FormRegisterProyectProps) {
             onClick={() => setOpenProfileModal(true)}
             style={{ marginTop: "10px" }}
           >
-            CREAR PERFIL
+            {lang("form.create_profile")}
           </Button>
         </Box>
         {/* FUNCIONARIOS */}
@@ -296,14 +299,16 @@ export default function FormRegisterProyect(props: FormRegisterProyectProps) {
           style={{ marginTop: "20px" }}
           className={styles.tituloConFondo3}
         >
-          <span>3. Funcionarios</span>{" "}
-          <span style={{ color: "#A0AEC0", fontSize: 15 }}>(opcional)</span>
+          <span>{lang("form.employees")}</span>
+          <span style={{ color: "#A0AEC0", fontSize: 15 }}>
+            ({lang("form.optional")})
+          </span>
         </Typography>
         <Box p={3}>
           {/* Visualizar la Lista de Empleados */}
           {employees.length === 0 ? (
             <Typography variant="subtitle1" gutterBottom color="secondary">
-              Aún no has agregado ningún funcionario
+              {lang("form.no_employee")}
             </Typography>
           ) : (
             <ul>
@@ -323,7 +328,7 @@ export default function FormRegisterProyect(props: FormRegisterProyectProps) {
             color="primary"
             onClick={() => setOpenFunctionaryModal(true)}
           >
-            AÑADIR FUNCIONARIO
+            {lang("form.add_employee")}
           </Button>
           <div data-testid="employee-modal">
             <EmployeesModal
@@ -343,7 +348,7 @@ export default function FormRegisterProyect(props: FormRegisterProyectProps) {
             sx={{ mt: 3, mr: 1, mb: 2 }}
             onClick={resetForm}
           >
-            Cancelar
+            {lang("form.cancel")}
           </Button>
           <Button
             type="submit"
@@ -356,7 +361,7 @@ export default function FormRegisterProyect(props: FormRegisterProyectProps) {
               "&:hover": { backgroundColor: "#864D8F" },
             }}
           >
-            CREAR PROYECTO
+            {lang("form.create_project")}
           </Button>
         </Box>
       </form>

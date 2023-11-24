@@ -1,6 +1,6 @@
 import React from "react";
 import { render, fireEvent, waitFor } from "@testing-library/react";
-import ProfileCard from "@/components/project-register/profileCard";
+import ProfileCard from "@/components/projects/create/profileCard";
 import userEvent from "@testing-library/user-event";
 
 describe("<ProfileCard />", () => {
