@@ -2,7 +2,9 @@
   "General": {
     "language": "Idioma",
     "en": "Inglés",
-    "es": "Español"
+    "es": "Español",
+    "loading": "Loading...",
+    "logout": "Cerrar sesión"
   },
   "Login": {
     "title": "Iniciar sesión",
@@ -15,6 +17,7 @@
     "loading": "Cargando..."
   },
   "Home": {
+    "logout": "Cerrar sesión",
     "candidates": {
       "title": "Candidatos",
       "description": "Elige a los mejores candidatos para tus proyectos",
@@ -87,5 +90,8 @@
       "create_project": "Crear proyecto",
       "optional": "Opcional"
     }
+  },
+  "Profile": {
+    "create_profile": "Crear perfil"
   }
 }

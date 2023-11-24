@@ -3,10 +3,15 @@ import { render, fireEvent, screen, waitFor } from "@testing-library/react";
 import ProfileModal from "@/components/projects/create/profileModal";
 import userEvent from "@testing-library/user-event";
 
+jest.mock("next-intl", () => ({
+  useLocale: () => "es",
+  useTranslations: () => (key: any) => key,
+}));
+
 describe("<ProfileModal />", () => {
   it("renders without crashing", async () => {
     render(<ProfileModal open={true} onClose={() => {}} onAdd={() => {}} />);
-    const element = await screen.findByText("Crear perfil");
+    const element = await screen.findByText("create_profile");
     expect(element).toBeInTheDocument();
   });
   it("shows an error when profile name is empty", async () => {

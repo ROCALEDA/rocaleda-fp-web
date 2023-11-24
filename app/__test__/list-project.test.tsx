@@ -1,7 +1,7 @@
 import React from "react";
 import { SessionProvider } from "next-auth/react";
 import ProjectList from "@/components/projects/project-list";
-import { render } from "@/utils/test-utils";
+import { act, render, waitFor } from "@/utils/test-utils";
 
 jest.mock("next-intl", () => ({
   useLocale: () => "es",
@@ -30,8 +30,12 @@ describe("<ListProject />", () => {
     jest.clearAllMocks();
   });
 
-  it("renders the component correctly", () => {
-    const screen = render(<ProjectList />, { userRole: 2, locale: "en" });
+  it("renders the component correctly", async () => {
+    let screen;
+
+    await act(async () => {
+      screen = render(<ProjectList />, { userRole: 2, locale: "en" });
+    });
     const h3Element = screen?.getByRole("heading", { name: "title" });
     expect(h3Element.tagName).toBe("H4");
   });

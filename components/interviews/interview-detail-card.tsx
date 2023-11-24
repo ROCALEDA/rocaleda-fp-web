@@ -21,6 +21,7 @@ export default function InterviewDetailCard({
         position: "relative",
         overflow: "visible",
         minWidth: 400,
+        margin: "auto",
       }}
     >
       <Stack direction="column" spacing={2}>
