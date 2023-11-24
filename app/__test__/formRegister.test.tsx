@@ -208,6 +208,8 @@ describe("<FormRegisterProyect />", () => {
     fireEvent.click(screen.getByText("form.create_profile"));
 
     // Espera a que el modal se muestre y verifica que contenga la palabra 'Crear perfil'
-    await waitFor(() => expect(screen.getByText("Crear perfil")).toBeVisible());
+    await waitFor(() =>
+      expect(screen.getByText("create_profile")).toBeVisible()
+    );
   });
 });
