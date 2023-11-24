@@ -6,9 +6,8 @@ import { useSession } from "next-auth/react";
 import { Box, Button, Container, Grid, Typography } from "@mui/material";
 
 import { philosopher } from "@/app/[locale]/theme/fonts";
-import OpenModalButton from '../evaluation/openModal';
-import EvalModal from '../evaluation/evaluationModal';
-
+import OpenModalButton from "../evaluation/openModal";
+import EvalModal from "../evaluation/evaluationModal";
 
 export default function Home() {
   const lang = useTranslations("Home");
@@ -16,13 +15,13 @@ export default function Home() {
   const user = session?.user;
 
   const [isModalOpen, setIsModalOpen] = React.useState(false);
-    const handleOpenModal = () => {
-        setIsModalOpen(true); 
-    };
-    
-    const handleCloseModal = () => {
-        setIsModalOpen(false); 
-    };
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
 
   return (
     <Container maxWidth="lg">
@@ -37,11 +36,20 @@ export default function Home() {
               >
                 {lang("candidates.title")}
               </Typography>
-              <Typography variant="h6" gutterBottom color="secondary.main">
+              <Typography
+                variant="subtitle1"
+                gutterBottom
+                color="secondary.main"
+              >
                 {lang("candidates.description")}
               </Typography>
               <Link href="/candidates">
-                <Button variant="contained">{lang("candidates.action")}</Button>
+                <Button
+                  variant="contained"
+                  aria-label={lang("candidates.action")}
+                >
+                  {lang("candidates.action")}
+                </Button>
               </Link>
             </Box>
           </Grid>
@@ -56,11 +64,20 @@ export default function Home() {
               >
                 {lang("projects.title")}
               </Typography>
-              <Typography variant="h6" gutterBottom color="secondary.main">
+              <Typography
+                variant="subtitle1"
+                gutterBottom
+                color="secondary.main"
+              >
                 {lang("projects.description")}
               </Typography>
               <Link href="/projects">
-                <Button variant="contained">{lang("projects.action")}</Button>
+                <Button
+                  variant="contained"
+                  aria-label={lang("projects.action")}
+                >
+                  {lang("projects.action")}
+                </Button>
               </Link>
             </Box>
           </Grid>
@@ -75,31 +92,43 @@ export default function Home() {
               >
                 {lang("interviews.title")}
               </Typography>
-              <Typography variant="h6" gutterBottom color="secondary.main">
+              <Typography
+                variant="subtitle1"
+                gutterBottom
+                color="secondary.main"
+              >
                 {lang("interviews.description")}
               </Typography>
               <Link href="/interviews">
-                <Button variant="contained">{lang("interviews.action")}</Button>
+                <Button
+                  variant="contained"
+                  aria-label={lang("interviews.action")}
+                >
+                  {lang("interviews.action")}
+                </Button>
               </Link>
             </Box>
           </Grid>
         )}
         <Grid item xs={12} sm={6}>
-          <Box  paddingTop={8} paddingBottom={2}>
+          <Box paddingTop={8} paddingBottom={2}>
             <Typography
               variant="h3"
               gutterBottom
               fontFamily={philosopher.style.fontFamily}
             >
-              {lang("quickLinks.title")} 
+              {lang("quickLinks.title")}
             </Typography>
-            <Typography variant="h6" gutterBottom color="secondary.main">
-                {lang("quickLinks.description")}
-              </Typography>
-              <OpenModalButton onOpen={handleOpenModal} label = {lang("quickLinks.action")} />
-              <EvalModal open={isModalOpen} onClose={handleCloseModal} />
+            <Typography variant="subtitle1" gutterBottom color="secondary.main">
+              {lang("quickLinks.description")}
+            </Typography>
+            <OpenModalButton
+              onOpen={handleOpenModal}
+              label={lang("quickLinks.action")}
+            />
+            <EvalModal open={isModalOpen} onClose={handleCloseModal} />
           </Box>
-        </Grid>      
+        </Grid>
       </Grid>
     </Container>
   );

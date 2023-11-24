@@ -3,7 +3,8 @@
     "language": "Language",
     "en": "English",
     "es": "Spanish",
-    "loading": "Loading..."
+    "loading": "Loading...",
+    "logout": "Logout"
   },
   "Login": {
     "title": "Login",
@@ -16,6 +17,7 @@
     "loading": "Loading..."
   },
   "Home": {
+    "logout": "Logout",
     "candidates": {
       "title": "Candidates",
       "description": "Choose the best candidate for your projects",
@@ -90,5 +92,8 @@
       "create_project": "Create project",
       "optional": "Optional"
     }
+  },
+  "Profile": {
+    "create_profile": "Create profile"
   }
 }

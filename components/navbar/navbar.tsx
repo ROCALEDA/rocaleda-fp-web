@@ -152,6 +152,7 @@ export default function Navbar() {
             <Button
               variant="text"
               color="primary"
+              aria-label={lang("logout")}
               startIcon={<LogoutOutlined />}
               onClick={handleLogout}
             />
