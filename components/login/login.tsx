@@ -144,7 +144,7 @@ export default function Login() {
                 </Button>
               </Link>
               <Link href="/signup/company" passHref>
-                <Button sx={{ backgroundColor: "#F4E8C9", color: "black" }}>
+                <Button data-cy="candidate-signup" sx={{ backgroundColor: "#F4E8C9", color: "black" }}>
                   {lang("companyButton")}
                 </Button>
               </Link>

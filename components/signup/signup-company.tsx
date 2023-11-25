@@ -162,6 +162,7 @@ export default function SignUpCompany() {
                         </Grid>
                       </Grid>
                       <Button
+                        data-cy="candidate-register"
                         type="submit"
                         variant="contained"
                         sx={{
