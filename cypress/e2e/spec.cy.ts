@@ -22,8 +22,10 @@ describe('Login Page', () => {
   it('login client/enterprise in successfully', () => {
     cy.get('input[name="email"]').type(userEmail);
     cy.get('input[name="password"]').type(userPassword);
+    cy.intercept('POST', '/api/auth/callback/credentials').as('authCallback');
     cy.get('button[type="submit"]').click();
-    cy.url().should('include', '/home'); 
+    cy.wait('@authCallback');
+    cy.url({ timeout: 10000 }).should('include', '/home'); 
   });
 
 })
