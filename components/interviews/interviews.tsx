@@ -67,8 +67,8 @@ export default function Interviews() {
       <Navbar />
       <DetailLayout>
         <Container maxWidth="lg">
-          <Grid container height="100%">
-            <Grid item xs={12} md={6}>
+          <Grid container height="100%" spacing={4}>
+            <Grid item xs={12} md={7}>
               <Stack padding={4} direction="column" spacing={4}>
                 <CustomBreadcrumbs routes={breadcrumbs}></CustomBreadcrumbs>
                 <Typography
@@ -93,7 +93,7 @@ export default function Interviews() {
                 />
               </Stack>
             </Grid>
-            <Grid item xs={12} md={6}>
+            <Grid item xs={12} md={5}>
               <Box
                 display="flex"
                 alignContent="center"

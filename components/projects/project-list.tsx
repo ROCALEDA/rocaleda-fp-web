@@ -4,17 +4,18 @@ import { useTranslations } from "next-intl";
 import { useSession } from "next-auth/react";
 import React, { useState, useRef } from "react";
 
-import { Project } from "@/types/types";
-import { Grid, Paper, Typography, Button, Container } from "@mui/material";
+import { Grid, Paper, Typography, Button, Container, Box } from "@mui/material";
 import DetailProject from "@/components/projects/project-detail";
 import SelectedProject from "@/components/projects/selected-project";
 import CustomBreadcrumbs from "../breadcrumbs/breadcrumbs";
-
+import { TSimpleProject } from "@/types/types";
 
 export default function ProjectList() {
   const lang = useTranslations("Projects");
 
-  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [selectedProject, setSelectedProject] = useState<TSimpleProject | null>(
+    null
+  );
   const cardRef: React.RefObject<HTMLDivElement> = useRef(null);
   const detailRef: React.RefObject<HTMLDivElement> = useRef(null);
 
@@ -28,11 +29,9 @@ export default function ProjectList() {
 
   return (
     <Container>
-      <CustomBreadcrumbs routes={routes} marginTop='40px'></CustomBreadcrumbs>
-      <Grid container paddingY={5}>
-      {/* <CustomBreadcrumbs routes={routes}></CustomBreadcrumbs> */}
-        <Grid item xs={12} sm={6}>
-        {/* <CustomBreadcrumbs routes={routes}></CustomBreadcrumbs> */}
+      <CustomBreadcrumbs routes={routes} marginTop="40px"></CustomBreadcrumbs>
+      <Grid container paddingY={5} spacing={4}>
+        <Grid item xs={12} md={7}>
           <Paper
             elevation={0}
             style={{ width: "95%", padding: "20px", marginRight: "30px" }}
@@ -75,15 +74,17 @@ export default function ProjectList() {
                 )}
               </Grid>
               <Grid item xs={12} sm={12} ref={cardRef}>
-                <DetailProject setSelectedProject={setSelectedProject} />
+                <DetailProject
+                  setSelectedProject={(project) => setSelectedProject(project)}
+                />
               </Grid>
             </Grid>
           </Paper>
         </Grid>
-        <Grid item xs={12} sm={6}>
-          <Grid item xs={12} sm={12} ref={detailRef}>
+        <Grid item xs={12} md={5}>
+          <Box ref={detailRef}>
             <SelectedProject project={selectedProject} />
-          </Grid>
+          </Box>
         </Grid>
       </Grid>
     </Container>

@@ -1,6 +1,7 @@
 import { mockInterviews } from "@/__mocks__/interviews";
 import { render } from "../../utils/test-utils";
 import Home from "./home";
+import { mockCandidates } from "@/__mocks__/candidates";
 
 jest.mock("next/navigation", () => ({
   useRouter: () => ({
@@ -31,6 +32,8 @@ global.fetch = jest.fn((url) =>
     json: () => {
       if (url.endsWith("/interviews")) {
         return Promise.resolve(mockInterviews);
+      } else if (url.endsWith("/candidate")) {
+        return Promise.resolve(mockCandidates);
       }
       // Fallback for unexpected URLs
       return Promise.resolve({});

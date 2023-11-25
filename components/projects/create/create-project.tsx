@@ -48,9 +48,9 @@ export default function CreateProject() {
       <Navbar />
       <DetailLayout>
         <Container>
-          <Grid container paddingY={5}>
-            <Grid item xs={12} sm={6}>
-            <CustomBreadcrumbs routes={routes}></CustomBreadcrumbs>
+          <Grid container paddingY={5} spacing={4}>
+            <Grid item xs={12} md={7}>
+              <CustomBreadcrumbs routes={routes}></CustomBreadcrumbs>
               <Paper
                 elevation={0}
                 style={{
@@ -83,10 +83,8 @@ export default function CreateProject() {
                 </Grid>
               </Paper>
             </Grid>
-            <Grid item xs={12} sm={6}>
-              <Grid item xs={12} sm={12}>
-                {isFormFilled()}
-              </Grid>
+            <Grid item xs={12} md={5}>
+              {isFormFilled()}
             </Grid>
           </Grid>
         </Container>

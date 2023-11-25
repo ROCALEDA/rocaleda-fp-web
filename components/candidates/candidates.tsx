@@ -1,6 +1,6 @@
 "use client";
 
-import { Box, Stack, Container, Typography } from "@mui/material";
+import { Box, Stack, Container, Typography, Grid } from "@mui/material";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
@@ -14,6 +14,7 @@ import { soft_skills, tech_skills } from "@/utils/skills";
 import { useCallback, useEffect, useState } from "react";
 import CustomBreadcrumbs from "../breadcrumbs/breadcrumbs";
 import { useTranslations } from "next-intl";
+import DetailLayout from "../layout/detail-layout";
 
 export default function Candidates() {
   const [techSkills, setTechSkills] = useState<string[]>([]);
@@ -80,40 +81,51 @@ export default function Candidates() {
   return (
     <Box>
       <Navbar />
-      <Container maxWidth="lg">
-        <Stack direction="column" spacing={4} paddingTop={4}>
-          <CustomBreadcrumbs routes={routes}></CustomBreadcrumbs>
-          <Typography
-            variant="h3"
-            gutterBottom
-            fontFamily={philosopher.style.fontFamily}
-          >
-            {lang("title")}
-          </Typography>
-          <Typography variant="h6" gutterBottom color="secondary.main">
-            {lang("description")}
-          </Typography>
-          <Stack direction="row">
-            <BasicSelect
-              text={lang("tech_skills")}
-              options={tech_skills}
-              selectedOptions={formik.values.techSkills}
-              onSelectionChange={(selected) => {
-                setTechSkills(selected);
-              }}
-            />
-            <BasicSelect
-              text={lang("soft_skills")}
-              options={soft_skills}
-              selectedOptions={formik.values.softSkills}
-              onSelectionChange={(selected) => {
-                setSoftSkills(selected);
-              }}
-            />
-          </Stack>
-          <CandidatesTable />
-        </Stack>
-      </Container>
+      <DetailLayout>
+        <Container maxWidth="lg">
+          <Grid container spacing={4}>
+            <Grid item xs={12} md={7}>
+              <Stack direction="column" spacing={4} paddingTop={4}>
+                <CustomBreadcrumbs routes={routes}></CustomBreadcrumbs>
+                <Typography
+                  variant="h3"
+                  gutterBottom
+                  fontFamily={philosopher.style.fontFamily}
+                >
+                  {lang("title")}
+                </Typography>
+                <Typography
+                  variant="subtitle1"
+                  gutterBottom
+                  color="secondary.main"
+                >
+                  {lang("description")}
+                </Typography>
+                <Stack direction="row">
+                  <BasicSelect
+                    text={lang("tech_skills")}
+                    options={tech_skills}
+                    selectedOptions={formik.values.techSkills}
+                    onSelectionChange={(selected) => {
+                      setTechSkills(selected);
+                    }}
+                  />
+                  <BasicSelect
+                    text={lang("soft_skills")}
+                    options={soft_skills}
+                    selectedOptions={formik.values.softSkills}
+                    onSelectionChange={(selected) => {
+                      setSoftSkills(selected);
+                    }}
+                  />
+                </Stack>
+                <CandidatesTable />
+              </Stack>
+            </Grid>
+            <Grid item xs={12} md={5}></Grid>
+          </Grid>
+        </Container>
+      </DetailLayout>
     </Box>
   );
 }
