@@ -37,3 +37,10 @@ export interface FormErrors  {
   score: string;
   observations: string;
 };
+
+export type TTechnicalTestPayload = {
+  candidate_id: number;
+  name: string;
+  score: number;
+  observations: string;
+};

@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, MouseEvent, KeyboardEvent } from "react";
 import {
   Box,
   Card,
@@ -250,8 +250,8 @@ export default function SelectedProject({ project }: SelectedProjectProps) {
                 ))}
             </Box>
             <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}> 
-                <OpenModalButton onOpen={handleOpenModal} />
-                <TechTestModal open={isModalOpen} onClose={handleCloseModal} />
+                <OpenModalButton onOpen={handleOpenModal} project={project}/>
+                <TechTestModal open={isModalOpen} onClose={handleCloseModal} project={project} />
             </Box>
             </CardContent>
             
