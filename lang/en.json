@@ -47,7 +47,14 @@
     "result": "Score",
     "no_results": "There are no results for this interview",
     "schedule": "Schedule",
-    "schedule_interview": "Schedule an Interview"
+    "schedule_interview": "Schedule an Interview",
+    "form": {
+      "name": "Title",
+      "candidate": "Candidate",
+      "position": "Positin",
+      "schedule": "Schedule",
+      "date": "Date"
+    }
   },
   "Candidates": {
     "title": "Candidates",

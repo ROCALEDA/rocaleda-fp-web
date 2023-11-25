@@ -36,7 +36,7 @@
     "quickLinks": {
       "title": "Enlaces rápidos",
       "description": "Evalua a los candidatos de tus proyectos",
-      "action": "Calificar Candidatos"
+      "action": "Evaluar desempeño"
     }
   },
   "Interviews": {
@@ -47,7 +47,14 @@
     "result": "Resultado",
     "no_results": "No hay resultados por mostrar",
     "schedule": "Agendar",
-    "schedule_interview": "Agendar entrevista"
+    "schedule_interview": "Agendar entrevista",
+    "form": {
+      "name": "Título",
+      "candidate": "Candidato",
+      "position": "Posición",
+      "schedule": "Agendar",
+      "date": "Fecha"
+    }
   },
   "Candidates": {
     "title": "Candidatos",

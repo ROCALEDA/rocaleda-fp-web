@@ -1,16 +1,16 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import {
-  Button,
-  Modal,
   Box,
-  TextField,
-  Typography,
+  Modal,
   Stack,
-  FormControl,
-  InputLabel,
+  Button,
   Select,
   MenuItem,
+  TextField,
+  Typography,
+  InputLabel,
+  FormControl,
   SelectChangeEvent,
 } from "@mui/material";
 import { useTranslations } from "next-intl";
@@ -18,7 +18,7 @@ import { philosopher } from "@/app/[locale]/theme/fonts";
 import { useSession } from "next-auth/react";
 import { TCandidate } from "@/types/users";
 import { getPositions } from "@/api/positions";
-import { getCandidates } from "@/api/candidates";
+import { getPositionCandidates } from "@/api/candidates";
 import { TPosition } from "@/types/position";
 import { scheduleInterview } from "@/api/interviews";
 import { enqueueSnackbar } from "notistack";
@@ -44,7 +44,7 @@ export default function ScheduleInterview({
   const lang = useTranslations("Interviews");
 
   const [open, setOpen] = useState(false);
-  const [candidates, setCandidates] = useState<TCandidate[]>([]);
+  const [candidates, setCandidates] = useState<TCandidate[] | null>(null);
   const [positions, setPositions] = useState<TPosition[]>([]);
 
   const [selectedCandidateId, setSelectedCandidateId] = useState("");
@@ -99,13 +99,19 @@ export default function ScheduleInterview({
     handleClose();
   };
 
-  const getInterviewCandidates = async () => {
-    if (session) {
-      const candidatesResponse = await getCandidates({
+  const getCandidates = async () => {
+    if (session && selectedPositionId) {
+      const candidatesResponse = await getPositionCandidates({
         token: session.user?.token,
+        positionId: selectedPositionId,
       });
       const candidatesData = await candidatesResponse.json();
-      setCandidates(candidatesData.data);
+      setCandidates(candidatesData);
+    }
+  };
+
+  const getInterviewPositions = async () => {
+    if (session) {
       const positionsResponse = await getPositions({
         token: session.user?.token,
       });
@@ -115,10 +121,19 @@ export default function ScheduleInterview({
   };
 
   useEffect(() => {
+    if (selectedPositionId) {
+      getCandidates();
+    }
+  }, [selectedPositionId]);
+
+  useEffect(() => {
+    console.log("GET INTERVIEW");
     if (session) {
-      getInterviewCandidates();
+      getInterviewPositions();
     }
   }, [session]);
+
+  console.log("candidates", candidates);
 
   return (
     <>
@@ -144,28 +159,11 @@ export default function ScheduleInterview({
           <Stack spacing={2} mt={2}>
             <TextField
               required
-              label="Subject"
+              label={lang("form.name")}
               name="subject"
               value={formData.subject}
               onChange={handleChange}
             />
-            <FormControl fullWidth>
-              <InputLabel id="candidate-selector-label">Candidate</InputLabel>
-              <Select
-                required
-                labelId="candidate-selector-label"
-                id="candidate-selector"
-                value={selectedCandidateId}
-                label="Candidate"
-                onChange={handleCandidateChange}
-              >
-                {candidates?.map((candidate) => (
-                  <MenuItem key={candidate.user_id} value={candidate.user_id}>
-                    {candidate.fullname}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
             <FormControl fullWidth>
               <InputLabel id="candidate-selector-label">Posición</InputLabel>
               <Select
@@ -173,7 +171,7 @@ export default function ScheduleInterview({
                 labelId="candidate-selector-label"
                 id="candidate-selector"
                 value={selectedPositionId}
-                label="Position"
+                label={lang("form.position")}
                 onChange={handlePositionChange}
               >
                 {positions?.map((position) => (
@@ -187,21 +185,52 @@ export default function ScheduleInterview({
                 ))}
               </Select>
             </FormControl>
-            <TextField
-              required
-              label="Scheduled Date"
-              name="scheduled_date"
-              type="datetime-local"
-              InputLabelProps={{ shrink: true }}
-              value={formData.scheduled_date}
-              onChange={handleChange}
-            />
-            <Stack direction="row" justifyContent="space-between">
-              <Button variant="outlined">Cancelar</Button>
-              <Button type="submit" variant="contained">
-                Agendar
-              </Button>
-            </Stack>
+            {candidates && candidates.length == 0 && (
+              <Box>No hay candidatos en esta posición</Box>
+            )}
+            {candidates && candidates.length > 0 && (
+              <>
+                <FormControl fullWidth>
+                  <InputLabel id="candidate-selector-label">
+                    Candidate
+                  </InputLabel>
+                  <Select
+                    required
+                    labelId="candidate-selector-label"
+                    id="candidate-selector"
+                    value={selectedCandidateId}
+                    label={lang("form.candidate")}
+                    onChange={handleCandidateChange}
+                  >
+                    {candidates?.map((candidate) => (
+                      <MenuItem
+                        key={candidate.user_id}
+                        value={candidate.user_id}
+                      >
+                        {candidate.fullname}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+                <TextField
+                  required
+                  label={lang("form.date")}
+                  name="scheduled_date"
+                  type="datetime-local"
+                  InputLabelProps={{ shrink: true }}
+                  value={formData.scheduled_date}
+                  onChange={handleChange}
+                />
+                <Stack direction="row" justifyContent="space-between">
+                  <Button variant="outlined" onClick={() => handleClose()}>
+                    Cancelar
+                  </Button>
+                  <Button type="submit" variant="contained">
+                    {lang("form.schedule")}
+                  </Button>
+                </Stack>
+              </>
+            )}
           </Stack>
         </Box>
       </Modal>
