@@ -1,21 +1,30 @@
 "use client";
 import Link from "next/link";
 import * as React from "react";
+import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { useSession } from "next-auth/react";
 import { Box, Button, Container, Grid, Stack, Typography } from "@mui/material";
 
-import { philosopher } from "@/app/[locale]/theme/fonts";
-import OpenModalButton from "../evaluation/openModal";
-import EvalModal from "../evaluation/evaluationModal";
-import { useEffect, useState } from "react";
+import { getProjects } from "@/api/projects";
+import { getCandidates } from "@/api/candidates";
 import { getInterviews } from "@/api/interviews";
+import EvalModal from "../evaluation/evaluationModal";
+import OpenModalButton from "../evaluation/openModal";
+import { philosopher } from "@/app/[locale]/theme/fonts";
 import InterviewCard from "../interviews/interview-card";
+import CandidateCard from "../candidates/candidate-card";
 import LoadingSkeleton from "../interviews/interview-card-skeleton";
+import ProjectCard from "../projects/project-card";
 
 export default function Home() {
   const [homeInterviews, setHomeInterviews] = useState([]);
+  const [homeCandidates, setHomeCandidates] = useState([]);
+  const [homeProjects, setHomeProjects] = useState([]);
+
   const [isLoadingInterviews, setIsLoadingInterviews] = useState(true);
+  const [isLoadingCandidates, setIsLoadingCandidates] = useState(true);
+  const [isLoadingProjects, setIsLoadingProjects] = useState(true);
 
   const lang = useTranslations("Home");
   const { data: session } = useSession();
@@ -42,9 +51,35 @@ export default function Home() {
     }
   };
 
+  const getHomeCandidates = async () => {
+    if (session) {
+      setIsLoadingCandidates(true);
+      const response = await getCandidates({ token: session.user?.token });
+      const data = await response.json();
+      if (response.ok) {
+        setIsLoadingCandidates(false);
+        setHomeCandidates(data.data);
+      }
+    }
+  };
+
+  const getHomeProjects = async () => {
+    if (session) {
+      setIsLoadingProjects(true);
+      const response = await getProjects({ token: session.user?.token });
+      const data = await response.json();
+      if (response.ok) {
+        setIsLoadingProjects(false);
+        setHomeProjects(data);
+      }
+    }
+  };
+
   useEffect(() => {
     if (session) {
       getHomeInterviews();
+      getHomeCandidates();
+      getHomeProjects();
     }
   }, [session]);
 
@@ -64,7 +99,7 @@ export default function Home() {
       <Grid container spacing={10} paddingY={10}>
         {user && [1, 2].includes(user?.role_id) && (
           <Grid item xs={12} sm={6}>
-            <Box>
+            <Stack direction="column" spacing={2}>
               <Typography
                 variant="h3"
                 gutterBottom
@@ -79,21 +114,34 @@ export default function Home() {
               >
                 {lang("candidates.description")}
               </Typography>
-              <Link href="/candidates">
-                <Button
-                  variant="contained"
-                  aria-label={lang("candidates.action")}
-                >
-                  {lang("candidates.action")}
-                </Button>
-              </Link>
-            </Box>
+              <Grid container>
+                {isLoadingCandidates
+                  ? Array.from({ length: 3 }).map((_, index) => (
+                      <LoadingSkeleton key={index} />
+                    ))
+                  : homeCandidates.slice(0, 3).map((candidate, key) => (
+                      <Grid item key={key} width="100%">
+                        <CandidateCard key={key} candidate={candidate} />
+                      </Grid>
+                    ))}
+              </Grid>
+              <Stack direction="row" justifyContent="flex-end" gap={2}>
+                <Link href="/candidates">
+                  <Button
+                    variant="contained"
+                    aria-label={lang("candidates.action")}
+                  >
+                    {lang("candidates.action")}
+                  </Button>
+                </Link>
+              </Stack>
+            </Stack>
           </Grid>
         )}
         {user && [1, 2].includes(user?.role_id) && (
           <>
             <Grid item xs={12} sm={6}>
-              <Box>
+              <Stack direction="column" spacing={2}>
                 <Typography
                   variant="h3"
                   gutterBottom
@@ -108,15 +156,28 @@ export default function Home() {
                 >
                   {lang("projects.description")}
                 </Typography>
-                <Link href="/projects">
-                  <Button
-                    variant="contained"
-                    aria-label={lang("projects.action")}
-                  >
-                    {lang("projects.action")}
-                  </Button>
-                </Link>
-              </Box>
+                <Grid container>
+                  {isLoadingProjects
+                    ? Array.from({ length: 3 }).map((_, index) => (
+                        <LoadingSkeleton key={index} />
+                      ))
+                    : homeProjects.slice(0, 3).map((project, key) => (
+                        <Grid item key={key} width="100%">
+                          <ProjectCard key={key} project={project} />
+                        </Grid>
+                      ))}
+                </Grid>
+                <Stack direction="row" justifyContent="flex-end" gap={2}>
+                  <Link href="/projects">
+                    <Button
+                      variant="contained"
+                      aria-label={lang("projects.action")}
+                    >
+                      {lang("projects.action")}
+                    </Button>
+                  </Link>
+                </Stack>
+              </Stack>
             </Grid>
           </>
         )}

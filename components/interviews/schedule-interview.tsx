@@ -127,13 +127,10 @@ export default function ScheduleInterview({
   }, [selectedPositionId]);
 
   useEffect(() => {
-    console.log("GET INTERVIEW");
     if (session) {
       getInterviewPositions();
     }
   }, [session]);
-
-  console.log("candidates", candidates);
 
   return (
     <>

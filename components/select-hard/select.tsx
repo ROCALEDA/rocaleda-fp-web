@@ -62,7 +62,7 @@ export default function BasicSelect({
 
   return (
     <div>
-      <FormControl sx={{ m: 1, width: 400 }}>
+      <FormControl sx={{ m: 1, minWidth: "200px" }}>
         <InputLabel id={`${idFriendlyText}-label`}>{text}</InputLabel>
         <Select
           data-testid={`select-${idFriendlyText}`}
