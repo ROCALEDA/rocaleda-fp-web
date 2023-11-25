@@ -9,7 +9,6 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { useTranslations } from "next-intl";
 import { TInterview } from "@/types/interview";
 import { formatTime, getDay, getMonth } from "@/utils/date";
 
@@ -18,8 +17,6 @@ type InterviewCardProps = {
 };
 
 export default function InterviewCard({ interview }: InterviewCardProps) {
-  const lang = useTranslations("Interviews");
-
   return (
     <Card
       sx={{
@@ -41,10 +38,10 @@ export default function InterviewCard({ interview }: InterviewCardProps) {
             typeof interview.score === "number" ? "#B1E5D9" : "#F3DA90",
         }}
       />
-      <Grid container alignItems="center" spacing={2}>
-        <Grid item xs={5} sx={{ padding: 1 }}>
+      <Grid container alignItems="center" spacing={2} justifyContent="end">
+        <Grid item xs={5}>
           <Stack direction="column">
-            <Typography variant="h6">{interview.subject}</Typography>
+            <Typography variant="subtitle1">{interview.subject}</Typography>
             <Typography variant="caption" gutterBottom color="secondary.main">
               {interview.client_name}
             </Typography>
@@ -54,18 +51,15 @@ export default function InterviewCard({ interview }: InterviewCardProps) {
           orientation="vertical"
           variant="middle"
           flexItem
-          sx={{ borderRightWidth: 5 }}
+          sx={{ borderRightWidth: 3 }}
         />
-        <Grid item xs={3} sx={{ padding: 1 }}>
+        <Grid item xs={3}>
+          <Typography color="secondary.main" sx={{ marginTop: 0 }}>
+            {getDay(interview.realization_date)}&nbsp;
+            {getMonth(interview.realization_date)}
+          </Typography>
+
           <Stack direction="row" spacing={2} alignItems="center">
-            <Stack direction="column" textAlign="center" alignItems="center">
-              <Typography variant="h6" fontWeight={600}>
-                {getDay(interview.realization_date)}
-              </Typography>
-              <Typography color="secondary.main" sx={{ marginTop: 0 }}>
-                {getMonth(interview.realization_date)}
-              </Typography>
-            </Stack>
             <Typography variant="caption" fontWeight={500}>
               {formatTime(interview.realization_date)}
             </Typography>
@@ -75,9 +69,9 @@ export default function InterviewCard({ interview }: InterviewCardProps) {
           orientation="vertical"
           variant="middle"
           flexItem
-          sx={{ borderRightWidth: 5 }}
+          sx={{ borderRightWidth: 3 }}
         />
-        <Grid item xs={3} sx={{ padding: 1 }}>
+        <Grid item xs={3}>
           <Chip
             sx={{ alignSelf: "center" }}
             label={

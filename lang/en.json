@@ -45,7 +45,9 @@
     "date": "Date",
     "company": "Company",
     "result": "Score",
-    "no_results": "There are no results for this interview"
+    "no_results": "There are no results for this interview",
+    "schedule": "Schedule",
+    "schedule_interview": "Schedule an Interview"
   },
   "Candidates": {
     "title": "Candidates",

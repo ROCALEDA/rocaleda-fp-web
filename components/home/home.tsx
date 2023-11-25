@@ -11,9 +11,11 @@ import EvalModal from "../evaluation/evaluationModal";
 import { useEffect, useState } from "react";
 import { getInterviews } from "@/api/interviews";
 import InterviewCard from "../interviews/interview-card";
+import LoadingSkeleton from "../interviews/interview-card-skeleton";
 
 export default function Home() {
   const [homeInterviews, setHomeInterviews] = useState([]);
+  const [isLoadingInterviews, setIsLoadingInterviews] = useState(true);
 
   const lang = useTranslations("Home");
   const { data: session } = useSession();
@@ -30,9 +32,13 @@ export default function Home() {
 
   const getHomeInterviews = async () => {
     if (session) {
+      setIsLoadingInterviews(true);
       const response = await getInterviews({ token: session.user?.token });
       const data = await response.json();
-      setHomeInterviews(data.data);
+      if (response.ok) {
+        setIsLoadingInterviews(false);
+        setHomeInterviews(data.data);
+      }
     }
   };
 
@@ -137,7 +143,7 @@ export default function Home() {
             </Grid>
           </>
         )}
-        {user && [3].includes(user?.role_id) && (
+        {user && [2, 3].includes(user?.role_id) && (
           <Grid item xs={12} sm={6}>
             <Stack direction="column" spacing={2}>
               <Typography
@@ -155,13 +161,17 @@ export default function Home() {
                 {lang("interviews.description")}
               </Typography>
               <Grid container spacing={2}>
-                {homeInterviews.map((interview, key) => (
-                  <Grid item key={key} width="100%">
-                    <InterviewCard key={key} interview={interview} />
-                  </Grid>
-                ))}
+                {isLoadingInterviews
+                  ? Array.from({ length: 3 }).map((_, index) => (
+                      <LoadingSkeleton key={index} />
+                    ))
+                  : homeInterviews.slice(0, 3).map((interview, key) => (
+                      <Grid item key={key} width="100%">
+                        <InterviewCard key={key} interview={interview} />
+                      </Grid>
+                    ))}
               </Grid>
-              <Stack alignItems="flex-end">
+              <Stack direction="row" justifyContent="flex-end" gap={2}>
                 <Link href="/interviews">
                   <Button
                     variant="contained"
