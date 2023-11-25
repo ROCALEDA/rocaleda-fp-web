@@ -1,8 +1,9 @@
 import React from "react";
-import { IntlProvider } from "next-intl";
-import { render, screen } from "@testing-library/react";
-import Interviews from "./interviews"; // Adjust the import path as necessary
-import InterviewList from "./interview-list";
+import Interviews from "./interviews";
+import { act, render, waitFor } from "@/utils/test-utils";
+import { mockInterviews } from "@/__mocks__/interviews";
+import { mockCandidates } from "@/__mocks__/candidates";
+import { mockPositions } from "@/__mocks__/positions";
 
 jest.mock("../navbar/navbar", () => {
   const NavbarMock = () => <div>Navbar Mock</div>;
@@ -14,66 +15,35 @@ jest.mock("../breadcrumbs/breadcrumbs", () => {
   return BreadcrumbsMock;
 });
 
-jest.mock("./interview-list", () => {
-  const ListMock = () => <div>List Mock</div>;
-  return ListMock;
-});
-
-jest.mock("next-auth/react", () => ({
-  useSession: jest.fn().mockReturnValue({
-    data: {
-      user: {
-        name: "Test User",
-        email: "test@example.com",
-        role_id: 1,
-      },
-    },
-    status: "authenticated",
-  }),
-  signIn: jest.fn(),
+jest.mock("next-intl", () => ({
+  useLocale: () => "es",
+  useTranslations: () => (key: any) => key,
 }));
 
-const renderWithReactIntl = (component, locale, messages) => {
-  return render(
-    <IntlProvider locale={locale} messages={messages}>
-      {component}
-    </IntlProvider>
-  );
-};
-
-const mockUseTranslations = (locale) => {
-  jest.mock("next-intl", () => ({
-    useTranslations: () => (key) => {
-      const translations = {
-        es: { title: "Entrevistas" },
-        en: { title: "Interviews" },
-      };
-      return translations[locale][key];
+global.fetch = jest.fn((url) =>
+  Promise.resolve({
+    ok: true,
+    json: () => {
+      if (url.endsWith("/candidate")) {
+        return Promise.resolve(mockCandidates);
+      } else if (url.includes("/positions")) {
+        return Promise.resolve(mockPositions);
+      } else if (url.endsWith("/interviews")) {
+        return Promise.resolve(mockInterviews);
+      }
+      // Fallback for unexpected URLs
+      return Promise.resolve({});
     },
-  }));
-};
+  })
+);
 
 describe("Interviews", () => {
-  const renderWithIntl = (locale = "en") => {
-    render(
-      <IntlProvider
-        messages={{
-          Interviews: {
-            title: "Interviews",
-            description: "Manage your scheduled interviews",
-          },
-        }}
-        locale={locale}
-        defaultLocale="en"
-      >
-        <Interviews />
-      </IntlProvider>
-    );
-  };
+  it("renders the title correctly", async () => {
+    let screen;
 
-  it("renders the title correctly", () => {
-    mockUseTranslations("en");
-    renderWithIntl("en");
-    expect(screen.getByText("Interviews")).toBeInTheDocument();
+    await act(async () => {
+      screen = render(<Interviews />, { userRole: 2, locale: "en" });
+    });
+    expect(screen.getByText("title")).toBeInTheDocument();
   });
 });

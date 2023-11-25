@@ -45,7 +45,9 @@
     "date": "Fecha",
     "company": "Compañía",
     "result": "Resultado",
-    "no_results": "No hay resultados por mostrar"
+    "no_results": "No hay resultados por mostrar",
+    "schedule": "Agendar",
+    "schedule_interview": "Agendar entrevista"
   },
   "Candidates": {
     "title": "Candidatos",

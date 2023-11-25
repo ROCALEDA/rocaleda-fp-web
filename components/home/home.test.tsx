@@ -1,3 +1,4 @@
+import { mockInterviews } from "@/__mocks__/interviews";
 import { render } from "../../utils/test-utils";
 import Home from "./home";
 
@@ -24,6 +25,19 @@ jest.mock("next-intl", () => ({
   useTranslations: () => (key: any) => key,
 }));
 
+global.fetch = jest.fn((url) =>
+  Promise.resolve({
+    ok: true,
+    json: () => {
+      if (url.endsWith("/interviews")) {
+        return Promise.resolve(mockInterviews);
+      }
+      // Fallback for unexpected URLs
+      return Promise.resolve({});
+    },
+  })
+);
+
 describe("Home", () => {
   it("renders correctly for admin user (role 1)", () => {
     const screen = render(<Home />, { userRole: 1, locale: "en" });
@@ -36,7 +50,6 @@ describe("Home", () => {
     const screen = render(<Home />, { userRole: 2, locale: "en" });
     expect(screen.getByText("candidates.title")).toBeInTheDocument();
     expect(screen.getByText("projects.title")).toBeInTheDocument();
-    expect(screen.queryByText("interviews.title")).not.toBeInTheDocument();
   });
 
   it("renders correctly for candidate user (role 3)", () => {

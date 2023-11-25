@@ -14,6 +14,7 @@ function customRender(
     const mockSession = {
       user: {
         name: "Test User",
+        user_id: "1",
         email: "test@example.com",
         role_id: userRole,
         token: "Fake token",

@@ -54,7 +54,7 @@ export async function middleware(request: NextRequest) {
     "/candidates": [1, 2],
     "/projects": [1, 2],
     "/projects/create": [2],
-    "/interviews": [3],
+    "/interviews": [2, 3],
   };
 
   if (user && routesByRole.hasOwnProperty(pathnameWithoutLocale)) {
