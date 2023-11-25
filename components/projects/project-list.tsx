@@ -2,13 +2,14 @@
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { useSession } from "next-auth/react";
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 
 import { Project } from "@/types/types";
 import { Grid, Paper, Typography, Button, Container } from "@mui/material";
 import DetailProject from "@/components/projects/project-detail";
 import SelectedProject from "@/components/projects/selected-project";
 import CustomBreadcrumbs from "../breadcrumbs/breadcrumbs";
+
 
 export default function ProjectList() {
   const lang = useTranslations("Projects");
@@ -27,9 +28,11 @@ export default function ProjectList() {
 
   return (
     <Container>
+      <CustomBreadcrumbs routes={routes} marginTop='40px'></CustomBreadcrumbs>
       <Grid container paddingY={5}>
+      {/* <CustomBreadcrumbs routes={routes}></CustomBreadcrumbs> */}
         <Grid item xs={12} sm={6}>
-          <CustomBreadcrumbs routes={routes} />
+        {/* <CustomBreadcrumbs routes={routes}></CustomBreadcrumbs> */}
           <Paper
             elevation={0}
             style={{ width: "95%", padding: "20px", marginRight: "30px" }}

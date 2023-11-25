@@ -1,6 +1,5 @@
 import { Box } from "@mui/material";
 import { ReactNode } from "react";
-import CustomBreadcrumbs from "@/components/breadcrumbs/breadcrumbs";
 
 interface LayoutProps {
   children: ReactNode;
