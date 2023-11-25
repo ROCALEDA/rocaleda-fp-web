@@ -88,6 +88,8 @@
     "profile_name_required": "El nombre del perfil es requerido",
     "profile_name_chars": "El nombre del perfil asociado no puede tener más de 30 caracteres",
     "form": {
+      "name": "Nombre",
+      "description": "Descripción",
       "basic": "1. Datos Básicos",
       "profiles": "2. Perfiles",
       "no_profile": "Aún no has agregado ningún perfil",

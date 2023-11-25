@@ -89,7 +89,7 @@ export default function CandidatesTable() {
   return (
     <Paper sx={{ width: "100%", overflow: "hidden" }}>
       <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+        <Table sx={{ minWidth: 650 }} aria-label="simple table" size="small">
           <TableHead>
             <TableRow>
               <TableCell align="left">ID</TableCell>
@@ -112,6 +112,7 @@ export default function CandidatesTable() {
                       key={techSkill.id}
                       label={techSkill.name}
                       sx={{ backgroundColor: "#FAE8FF" }}
+                      size="small"
                     ></Chip>
                   ))}
                 </TableCell>
@@ -121,6 +122,7 @@ export default function CandidatesTable() {
                       key={softSkill.id}
                       label={softSkill.name}
                       sx={{ backgroundColor: "#FEF7E7" }}
+                      size="small"
                     ></Chip>
                   ))}
                 </TableCell>

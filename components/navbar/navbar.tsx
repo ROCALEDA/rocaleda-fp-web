@@ -68,13 +68,15 @@ export default function Navbar() {
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Box sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}>
-            <Image
-              src={roleLogo}
-              alt="Quire logo desktop"
-              width={250}
-              height={70}
-              style={{ objectFit: "contain" }}
-            />
+            <Link href="/home">
+              <Image
+                src={roleLogo}
+                alt="Quire logo desktop"
+                width={250}
+                height={70}
+                style={{ objectFit: "contain" }}
+              />
+            </Link>
           </Box>
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
