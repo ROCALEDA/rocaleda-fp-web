@@ -50,13 +50,14 @@ export default function CreateProject() {
         <Container>
           <Grid container paddingY={5}>
             <Grid item xs={12} sm={6}>
-              <CustomBreadcrumbs routes={routes} />
+            <CustomBreadcrumbs routes={routes}></CustomBreadcrumbs>
               <Paper
                 elevation={0}
                 style={{
                   width: "80%",
                   padding: "20px",
                   marginRight: "30px",
+                  marginTop: "30px",
                   backgroundColor: "transparent",
                 }}
               >

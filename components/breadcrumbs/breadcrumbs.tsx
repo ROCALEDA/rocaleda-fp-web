@@ -11,14 +11,16 @@ interface RouteType {
 interface BreadcrumbsProps {
   routes: RouteType[];
   paddingLeft?: string;
+  marginTop?: string;
 }
 
 export default function CustomBreadcrumbs({
   routes,
   paddingLeft,
+  marginTop,
 }: BreadcrumbsProps) {
   return (
-    <div role="presentation" style={{ paddingLeft: paddingLeft }}>
+    <div role="presentation" style={{ paddingLeft: paddingLeft, marginTop: marginTop, position: 'absolute'}}>
       <Breadcrumbs
         separator={<NavigateNextIcon fontSize="small" />}
         aria-label="breadcrumb"
