@@ -3,11 +3,12 @@ import { Modal, Box, Typography, TextField, MenuItem, Button, Slider,FormControl
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import Image from 'next/image';
 import { philosopher } from "@/app/[locale]/theme/fonts";
-import { Project, TTechnicalTestPayload} from "@/types/types";
+import { Project } from "@/types/types";
 import { useSession } from "next-auth/react";
 import API_URL from "@/api/config";
 import * as yup from 'yup';
 import { enqueueSnackbar } from "notistack";
+import { useTranslations } from "next-intl";
 
 interface TechTestModalProps {
     open: boolean;
@@ -15,17 +16,7 @@ interface TechTestModalProps {
     project: Project | null;
   }
 
-  const validationSchema = yup.object().shape({
-    position: yup
-      .string()
-      .nullable()
-      .required('Por favor debe seleccionar una posición.'),
-    candidate: yup
-      .string()
-      .required('Por favor debe seleccionar un candidato.')
-      .nullable(),
-      observations: yup.string().trim().min(1, 'Las observaciones no pueden estar vacías').required('Las observaciones no pueden estar vacías.')
-  });
+  
 
 
 const TechTestModal: React.FC<TechTestModalProps> = ({ open, onClose, project  }) => {
@@ -42,7 +33,19 @@ const TechTestModal: React.FC<TechTestModalProps> = ({ open, onClose, project  }
       candidate: '',
       observations: '',
     });
+    const lang = useTranslations("TechTest");
 
+    const validationSchema = yup.object().shape({
+      position: yup
+        .string()
+        .nullable()
+        .required(lang("position_required")),
+      candidate: yup
+        .string()
+        .required(lang("candidate_required"))
+        .nullable(),
+        observations: yup.string().trim().min(1, lang("observation_required")).required(lang("observation_required"))
+    });
     
 
     const handleTestChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -240,7 +243,7 @@ const TechTestModal: React.FC<TechTestModalProps> = ({ open, onClose, project  }
             {/* Título */}
             <Box sx={{ position: 'relative', width: '100%', height: '80px' }}>
                 <Typography variant="h4" component="h2" sx={{ width: '100%', textAlign: 'center' }} fontFamily={philosopher.style.fontFamily}>
-                Registrar prueba técnica
+                {lang("title")}
                 </Typography>
             </Box>
             {/* Contenedor principal */}
@@ -249,7 +252,7 @@ const TechTestModal: React.FC<TechTestModalProps> = ({ open, onClose, project  }
                 <Box sx={{ flexGrow: 1, mr: 2 }}>
                     <FormControl variant="standard" sx={{ m: 1, width: '90%' }} size="small">
                         <TextField
-                            label="Nombre Prueba"
+                            label={lang("name")}
                             variant="standard"
                             value={selectedTest}
                             onChange={handleTestChange}
@@ -257,7 +260,7 @@ const TechTestModal: React.FC<TechTestModalProps> = ({ open, onClose, project  }
                         />
                     </FormControl>
                     <FormControl variant="standard" sx={{ m: 1, width: '90%' }} size="small">
-                        <InputLabel id="position">Posición</InputLabel>
+                        <InputLabel id="position">{lang("position")}</InputLabel>
                         <Select
                         labelId="position"
                         id="position-select"
@@ -271,7 +274,7 @@ const TechTestModal: React.FC<TechTestModalProps> = ({ open, onClose, project  }
                         <Typography color="error">{formErrors.position}</Typography>
                     </FormControl>
                     <FormControl variant="standard" sx={{ m: 1, width: '90%' }} size="small">
-                        <InputLabel id="name_candidate">Candidato</InputLabel>
+                        <InputLabel id="name_candidate">{lang("role")}</InputLabel>
                         {isLoading ? (<Skeleton variant="rectangular" height={40} />) : (
                         <Select
                         labelId="name_candidate"
@@ -298,7 +301,7 @@ const TechTestModal: React.FC<TechTestModalProps> = ({ open, onClose, project  }
             <FormControl fullWidth sx={{ m: 1,mt:4 }}>
           <TextField 
           id="standard-basic" 
-          label="Descripción de habilidades técnicas" 
+          label={lang("description")}
           variant="standard" 
           multiline 
           maxRows={4}
@@ -326,14 +329,14 @@ const TechTestModal: React.FC<TechTestModalProps> = ({ open, onClose, project  }
                 onClick={handleClose} 
                 sx={{ flexGrow: 1, mr: 1 }} 
             >
-                CANCELAR
+                {lang("cancel")}
             </Button>
             <Button 
                 variant="contained"
                 onClick={handleSubmit} 
                 sx={{ flexGrow: 1, ml: 1, backgroundColor: "#A15CAC", "&:hover": { backgroundColor: "#864D8F" } }}
             >
-                REGISTRAR PRUEBA
+                {lang("save")}
             </Button>
         </Box>
             

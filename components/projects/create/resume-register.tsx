@@ -47,7 +47,7 @@ export default function ResumeRegisterProyect({
       >
         {lang("your_project")}
       </Typography>
-      <Card sx={{ width: { xs: "90%", xl: "50%" }, p: 2 }}>
+      <Card sx={{ width: { xs: "90%", xl: "100%" }, p: 2 }}>
         <CardContent>
           <Box display="flex" alignItems="center">
             <Typography variant="h5" sx={{ mr: 2 }}>

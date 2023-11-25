@@ -95,5 +95,17 @@
   },
   "Profile": {
     "create_profile": "Crear perfil"
+  },
+  "TechTest": {
+    "title": "Registrar prueba técnica",
+    "name": "Nombre prueba técnica",
+    "position": "Posición",
+    "role": "Candidato",
+    "description": "Descripción de habilidades técnicas",
+    "cancel": "Cancelar",
+    "save": "Registrar Prueba",
+    "position_required": "Por favor debe seleccionar una posición.",
+    "candidate_required": "Por favor debe seleccionar un candidato.",
+    "observation_required": "Las observaciones no pueden estar vacías"
   }
 }

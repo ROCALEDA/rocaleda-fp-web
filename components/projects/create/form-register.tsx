@@ -17,7 +17,6 @@ import { useTranslations } from "next-intl";
 const validationSchema = Yup.object().shape({
   nombre: Yup.string().required("El nombre es obligatorio"),
   description: Yup.string().required("La descripción es obligatoria"),
-  // Agrega aquí más validaciones para otros campos...
 });
 
 type FormRegisterProyectProps = {
@@ -30,7 +29,6 @@ type FormRegisterProyectProps = {
 interface FormValues {
   nombre: string;
   description: string;
-  // otros campos si los tienes...
 }
 
 export default function FormRegisterProyect(props: FormRegisterProyectProps) {
@@ -111,7 +109,6 @@ export default function FormRegisterProyect(props: FormRegisterProyectProps) {
     initialValues: {
       nombre: "",
       description: "",
-      // otros campos...
     },
     validationSchema: validationSchema,
     onSubmit: handleSubmit,
@@ -124,7 +121,7 @@ export default function FormRegisterProyect(props: FormRegisterProyectProps) {
       const newProfiles = prevProfiles.filter(
         (profile) => profile.profileName !== profileName
       );
-      props.setProfiles(newProfiles); // Actualiza el estado del componente padre
+      props.setProfiles(newProfiles); 
       return newProfiles;
     });
   };

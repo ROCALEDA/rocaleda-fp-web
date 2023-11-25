@@ -97,5 +97,17 @@
   },
   "Profile": {
     "create_profile": "Create profile"
+  },
+  "TechTest": {
+    "title": "Register technical test",
+    "name": "Technical test name",
+    "position": "Position",
+    "role": "Candidate",
+    "description": "Description of technical skills",
+    "cancel": "Cancel",
+    "save": "Save",
+    "position_required": "Please select a position.",
+    "candidate_required": "Please select a candidate.",
+    "observation_required": "Observations cannot be empty"
   }
 }
