@@ -61,7 +61,7 @@ export default function Home() {
           zIndex: -1, // To ensure it's under other content; adjust as needed
         }}
       />
-      <Grid container spacing={2} paddingY={10}>
+      <Grid container spacing={10} paddingY={10}>
         {user && [1, 2].includes(user?.role_id) && (
           <Grid item xs={12} sm={6}>
             <Box>
@@ -118,29 +118,6 @@ export default function Home() {
                 </Link>
               </Box>
             </Grid>
-            <Grid item xs={12} sm={6}>
-              <Box>
-                <Typography
-                  variant="h3"
-                  gutterBottom
-                  fontFamily={philosopher.style.fontFamily}
-                >
-                  {lang("quickLinks.title")}
-                </Typography>
-                <Typography
-                  variant="subtitle1"
-                  gutterBottom
-                  color="secondary.main"
-                >
-                  {lang("quickLinks.description")}
-                </Typography>
-                <OpenModalButton
-                  onOpen={handleOpenModal}
-                  label={lang("quickLinks.action")}
-                />
-                <EvalModal open={isModalOpen} onClose={handleCloseModal} />
-              </Box>
-            </Grid>
           </>
         )}
         {user && [2, 3].includes(user?.role_id) && (
@@ -160,7 +137,7 @@ export default function Home() {
               >
                 {lang("interviews.description")}
               </Typography>
-              <Grid container spacing={2}>
+              <Grid container>
                 {isLoadingInterviews
                   ? Array.from({ length: 3 }).map((_, index) => (
                       <LoadingSkeleton key={index} />
@@ -182,6 +159,31 @@ export default function Home() {
                 </Link>
               </Stack>
             </Stack>
+          </Grid>
+        )}
+        {user && [2].includes(user?.role_id) && (
+          <Grid item xs={12} sm={6}>
+            <Box>
+              <Typography
+                variant="h3"
+                gutterBottom
+                fontFamily={philosopher.style.fontFamily}
+              >
+                {lang("quickLinks.title")}
+              </Typography>
+              <Typography
+                variant="subtitle1"
+                gutterBottom
+                color="secondary.main"
+              >
+                {lang("quickLinks.description")}
+              </Typography>
+              <OpenModalButton
+                onOpen={handleOpenModal}
+                label={lang("quickLinks.action")}
+              />
+              <EvalModal open={isModalOpen} onClose={handleCloseModal} />
+            </Box>
           </Grid>
         )}
       </Grid>

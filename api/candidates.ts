@@ -8,3 +8,18 @@ export const getCandidates = async ({ token }: { token: string }) => {
     },
   });
 };
+
+export const getPositionCandidates = async ({
+  token,
+  positionId,
+}: {
+  token: string;
+  positionId: string;
+}) => {
+  return await fetch(`${API_URL}/positions/${positionId}/candidates`, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
