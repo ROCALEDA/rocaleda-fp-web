@@ -20,25 +20,6 @@ export default function ProjectList() {
   const { data: session } = useSession();
   const userRole = session?.user?.role_id;
 
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (
-        cardRef.current &&
-        !cardRef.current.contains(event.target as Node) &&
-        detailRef.current &&
-        !detailRef.current.contains(event.target as Node)
-      ) {
-        setSelectedProject(null);
-      }
-    }
-
-    window.addEventListener("click", handleClickOutside);
-
-    return () => {
-      window.removeEventListener("click", handleClickOutside);
-    };
-  }, []);
-
   const routes = [
     { name: "Home", path: "/home" },
     { name: lang("title"), path: "/projects" },
