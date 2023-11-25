@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button } from '@mui/material';
 import { Project} from "@/types/types";
+import { useTranslations } from "next-intl";
 
 interface OpenModalButtonProps {
     onOpen: () => void; 
@@ -8,6 +9,7 @@ interface OpenModalButtonProps {
   }
 
   const OpenModalButton: React.FC<OpenModalButtonProps> = ({ onOpen , project }) => {
+    const lang = useTranslations("TechTest");
   return (
     <Button 
       type="submit"
@@ -15,7 +17,7 @@ interface OpenModalButtonProps {
       onClick={onOpen}
       sx={{ backgroundColor: "#A15CAC", "&:hover": { backgroundColor: "#864D8F" } }}
     >
-      REGISTRAR PRUEBA TÉCNICA
+      {lang("title")}
     </Button>
   );
 }

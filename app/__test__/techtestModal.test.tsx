@@ -2,6 +2,24 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import TechTestModal from '@/components/techtest/techtestModal';
 import { SessionProvider } from "next-auth/react";
 
+jest.mock("next-intl", () => ({
+  useTranslations: () => (key) => {
+    const translations = {
+    "title": "Registrar prueba técnica",
+    "name": "Nombre prueba técnica",
+    "position": "Posición",
+    "role": "Candidato",
+    "description": "Descripción de habilidades técnicas",
+    "cancel": "Cancelar",
+    "save": "Registrar Prueba",
+    "position_required": "Por favor debe seleccionar una posición.",
+    "candidate_required": "Por favor debe seleccionar un candidato.",
+    "observation_required": "Las observaciones no pueden estar vacías"
+    };
+    return translations[key];
+  },
+}));
+
 describe('<TechTestModal />', () => {
   const mockSession = {
     user: {
@@ -28,7 +46,7 @@ describe('<TechTestModal />', () => {
     );
 
     expect(screen.getByText('Registrar prueba técnica')).toBeInTheDocument();
-    expect(screen.getByLabelText('Nombre Prueba')).toBeInTheDocument();
+    expect(screen.getByLabelText('Nombre prueba técnica')).toBeInTheDocument();
     expect(screen.getByLabelText('Posición')).toBeInTheDocument();
     expect(screen.getByLabelText('Descripción de habilidades técnicas')).toBeInTheDocument();
   });
@@ -65,7 +83,7 @@ describe('<TechTestModal />', () => {
       </SessionProvider>
     );
   
-    fireEvent.click(screen.getByText('CANCELAR'));
+    fireEvent.click(screen.getByText('Cancelar'));
     expect(mockOnClose).toHaveBeenCalled();
   });
   global.fetch = jest.fn();
@@ -80,14 +98,14 @@ describe('<TechTestModal />', () => {
       </SessionProvider>
     );
 
-    const submitButton = screen.getByText('REGISTRAR PRUEBA');
+    const submitButton = screen.getByText('Registrar Prueba');
     fireEvent.click(submitButton);
 
     await waitFor(() => {
       expect(screen.getByText('Por favor debe seleccionar una posición.')).toBeInTheDocument();
       expect(screen.getByText('Por favor debe seleccionar un candidato.')).toBeInTheDocument();
     });
-  });
+  }); 
 
   
 
