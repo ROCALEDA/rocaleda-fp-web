@@ -15,6 +15,7 @@ const OpenModalButton: React.FC<OpenModalButtonProps> = ({
   const lang = useTranslations("TechTest");
   return (
     <Button
+      data-cy="modal_techtest"
       type="submit"
       variant="contained"
       onClick={onOpen}
