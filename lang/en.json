@@ -68,6 +68,7 @@
     "spanish": "Spanish",
     "english": "English",
     "assignPosition": "Assign position",
+    "anonymous": "Anonymous candidate",
     "form": {
       "assign_candidate": "Assign candidate to position",
       "position": "Position",
@@ -115,7 +116,7 @@
   "Profile": {
     "create_profile": "Create profile",
     "edit_profile": "Edit profile",
-    "name_profile":"Name profile",
+    "name_profile": "Name profile",
     "tech_skills": "Technical skills",
     "soft_skills": "Soft skills",
     "number_profiles": "Profiles number",
@@ -135,7 +136,7 @@
     "candidate_required": "Please select a candidate.",
     "observation_required": "Observations cannot be empty"
   },
-  "EvalTest":{
+  "EvalTest": {
     "title": "Evaluate performance",
     "name": "Project",
     "role": "Collaborator",
