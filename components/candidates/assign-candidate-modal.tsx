@@ -1,23 +1,24 @@
 import React, { useState } from "react";
 import {
-  Modal,
   Box,
+  Stack,
+  Modal,
   Button,
-  FormControl,
-  InputLabel,
   Select,
   MenuItem,
+  InputLabel,
   Typography,
+  FormControl,
   SelectChangeEvent,
-  Stack,
 } from "@mui/material";
-import { TSimpleProject } from "@/types/types";
-import { useTranslations } from "next-intl";
-import { assignCandidateToPosition } from "@/api/candidates";
-import { useSession } from "next-auth/react";
 import { enqueueSnackbar } from "notistack";
-import { philosopher } from "@/app/[locale]/theme/fonts";
+import { useTranslations } from "next-intl";
+
 import { TCandidate } from "@/types/users";
+import { useSession } from "next-auth/react";
+import { TSimpleProject } from "@/types/types";
+import { philosopher } from "@/app/[locale]/theme/fonts";
+import { assignCandidateToPosition } from "@/api/candidates";
 
 type AsignCandidateProps = {
   projects: TSimpleProject[];
@@ -154,11 +155,13 @@ const AssignCandidateModal = ({ projects, candidate }: AsignCandidateProps) => {
                     label={lang("form.position")}
                     onChange={handlePositionChange}
                   >
-                    {selectedProject.positions?.map((position) => (
-                      <MenuItem key={position.id} value={position.id}>
-                        {position.name}
-                      </MenuItem>
-                    ))}
+                    {selectedProject.positions
+                      ?.filter((position) => position.is_open)
+                      .map((position) => (
+                        <MenuItem key={position.id} value={position.id}>
+                          {position.name}
+                        </MenuItem>
+                      ))}
                   </Select>
                 </FormControl>
 
