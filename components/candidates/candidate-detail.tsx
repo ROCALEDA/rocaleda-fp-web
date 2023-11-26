@@ -40,7 +40,7 @@ export default function CandidateDetail({
             height={100}
           />
           <Typography variant="h6" fontFamily={philosopher.style.fontFamily}>
-            {candidate.fullname}
+            {lang("anonymous")}
           </Typography>
         </Grid>
         <Grid item xs={12}>

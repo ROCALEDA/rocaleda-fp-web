@@ -68,6 +68,7 @@
     "spanish": "Español",
     "english": "Inglés",
     "assignPosition": "Asignar posición",
+    "anonymous": "Candidato anónimo",
     "form": {
       "assign_candidate": "Asignar candidato a position",
       "position": "Posición",
@@ -115,7 +116,7 @@
   "Profile": {
     "create_profile": "Crear perfil",
     "edit_profile": "Editar perfil",
-    "name_profile":"Nombre del perfil",
+    "name_profile": "Nombre del perfil",
     "tech_skills": "Habilidades técnicas",
     "soft_skills": "Habilidades blandas",
     "number_profiles": "Número de perfiles",
@@ -135,7 +136,7 @@
     "candidate_required": "Por favor debe seleccionar un candidato.",
     "observation_required": "Las observaciones no pueden estar vacías"
   },
-  "EvalTest":{
+  "EvalTest": {
     "title": "Evaluar desempeño",
     "name": "Proyecto",
     "role": "Colaborador",
