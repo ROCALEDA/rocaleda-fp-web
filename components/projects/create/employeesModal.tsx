@@ -116,6 +116,7 @@ const EmployeesModal: React.FC<EmployeesModalProps> = ({
           {employeeToEdit ? "Editar Funcionario" : "Añadir Funcionario"}
         </Typography>
         <TextField
+          data-cy="employee-name"
           label={lang("employee_name")}
           fullWidth
           margin="normal"
@@ -126,6 +127,7 @@ const EmployeesModal: React.FC<EmployeesModalProps> = ({
           helperText={errors.name}
         />
         <TextField
+          data-cy="employee-role"
           label={lang("profile_name")}
           fullWidth
           margin="normal"
@@ -146,6 +148,7 @@ const EmployeesModal: React.FC<EmployeesModalProps> = ({
             {lang("cancel")}
           </Button>
           <Button
+            data-cy="modal-employee"
             variant="contained"
             onClick={handleEmployeeSubmission}
             sx={{

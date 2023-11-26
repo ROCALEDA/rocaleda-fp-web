@@ -61,6 +61,7 @@ export default function ProjectList() {
                 {userRole === 2 && (
                   <Link href="/projects/create" passHref>
                     <Button
+                      data-cy="create-project"
                       variant="outlined"
                       color="primary"
                       sx={{

@@ -128,6 +128,7 @@ export default function Home() {
               <Stack direction="row" justifyContent="flex-end" gap={2}>
                 <Link href="/candidates">
                   <Button
+                    data-cy="candidates-action"
                     variant="contained"
                     aria-label={lang("candidates.action")}
                   >
@@ -170,6 +171,7 @@ export default function Home() {
                 <Stack direction="row" justifyContent="flex-end" gap={2}>
                   <Link href="/projects">
                     <Button
+                      data-cy="projects-action"
                       variant="contained"
                       aria-label={lang("projects.action")}
                     >
