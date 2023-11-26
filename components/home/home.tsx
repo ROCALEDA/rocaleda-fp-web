@@ -214,6 +214,7 @@ export default function Home() {
               <Stack direction="row" justifyContent="flex-end" gap={2}>
                 <Link href="/interviews">
                   <Button
+                    data-cy="interviews-action"
                     variant="contained"
                     aria-label={lang("interviews.action")}
                   >

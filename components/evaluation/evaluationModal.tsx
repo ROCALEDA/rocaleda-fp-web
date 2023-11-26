@@ -311,6 +311,7 @@ const EvalModal: React.FC<EvalModalModalProps> = ({ open, onClose }) => {
                 <InputLabel id="proyectos_customer">Proyecto</InputLabel>
                 {/* {isLoading ? (<Skeleton variant="rectangular" height={40} />) : ( */}
                 <Select
+                  data-cy = "project-select"
                   labelId="proyectos_customer"
                   id="proyecto-select"
                   value={selectedProject ?? ""}
@@ -335,6 +336,7 @@ const EvalModal: React.FC<EvalModalModalProps> = ({ open, onClose }) => {
                   <Skeleton variant="rectangular" height={40} />
                 ) : (
                   <Select
+                    data-cy = "profile-select"
                     labelId="perfil_candidate"
                     id="profile-select"
                     value={selectedProfile.id ?? ""}
@@ -370,6 +372,7 @@ const EvalModal: React.FC<EvalModalModalProps> = ({ open, onClose }) => {
           </Box>
           <FormControl fullWidth sx={{ m: 1, mt: 1, mb: 4 }}>
             <TextField
+              data-cy = "observations-evaluation"
               id="standard-basic"
               label="Descripción de calificación"
               variant="standard"
@@ -384,6 +387,7 @@ const EvalModal: React.FC<EvalModalModalProps> = ({ open, onClose }) => {
             Score (0 - 100)
           </Typography>
           <Slider
+            data-cy = "score-evaluation"
             defaultValue={30}
             aria-label="Default"
             valueLabelDisplay="auto"
@@ -411,6 +415,7 @@ const EvalModal: React.FC<EvalModalModalProps> = ({ open, onClose }) => {
               CANCELAR
             </Button>
             <Button
+              data-cy = "eval-submit"
               type="submit"
               variant="contained"
               sx={{

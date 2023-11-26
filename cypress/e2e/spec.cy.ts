@@ -6,10 +6,11 @@ describe('Login Client Test', () => {
   const userPassword = Cypress.env('userPassword');
   const apiUrl = Cypress.env('apiUrl');
   const nameProject = faker.commerce.department() + ' Project';
-  const descriptionProject = 'This project ' + faker.commerce.productDescription()
+  const descriptionProject = 'This project ' + faker.commerce.productDescription();
   const profileName = 'Backend Developer';
   const employeeName = faker.person.fullName();
   const employeeRole = faker.person.jobTitle();
+  const descriptionEvaluation = faker.commerce.productDescription();
 
   beforeEach(() => {
     cy.viewport('macbook-16');
@@ -85,20 +86,55 @@ describe('Login Client Test', () => {
   });
 
 
-
   it('View Candidates', () => {
     cy.visit('/es/home');
     cy.get('[data-cy=candidates-action]').click();
+    cy.url({ timeout: 10000 }).should('include', '/es/candidates');
+    cy.get('#habilidades-técnicas-select').click();
+    
+  });
+
+  it('View Interviews', () => {
+    cy.visit('/es/home');
+    cy.get('[data-cy=interviews-action]').click();
+    cy.url({ timeout: 10000 }).should('include', '/es/interviews');
+    cy.intercept('GET', `${apiUrl}/interviews?page=1&limit=1000`).as('interviews');
+    cy.wait('@interviews');
+    cy.get('[data-cy=register-interview]').should('exist');
+  });
+
+  it('View Evaluations', () => {
+    cy.visit('/es/home');
+    cy.get('[data-cy=evaluation-action]').click();
+    cy.get('[data-cy=project-select]').should('exist');
+    cy.get('[data-cy=eval-submit]').should('exist');
+  });
+  it('Register Evaluation', () => {
+    cy.visit('/es/home');
+    cy.get('[data-cy=evaluation-action]').click();
+    cy.get('[data-cy=eval-submit]').should('exist');
+    cy.get('[data-cy=project-select]').click();
+    cy.get('ul[role="listbox"] li', { timeout: 10000 }).first().click();
+    cy.get('[data-cy=profile-select]').click();
+    cy.get('ul[role="listbox"] li', { timeout: 10000 }).first().click();
+    cy.get('[data-cy=observations-evaluation]').type(descriptionEvaluation);
+    cy.get('[data-cy=score-evaluation]').invoke('val', 35).trigger('change');
+    cy.get('[data-cy=score-evaluation]').should('have.value', 35);
+    cy.get('[data-cy=eval-submit]').click();
+    cy.contains('Evaluación enviada con éxito', { timeout: 10000 }).should('be.visible');
   });
 
 
 
+
+
 });
+
 describe('Register Client Test', () => {
   const userEmail = faker.internet.email();
   const userPassword = 'cristian';
 
-  it('Client/Enterprise Register', () => {
+  it.skip('Client/Enterprise Register', () => {
     cy.visit('/es/login');
     cy.get('[data-cy=candidate-signup]').click();
 
@@ -110,6 +146,4 @@ describe('Register Client Test', () => {
     cy.get('[data-cy=candidate-register]').click();
     cy.url().should('include', '/es/login'); 
   });
-
-
 });

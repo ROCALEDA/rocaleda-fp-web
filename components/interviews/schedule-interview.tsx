@@ -134,7 +134,7 @@ export default function ScheduleInterview({
 
   return (
     <>
-      <Button variant="contained" onClick={handleOpen}>
+      <Button data-cy="register-interview" variant="contained" onClick={handleOpen}>
         {lang("schedule")}
       </Button>
       <Modal

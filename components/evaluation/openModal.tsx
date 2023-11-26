@@ -8,7 +8,8 @@ interface OpenModalButtonProps {
 
   const OpenModalButton: React.FC<OpenModalButtonProps> = ({ onOpen, label }) => {
   return (
-    <Button 
+    <Button
+      data-cy="evaluation-action" 
       type="submit"
       variant="contained"
       onClick={onOpen}
