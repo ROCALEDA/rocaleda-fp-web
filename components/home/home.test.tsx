@@ -45,7 +45,6 @@ describe("Home", () => {
   it("renders correctly for admin user (role 1)", () => {
     const screen = render(<Home />, { userRole: 1, locale: "en" });
     expect(screen.getByText("candidates.title")).toBeInTheDocument();
-    expect(screen.getByText("projects.title")).toBeInTheDocument();
     expect(screen.queryByText("interviews.title")).not.toBeInTheDocument();
   });
 

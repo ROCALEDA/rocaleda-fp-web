@@ -27,6 +27,12 @@ interface TechTestModalProps {
   project: TSimpleProject | null;
 }
 
+interface FormErrors {
+  position?: string;
+  candidate?: string;
+  observations?: string;
+}
+
 const TechTestModal: React.FC<TechTestModalProps> = ({
   open,
   onClose,
@@ -34,28 +40,43 @@ const TechTestModal: React.FC<TechTestModalProps> = ({
 }) => {
   const { data: session } = useSession();
   const [selectedTest, setSelectedTest] = useState<string | "">("");
-  const [selectedPosition, setSelectedPosition] = useState<number | "">("");
-  const [selectedCandidate, setSelectedCandidate] = useState<number | "">("");
+  const [selectedPosition, setSelectedPosition] = useState<number | null>(null);
+  const [selectedCandidate, setSelectedCandidate] = useState<number | null>(null)
   const [candidates, setCandidates] = useState([]);
   const [score, setScore] = useState(30);
   const [observations, setObservations] = useState("");
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [formErrors, setFormErrors] = useState({
-    position: "",
-    candidate: "",
-    observations: "",
-  });
+  const [formErrors, setFormErrors] = useState<FormErrors>({});
   const lang = useTranslations("TechTest");
 
   const validationSchema = yup.object().shape({
-    position: yup.string().nullable().required(lang("position_required")),
-    candidate: yup.string().required(lang("candidate_required")).nullable(),
+    position: yup.number().nullable().required(lang("position_required")),
+    candidate: yup.number().nullable().required(lang("candidate_required")),
     observations: yup
       .string()
       .trim()
       .min(1, lang("observation_required"))
       .required(lang("observation_required")),
   });
+
+  const validateField = (field: keyof FormErrors, value: any) => {
+    const fieldSchema = yup.reach(validationSchema, field) as yup.AnySchema;
+  
+  fieldSchema
+    .validate(value)
+    .then(() => {
+      setFormErrors((prevErrors) => ({
+        ...prevErrors,
+        [field]: '',
+      }));
+    })
+    .catch((error: yup.ValidationError) => {
+      setFormErrors((prevErrors) => ({
+        ...prevErrors,
+        [field]: error.message,
+      }));
+    });
+  };
 
   const handleTestChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -64,45 +85,38 @@ const TechTestModal: React.FC<TechTestModalProps> = ({
   };
 
   const handlePositionChange = (event: SelectChangeEvent<number>) => {
-    const newPosition =
-      event.target.value === "" ? null : Number(event.target.value);
-    setSelectedPosition(+event.target.value);
-    validateField("position", newPosition);
+    const newPosition = event.target.value === "" ? null : Number(event.target.value);
+    setSelectedPosition(newPosition);
+    validateField('position', newPosition);
   };
 
-  const validateField = (field: string, value: any) => {
-    const fieldSchema = yup.reach(validationSchema, field) as yup.StringSchema;
-
-    fieldSchema
-      .validate(value)
-      .then(() => {
-        setFormErrors((prevErrors) => ({
-          ...prevErrors,
-          [field]: "",
-        }));
-      })
-      .catch((error: yup.ValidationError) => {
-        setFormErrors((prevErrors) => ({
-          ...prevErrors,
-          [field]: error.message,
-        }));
-      });
-  };
 
   const handleCandidateChange = (event: SelectChangeEvent<number>) => {
-    const newCandidate =
-      event.target.value === "" ? null : Number(event.target.value);
-    setSelectedCandidate(+event.target.value);
-    validateField("candidate", newCandidate);
+    const newCandidate = event.target.value === "" ? null : Number(event.target.value);
+    setSelectedCandidate(newCandidate);
+    validateField('candidate', newCandidate);
+  };
+
+  const handleObservationsChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newObservations = event.target.value;
+    setObservations(newObservations);
+    validateField('observations', newObservations);
   };
 
   const handleClose = (
     event: React.MouseEvent<HTMLElement> | React.KeyboardEvent<HTMLElement>,
     reason?: "backdropClick" | "escapeKeyDown"
   ) => {
+    handleReset();
+    if (reason !== "backdropClick" && reason !== "escapeKeyDown") {
+      onClose();
+    }
+  };
+
+  const handleReset = () => {
     setSelectedTest("");
-    setSelectedPosition("");
-    setSelectedCandidate("");
+    setSelectedPosition(null);
+    setSelectedCandidate(null);
     setScore(30);
     setObservations("");
     setFormErrors({
@@ -110,9 +124,6 @@ const TechTestModal: React.FC<TechTestModalProps> = ({
       candidate: "",
       observations: "",
     });
-    if (reason !== "backdropClick" && reason !== "escapeKeyDown") {
-      onClose();
-    }
   };
 
   useEffect(() => {
@@ -149,10 +160,26 @@ const TechTestModal: React.FC<TechTestModalProps> = ({
     }
   }, [selectedPosition, session]);
 
-  const sendTechnicalTest = async (technicalTestPayload: any) => {
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+  
+    const technicalTestPayload = {
+      candidate_id: selectedCandidate,
+      name: selectedTest,
+      score: score,
+      observations: observations,
+    };
+    const formData = {
+      position: selectedPosition, 
+      candidate: selectedCandidate,
+      observations: observations 
+    };
+  
     try {
+      await validationSchema.validate(formData, { abortEarly: false });
       const response = await fetch(
-        `${API_URL}/positions/${technicalTestPayload.position}/tests`,
+        `${API_URL}/positions/${selectedPosition}/tests`, 
         {
           method: "POST",
           headers: {
@@ -162,78 +189,31 @@ const TechTestModal: React.FC<TechTestModalProps> = ({
           body: JSON.stringify(technicalTestPayload),
         }
       );
-
+  
       if (response.ok) {
-        enqueueSnackbar("Prueba técnica guardada con éxito.", {
-          variant: "success",
-        });
+        onClose();
+        handleReset();
+        enqueueSnackbar("Prueba técnica guardada con éxito.", { variant: "success" });
       } else {
-        enqueueSnackbar(
-          `Error al enviar prueba técnica: ${response.statusText}`,
-          { variant: "error" }
-        );
+        enqueueSnackbar(`Error al enviar prueba técnica: ${response.statusText}`, { variant: "error" });
       }
     } catch (error) {
-      enqueueSnackbar("Error al enviar prueba técnica.", { variant: "error" });
-      console.error("Error al enviar la prueba técnica:", error);
-    }
-  };
-
-  const handleReset = () => {
-    setSelectedTest("");
-    setSelectedPosition("");
-    setSelectedCandidate("");
-    setScore(30);
-    setObservations("");
-    setFormErrors({
-      position: "",
-      candidate: "",
-      observations: "",
-    });
-  };
-
-  const handleSubmit = async (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault();
-
-    const technicalTestPayload = {
-      position: selectedPosition,
-      candidate_id: selectedCandidate,
-      name: selectedTest,
-      score: score,
-      observations: observations,
-    };
-
-    try {
-      await validationSchema.validate(technicalTestPayload, {
-        abortEarly: false,
-      });
-      await sendTechnicalTest(technicalTestPayload);
-      handleReset();
-      onClose();
-    } catch (err) {
-      if (err instanceof yup.ValidationError) {
-        const newErrors = err.inner.reduce(
-          (acc, currentError) => {
-            const errorPath = currentError.path || "unknown";
-            if (
-              errorPath === "position" ||
-              errorPath === "candidate" ||
-              errorPath === "observations"
-            ) {
-              acc[errorPath] = currentError.message;
-            }
-            return acc;
-          },
-          {
-            position: "",
-            candidate: "",
-            observations: "",
+      if (error instanceof yup.ValidationError) {
+        const newErrors = error.inner.reduce<FormErrors>((acc, currentError) => {
+          if (currentError.path && ['position', 'candidate', 'observations'].includes(currentError.path)) {
+            acc[currentError.path as keyof FormErrors] = currentError.message;
           }
-        );
+          return acc;
+        }, {});
         setFormErrors(newErrors);
+      } else {
+        enqueueSnackbar("Error al enviar prueba técnica.", { variant: "error" });
+        console.error("Error al enviar la prueba técnica:", error);
       }
     }
   };
+
+
   const style = {
     position: "absolute",
     top: "50%",
@@ -280,9 +260,12 @@ const TechTestModal: React.FC<TechTestModalProps> = ({
           </Typography>
         </Box>
         {/* Contenedor principal */}
+        <form onSubmit={handleSubmit}>
         <Box sx={{ display: "flex", width: "100%" }}>
           {/* Contenedor para los Selects */}
+          
           <Box sx={{ flexGrow: 1, mr: 2 }}>
+          
             <FormControl
               variant="standard"
               sx={{ m: 1, width: "90%" }}
@@ -305,8 +288,9 @@ const TechTestModal: React.FC<TechTestModalProps> = ({
               <Select
                 labelId="position"
                 id="position-select"
-                value={selectedPosition}
+                value={selectedPosition?? ""}
                 onChange={handlePositionChange}
+                error={!!formErrors.position}
               >
                 {project &&
                   project.positions.map((position) => (
@@ -329,8 +313,9 @@ const TechTestModal: React.FC<TechTestModalProps> = ({
                 <Select
                   labelId="name_candidate"
                   id="candidate-select"
-                  value={selectedCandidate}
+                  value={selectedCandidate?? ""}
                   onChange={handleCandidateChange}
+                  error={!!formErrors.candidate}
                 >
                   {candidates.map((candidate: any) => (
                     <MenuItem key={candidate.user_id} value={candidate.user_id}>
@@ -361,10 +346,7 @@ const TechTestModal: React.FC<TechTestModalProps> = ({
             multiline
             maxRows={4}
             value={observations}
-            onChange={(e) => {
-              setObservations(e.target.value);
-              validateField("observations", e.target.value);
-            }}
+            onChange={handleObservationsChange}
             error={!!formErrors.observations}
             helperText={formErrors.observations}
           />
@@ -396,8 +378,8 @@ const TechTestModal: React.FC<TechTestModalProps> = ({
             {lang("cancel")}
           </Button>
           <Button
+            type="submit"
             variant="contained"
-            onClick={handleSubmit}
             sx={{
               flexGrow: 1,
               ml: 1,
@@ -408,6 +390,7 @@ const TechTestModal: React.FC<TechTestModalProps> = ({
             {lang("save")}
           </Button>
         </Box>
+        </form>
       </Box>
     </Modal>
   );

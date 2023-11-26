@@ -139,7 +139,7 @@ export default function Home() {
             </Stack>
           </Grid>
         )}
-        {user && [1, 2].includes(user?.role_id) && (
+        {user && [2].includes(user?.role_id) && (
           <>
             <Grid item xs={12} sm={6}>
               <Stack direction="column" spacing={2}>

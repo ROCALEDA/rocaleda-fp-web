@@ -42,13 +42,13 @@ export default function CreateProject() {
     { name: lang("title"), path: "/projects" },
     { name: lang("create"), path: "/projects/create" },
   ];
-
+  //console.log("profiles", profiles);
   return (
     <Box>
       <Navbar />
       <DetailLayout>
         <Container>
-          <Grid container paddingY={5} spacing={4}>
+          <Grid container paddingY={5}>
             <Grid item xs={12} md={7}>
               <CustomBreadcrumbs routes={routes}></CustomBreadcrumbs>
               <Paper
