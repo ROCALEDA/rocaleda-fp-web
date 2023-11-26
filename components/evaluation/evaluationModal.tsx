@@ -19,23 +19,12 @@ import API_URL from "@/api/config";
 import { PositionComplete, FormErrors, TSimpleProject } from "@/types/types";
 import * as yup from "yup";
 import { enqueueSnackbar } from "notistack";
+import { useTranslations } from "next-intl";
 
 interface EvalModalModalProps {
   open: boolean;
   onClose: () => void;
 }
-
-const validationSchema = yup.object({
-  project_id: yup.number().nullable().required("El proyecto es obligatorio"),
-  name: yup.string().required("El perfil es obligatorio"),
-  candidate_id: yup.number().nullable().required("El candidato es obligatorio"),
-  score: yup.number().min(0).max(100).required("La puntuación es obligatoria"),
-  observations: yup
-    .string()
-    .trim()
-    .min(1, "Las observaciones no pueden estar vacías")
-    .required("Observación del desempeño del colaborador."),
-});
 
 const EvalModal: React.FC<EvalModalModalProps> = ({ open, onClose }) => {
   const { data: session } = useSession();
@@ -55,6 +44,19 @@ const EvalModal: React.FC<EvalModalModalProps> = ({ open, onClose }) => {
     candidate_id: "",
     score: "",
     observations: "",
+  });
+  const lang = useTranslations("EvalTest");
+
+  const validationSchema = yup.object({
+    project_id: yup.number().nullable().required(lang("project_required")),
+    name: yup.string().required(lang("profile_required")),
+    candidate_id: yup.number().nullable().required(lang("candidate_required")),
+    score: yup.number().min(0).max(100).required("La puntuación es obligatoria"),
+    observations: yup
+      .string()
+      .trim()
+      .min(1, lang("observation_required"))
+      .required(lang("observation_required")),
   });
 
   const resetModal = () => {
@@ -245,7 +247,7 @@ const EvalModal: React.FC<EvalModalModalProps> = ({ open, onClose }) => {
       });
 
       if (response.ok) {
-        enqueueSnackbar("Evaluación enviada con éxito", { variant: "success" });
+        enqueueSnackbar(lang("success_save"), { variant: "success" });
         resetModal();
         onClose();
       } else {
@@ -272,7 +274,7 @@ const EvalModal: React.FC<EvalModalModalProps> = ({ open, onClose }) => {
           }
         );
         setErrors(newErrors);
-        enqueueSnackbar("Error en la validación del formulario", {
+        enqueueSnackbar(lang("error_save"), {
           variant: "error",
         });
       }
@@ -295,8 +297,7 @@ const EvalModal: React.FC<EvalModalModalProps> = ({ open, onClose }) => {
               component="h2"
               sx={{ width: "100%", textAlign: "center" }}
               fontFamily={philosopher.style.fontFamily}
-            >
-              Evaluar desempeño
+            > {lang("title")}
             </Typography>
           </Box>
           {/* Contenedor principal */}
@@ -308,7 +309,7 @@ const EvalModal: React.FC<EvalModalModalProps> = ({ open, onClose }) => {
                 sx={{ m: 1, minWidth: "240px", width: "100%", pb: 6 }}
                 size="small"
               >
-                <InputLabel id="proyectos_customer">Proyecto</InputLabel>
+                <InputLabel id="proyectos_customer">{lang("name")}</InputLabel>
                 {/* {isLoading ? (<Skeleton variant="rectangular" height={40} />) : ( */}
                 <Select
                   labelId="proyectos_customer"
@@ -330,7 +331,7 @@ const EvalModal: React.FC<EvalModalModalProps> = ({ open, onClose }) => {
                 sx={{ m: 1, minWidth: 240, width: "100%" }}
                 size="small"
               >
-                <InputLabel id="perfil_candidate">Colaborador</InputLabel>
+                <InputLabel id="perfil_candidate">{lang("role")}</InputLabel>
                 {isLoading ? (
                   <Skeleton variant="rectangular" height={40} />
                 ) : (
@@ -371,7 +372,7 @@ const EvalModal: React.FC<EvalModalModalProps> = ({ open, onClose }) => {
           <FormControl fullWidth sx={{ m: 1, mt: 1, mb: 4 }}>
             <TextField
               id="standard-basic"
-              label="Descripción de calificación"
+              label={lang("description")}
               variant="standard"
               onChange={(e) => setObservations(e.target.value)}
               multiline
@@ -407,8 +408,7 @@ const EvalModal: React.FC<EvalModalModalProps> = ({ open, onClose }) => {
               //onClick={() => onClose()}
               onClick={handleCancel}
               sx={{ width: "48%", mr: "4%" }}
-            >
-              CANCELAR
+            >{lang("cancel")}
             </Button>
             <Button
               type="submit"
@@ -419,7 +419,7 @@ const EvalModal: React.FC<EvalModalModalProps> = ({ open, onClose }) => {
                 "&:hover": { backgroundColor: "#864D8F" },
               }}
             >
-              CALIFICAR CANDIDATO
+              {lang("save")}
             </Button>
           </Box>
         </form>
