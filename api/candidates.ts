@@ -23,3 +23,24 @@ export const getPositionCandidates = async ({
     },
   });
 };
+
+export const assignCandidateToPosition = async ({
+  token,
+  candidateId,
+  positionId,
+}: {
+  token: string;
+  candidateId: string;
+  positionId: number;
+}) => {
+  return await fetch(
+    `${API_URL}/positions/${positionId}/candidates/${candidateId}`,
+    {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      method: "POST",
+    }
+  );
+};
