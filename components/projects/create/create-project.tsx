@@ -42,7 +42,7 @@ export default function CreateProject() {
     { name: lang("title"), path: "/projects" },
     { name: lang("create"), path: "/projects/create" },
   ];
-
+  //console.log("profiles", profiles);
   return (
     <Box>
       <Navbar />

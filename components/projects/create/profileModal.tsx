@@ -184,12 +184,12 @@ const ProfileModal: React.FC<ProfileModalProps> = ({
           gutterBottom
           sx={{ fontFamily: "Philosopher" }}
         >
-          {lang("create_profile")}
+          {existingProfile ? lang("edit_profile")  : lang("create_profile") }
         </Typography>
 
         <TextField
           data-cy="profileName"
-          label="Nombre del perfil"
+          label={lang("name_profile")}
           fullWidth
           value={profileName}
           onChange={(e) => setProfileName(e.target.value)}
@@ -199,7 +199,7 @@ const ProfileModal: React.FC<ProfileModalProps> = ({
           helperText={errors.profileName}
         />
         <InputLabel id="tech-skills-label" style={{ marginTop: "40px" }}>
-          Habilidades técnicas
+          {lang("tech_skills")}
         </InputLabel>
         <Select
           data-cy="tech-skills-select"
@@ -238,7 +238,7 @@ const ProfileModal: React.FC<ProfileModalProps> = ({
           ))}
         </Select>
         <InputLabel id="soft-skills-label" style={{ marginTop: "40px" }}>
-          Habilidades blandas
+          {lang("soft_skills")}
         </InputLabel>
         <Select
           data-cy="soft-skills-select"
@@ -276,7 +276,7 @@ const ProfileModal: React.FC<ProfileModalProps> = ({
         </Select>
 
         <TextField
-          label="Número de perfiles"
+          label={lang("number_profiles")}
           fullWidth
           margin="normal"
           variant="standard"
@@ -296,7 +296,7 @@ const ProfileModal: React.FC<ProfileModalProps> = ({
               onClose();
             }}
           >
-            CANCELAR
+            {lang("cancel")}
           </Button>
           <Button
             data-cy="modal-profile"
@@ -310,7 +310,7 @@ const ProfileModal: React.FC<ProfileModalProps> = ({
               },
             }}
           >
-            {existingProfile ? "GUARDAR" : "AÑADIR"}
+            {existingProfile ? lang("save")  : lang("add") }
           </Button>
         </Box>
       </Box>

@@ -113,7 +113,15 @@
     }
   },
   "Profile": {
-    "create_profile": "Crear perfil"
+    "create_profile": "Crear perfil",
+    "edit_profile": "Editar perfil",
+    "name_profile":"Nombre del perfil",
+    "tech_skills": "Habilidades técnicas",
+    "soft_skills": "Habilidades blandas",
+    "number_profiles": "Número de perfiles",
+    "cancel": "Cancelar",
+    "add": "Añadir",
+    "save": "Guardar"
   },
   "TechTest": {
     "title": "Registrar prueba técnica",

@@ -35,7 +35,18 @@ export default function FormRegisterProyect(props: FormRegisterProyectProps) {
   const lang = useTranslations("Projects");
 
   const { data: session } = useSession();
+  const [profiles, setProfiles] = useState<Array<any>>([]);
+  // Modal de perfiles
+  const [openProfileModal, setOpenProfileModal] = useState(false);
+  const [profileToEdit, setProfileToEdit] = useState<ProfileData | null>(null);
 
+  // Modal de funcionarios
+  const [employees, setEmployees] = useState<
+    Array<{ name: string; role: string }>
+  >([]);
+  const [employeeToEdit, setEmployeeToEdit] = useState<
+    { name: string; role: string } | undefined
+  >();
   const resetForm = () => {
     formik.resetForm();
     setProfiles([]);
@@ -115,7 +126,7 @@ export default function FormRegisterProyect(props: FormRegisterProyectProps) {
   });
 
   // Manejo de perfiles
-  const [profiles, setProfiles] = useState<Array<any>>([]);
+  
   const handleDeleteProfile = (profileName: string) => {
     setProfiles((prevProfiles) => {
       const newProfiles = prevProfiles.filter(
@@ -146,28 +157,20 @@ export default function FormRegisterProyect(props: FormRegisterProyectProps) {
       if (index !== -1) {
         newProfiles[index] = updatedProfile;
       }
+      props.setProfiles(newProfiles);
       return newProfiles;
     });
     setProfileToEdit(null);
     setOpenProfileModal(false);
   };
+  //console.log("profiles", profiles)
 
   const handleCloseProfileModal = () => {
     setOpenProfileModal(false);
     setProfileToEdit(null);
   };
 
-  // Modal de perfiles
-  const [openProfileModal, setOpenProfileModal] = useState(false);
-  const [profileToEdit, setProfileToEdit] = useState<ProfileData | null>(null);
-
-  // Modal de funcionarios
-  const [employees, setEmployees] = useState<
-    Array<{ name: string; role: string }>
-  >([]);
-  const [employeeToEdit, setEmployeeToEdit] = useState<
-    { name: string; role: string } | undefined
-  >();
+  
 
   const handleAddEmployee = (employee: { name: string; role: string }) => {
     setEmployees((prev) => {
@@ -208,6 +211,8 @@ export default function FormRegisterProyect(props: FormRegisterProyectProps) {
     setEmployeeToEdit(employee);
     setOpenFunctionaryModal(true);
   };
+
+
 
   const router = useRouter();
 
