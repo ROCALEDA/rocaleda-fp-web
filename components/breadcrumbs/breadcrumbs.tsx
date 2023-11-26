@@ -20,7 +20,14 @@ export default function CustomBreadcrumbs({
   marginTop,
 }: BreadcrumbsProps) {
   return (
-    <div role="presentation" style={{ paddingLeft: paddingLeft, marginTop: marginTop, position: 'absolute'}}>
+    <div
+      role="presentation"
+      style={{
+        paddingLeft: paddingLeft,
+        marginTop: marginTop,
+        position: "absolute",
+      }}
+    >
       <Breadcrumbs
         separator={<NavigateNextIcon fontSize="small" />}
         aria-label="breadcrumb"
