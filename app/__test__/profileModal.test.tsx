@@ -4,14 +4,26 @@ import ProfileModal from "@/components/projects/create/profileModal";
 import userEvent from "@testing-library/user-event";
 
 jest.mock("next-intl", () => ({
-  useLocale: () => "es",
-  useTranslations: () => (key: any) => key,
+  useTranslations: () => (key) => {
+    const translations: { [key: string]: string } = {
+      "create_profile": "Crear perfil",
+      "edit_profile": "Editar perfil",
+      "name_profile":"Nombre del perfil",
+      "tech_skills": "Habilidades técnicas",
+      "soft_skills": "Habilidades blandas",
+      "number_profiles": "Número de perfiles",
+      "cancel": "Cancelar",
+      "add": "AÑADIR",
+      "save": "Guardar"
+    };
+    return translations[key];
+  },
 }));
 
 describe("<ProfileModal />", () => {
   it("renders without crashing", async () => {
     render(<ProfileModal open={true} onClose={() => {}} onAdd={() => {}} />);
-    const element = await screen.findByText("create_profile");
+    const element = await screen.findByText("Crear perfil");
     expect(element).toBeInTheDocument();
   });
   it("shows an error when profile name is empty", async () => {

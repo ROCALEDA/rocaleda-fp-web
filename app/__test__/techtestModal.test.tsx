@@ -4,7 +4,7 @@ import { SessionProvider } from "next-auth/react";
 
 jest.mock("next-intl", () => ({
   useTranslations: () => (key) => {
-    const translations = {
+    const translations: { [key: string]: string } = {
     "title": "Registrar prueba técnica",
     "name": "Nombre prueba técnica",
     "position": "Posición",

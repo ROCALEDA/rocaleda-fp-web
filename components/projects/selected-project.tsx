@@ -157,6 +157,12 @@ export default function SelectedProject({ project }: SelectedProjectProps) {
     [session]
   );
 
+  useEffect(() => {
+    if (submitTrigger && submitTrigger.candidateId && submitTrigger.positionId) {
+      submitSelectedCandidate(submitTrigger.positionId, submitTrigger.candidateId);
+    }
+  }, [submitTrigger, submitSelectedCandidate]);
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const handleOpenModal = () => {
     setIsModalOpen(true);

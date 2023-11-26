@@ -30,7 +30,7 @@ export default function ProjectList() {
   return (
     <Container>
       <CustomBreadcrumbs routes={routes} marginTop="40px"></CustomBreadcrumbs>
-      <Grid container paddingY={5} spacing={4}>
+      <Grid container paddingY={5}>
         <Grid item xs={12} md={7}>
           <Paper
             elevation={0}

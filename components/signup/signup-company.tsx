@@ -15,6 +15,7 @@ import { enqueueSnackbar } from "notistack";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { registerCompany } from "@/api/auth";
+import { philosopher } from "@/app/[locale]/theme/fonts";
 
 const validationSchema = Yup.object().shape({
   company: Yup.string()
@@ -189,7 +190,7 @@ export default function SignUpCompany() {
           <Typography
             variant="h3"
             gutterBottom
-            style={{ fontFamily: "Philosopher, sans-serif" }}
+            fontFamily={philosopher.style.fontFamily}
           >
             Regístrate como <br />
             <strong>empresa:</strong>

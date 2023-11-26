@@ -16,6 +16,7 @@ import { enqueueSnackbar } from "notistack";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { registerCandidate } from "@/api/auth";
+import { philosopher } from "@/app/[locale]/theme/fonts";
 
 const validationSchema = Yup.object().shape({
   nombre: Yup.string()
@@ -263,6 +264,7 @@ export default function SignUpCandidate() {
                       />
 
                       <Button
+                        data-cy="candidate-register"
                         type="submit"
                         variant="contained"
                         sx={{
@@ -290,7 +292,7 @@ export default function SignUpCandidate() {
           <Typography
             variant="h3"
             gutterBottom
-            style={{ fontFamily: "Philosopher, sans-serif" }}
+            fontFamily={philosopher.style.fontFamily}
           >
             Regístrate como <br />
             <strong>candidato</strong> y obtén:
