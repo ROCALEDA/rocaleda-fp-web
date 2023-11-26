@@ -226,7 +226,7 @@ export default function Home() {
         )}
         {user && [2].includes(user?.role_id) && (
           <Grid item xs={12} sm={6}>
-            <Box>
+            <Stack direction="column" spacing={2}>
               <Typography
                 variant="h3"
                 gutterBottom
@@ -246,7 +246,7 @@ export default function Home() {
                 label={lang("quickLinks.action")}
               />
               <EvalModal open={isModalOpen} onClose={handleCloseModal} />
-            </Box>
+            </Stack>
           </Grid>
         )}
       </Grid>
