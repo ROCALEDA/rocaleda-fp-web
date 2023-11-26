@@ -126,5 +126,18 @@
     "position_required": "Por favor debe seleccionar una posición.",
     "candidate_required": "Por favor debe seleccionar un candidato.",
     "observation_required": "Las observaciones no pueden estar vacías"
+  },
+  "EvalTest":{
+    "title": "Evaluar desempeño",
+    "name": "Proyecto",
+    "role": "Colaborador",
+    "description": "Descripción de calificación",
+    "cancel": "CANCELAR",
+    "save": "CALIFICAR COLABORADOR",
+    "project_required": "Por favor debe seleccionar un proyecto.",
+    "profile_required": "Por favor debe seleccionar un colaborador.",
+    "observation_required": "Las observaciones no pueden estar vacías",
+    "success_save": "Evaluación enviada con éxito",
+    "error_save": "Error al enviar la evaluación"
   }
 }

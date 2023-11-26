@@ -126,5 +126,18 @@
     "position_required": "Please select a position.",
     "candidate_required": "Please select a candidate.",
     "observation_required": "Observations cannot be empty"
+  },
+  "EvalTest":{
+    "title": "Evaluate performance",
+    "name": "Project",
+    "role": "Collaborator",
+    "description": "Rating Description",
+    "cancel": "Cancel",
+    "save": "Save",
+    "project_required": "Please select a project.",
+    "profile_required": "Please select a collaborator.",
+    "observation_required": "Observations cannot be empty",
+    "success_save": "Evaluation submitted successfully",
+    "error_save": "Error submitting evaluation"
   }
 }
