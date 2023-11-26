@@ -1,18 +1,20 @@
 "use client";
 
-import { Box, Stack, Container, Typography } from "@mui/material";
+import { Box, Stack, Container, Typography, Grid } from "@mui/material";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { enqueueSnackbar } from "notistack";
 
 import Navbar from "../navbar/navbar";
-import { philosopher } from "@/app/theme/fonts";
+import { philosopher } from "@/app/[locale]/theme/fonts";
 import BasicSelect from "../select-hard/select";
 import CandidatesTable from "./candidates-table";
 import { soft_skills, tech_skills } from "@/utils/skills";
 import { useCallback, useEffect, useState } from "react";
 import CustomBreadcrumbs from "../breadcrumbs/breadcrumbs";
+import { useTranslations } from "next-intl";
+import DetailLayout from "../layout/detail-layout";
 
 export default function Candidates() {
   const [techSkills, setTechSkills] = useState<string[]>([]);
@@ -21,11 +23,13 @@ export default function Candidates() {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams()!;
+  const lang = useTranslations("Candidates");
 
   const createQueryString = useCallback(() => {
     const params = new URLSearchParams(searchParams);
     const techSkillsParam = techSkills.join(",");
     const softSkillsParam = softSkills.join(",");
+
     if (softSkills.length > 0) {
       params.set("soft_skills", softSkillsParam);
     } else {
@@ -58,9 +62,7 @@ export default function Candidates() {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      console.log("Valores enviados:", values);
       try {
-        console.log("filtrar candidatos", values);
       } catch (error: any) {
         enqueueSnackbar(error.message, { variant: "error" });
       }
@@ -73,47 +75,57 @@ export default function Candidates() {
 
   const routes = [
     { name: "Home", path: "/home" },
-    { name: "Candidatos", path: "/candidates" },
+    { name: lang("title"), path: "/candidates" },
   ];
 
   return (
     <Box>
       <Navbar />
-      <Container maxWidth="lg">
-        <Stack direction="column" spacing={4} paddingTop={4}>
-          <CustomBreadcrumbs routes={routes}></CustomBreadcrumbs>
-          <Typography
-            variant="h3"
-            gutterBottom
-            fontFamily={philosopher.style.fontFamily}
-          >
-            Candidatos
-          </Typography>
-          <Typography variant="h6" gutterBottom color="secondary.main">
-            Aquí puedes elegir a los candidatos que se ajustan a los perfiles
-            que estás buscando
-          </Typography>
-          <Stack direction="row">
-            <BasicSelect
-              text="Habilidades Técnicas"
-              options={tech_skills}
-              selectedOptions={formik.values.techSkills}
-              onSelectionChange={(selected) => {
-                setTechSkills(selected);
-              }}
-            />
-            <BasicSelect
-              text="Habilidades Blandas"
-              options={soft_skills}
-              selectedOptions={formik.values.softSkills}
-              onSelectionChange={(selected) => {
-                setSoftSkills(selected);
-              }}
-            />
-          </Stack>
-          <CandidatesTable />
-        </Stack>
-      </Container>
+      <DetailLayout>
+        <Container maxWidth="lg">
+          <Grid container spacing={4}>
+            <Grid item xs={12} md={7}>
+              <Stack direction="column" spacing={4} paddingTop={4}>
+                <CustomBreadcrumbs routes={routes}></CustomBreadcrumbs>
+                <Typography
+                  variant="h3"
+                  gutterBottom
+                  fontFamily={philosopher.style.fontFamily}
+                >
+                  {lang("title")}
+                </Typography>
+                <Typography
+                  variant="subtitle1"
+                  gutterBottom
+                  color="secondary.main"
+                >
+                  {lang("description")}
+                </Typography>
+                <Stack direction="row">
+                  <BasicSelect
+                    text={lang("tech_skills")}
+                    options={tech_skills}
+                    selectedOptions={formik.values.techSkills}
+                    onSelectionChange={(selected) => {
+                      setTechSkills(selected);
+                    }}
+                  />
+                  <BasicSelect
+                    text={lang("soft_skills")}
+                    options={soft_skills}
+                    selectedOptions={formik.values.softSkills}
+                    onSelectionChange={(selected) => {
+                      setSoftSkills(selected);
+                    }}
+                  />
+                </Stack>
+                <CandidatesTable />
+              </Stack>
+            </Grid>
+            <Grid item xs={12} md={5}></Grid>
+          </Grid>
+        </Container>
+      </DetailLayout>
     </Box>
   );
 }

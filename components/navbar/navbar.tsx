@@ -19,13 +19,16 @@ import { signOut, useSession } from "next-auth/react";
 import MenuIcon from "@mui/icons-material/Menu";
 import LanguageSelector from "../language-selector.tsx/language-selector";
 import { LogoutOutlined } from "@mui/icons-material";
+import { useTranslations } from "next-intl";
 
 export default function Navbar() {
   const { data: session } = useSession();
+  const lang = useTranslations("Home");
+
   const pages = [
-    { roles: [1, 2], name: "Proyectos", link: "/projects" },
-    { roles: [1, 2], name: "Candidatos", link: "/candidates" },
-    { roles: [3], name: "Entrevistas", link: "/interviews" },
+    { roles: [1, 2], name: lang("projects.title"), link: "/projects" },
+    { roles: [1, 2], name: lang("candidates.title"), link: "/candidates" },
+    { roles: [3], name: lang("interviews.title"), link: "/interviews" },
   ];
 
   const user = session?.user;
@@ -60,18 +63,20 @@ export default function Navbar() {
     <AppBar
       position="static"
       color="transparent"
-      sx={{ backgroundColor: "white" }}
+      sx={{ backgroundColor: "white", boxShadow: 0 }}
     >
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Box sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}>
-            <Image
-              src={roleLogo}
-              alt="Quire logo desktop"
-              width={250}
-              height={70}
-              style={{ objectFit: "contain" }}
-            />
+            <Link href="/home">
+              <Image
+                src={roleLogo}
+                alt="Quire logo desktop"
+                width={250}
+                height={70}
+                style={{ objectFit: "contain" }}
+              />
+            </Link>
           </Box>
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
@@ -149,6 +154,7 @@ export default function Navbar() {
             <Button
               variant="text"
               color="primary"
+              aria-label={lang("logout")}
               startIcon={<LogoutOutlined />}
               onClick={handleLogout}
             />

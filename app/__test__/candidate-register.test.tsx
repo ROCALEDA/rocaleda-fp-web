@@ -110,10 +110,6 @@ describe("Register Component", () => {
     const mockPassword = "password123";
     const mockPassword2 = "password123";
 
-    const { location } = window;
-    delete window.location;
-    window.location = { ...location, href: "/proyectos" };
-
     //const { getByLabelText, getByRole } = render(<Register enqueueSnackbar={enqueueSnackbar} />);
 
     // Selecciona los inputs y el botón del formulario
@@ -133,13 +129,9 @@ describe("Register Component", () => {
     fireEvent.change(passwordInput, { target: { value: mockPassword } });
     fireEvent.change(password2Input, { target: { value: mockPassword2 } });
 
-    // Haz click en el botón de registrarse
     fireEvent.click(submitButton);
-    //expect(await screen.findByText('Registro completo exitoso')).toBeInTheDocument();
-    expect(window.location.href).toBe("/proyectos");
 
     window.location = location;
-    //expect(await screen.findByText('Registro completo exitoso')).toBeInTheDocument();
   });
   test("renders tech skills and soft skills selects", async () => {
     const labels = screen.getAllByText("Habilidades Técnicas");

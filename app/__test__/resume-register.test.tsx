@@ -1,17 +1,23 @@
-import React from 'react';
-import { render } from '@testing-library/react';
-import ResumeRegisterProyect from '@/components/project-register/resume-register';
+import React from "react";
+import { render } from "@testing-library/react";
+import ResumeRegisterProyect from "@/components/projects/create/resume-register";
 
-describe('<ResumeRegisterProyect />', () => {
-  it('renders without crashing', () => {
+jest.mock("next-intl", () => ({
+  useLocale: () => "es",
+  useTranslations: () => (key: any) => key,
+}));
+
+describe("<ResumeRegisterProyect />", () => {
+  it("renders without crashing", () => {
     expect(() => {
-        render(<ResumeRegisterProyect
-            proyectName="My Project"
-            proyectDescription="This is a description of my project"
-            profiles={[]}
-            employees={[]}
-        />);
+      render(
+        <ResumeRegisterProyect
+          proyectName="My Project"
+          proyectDescription="This is a description of my project"
+          profiles={[]}
+          employees={[]}
+        />
+      );
     }).not.toThrow();
   });
 });
-

@@ -91,7 +91,6 @@ export default function SignUpCandidate() {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      console.log("Valores enviados:", values);
       try {
         const response = await registerCandidate(
           values.email,

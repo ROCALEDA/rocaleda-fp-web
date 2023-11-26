@@ -1,44 +1,42 @@
-import React from 'react';
-import { render, screen } from '@testing-library/react';
-import ListProject from '@/components/projects/list-project';
-import { SessionProvider } from 'next-auth/react';
+import React from "react";
+import { SessionProvider } from "next-auth/react";
+import ProjectList from "@/components/projects/project-list";
+import { act, render, waitFor } from "@/utils/test-utils";
 
-describe('<ListProject />', () => {
+jest.mock("next-intl", () => ({
+  useLocale: () => "es",
+  useTranslations: () => (key: any) => key,
+}));
+
+describe("<ListProject />", () => {
   beforeEach(() => {
-      global.fetch = jest.fn(() =>
-          Promise.resolve({
-              json: () => Promise.resolve([{ 
-                  id: 1,
-                  name: "Proyecto de prueba",
-                  is_team_complete: false,
-                  total_positions: 5,
-                  positions: []
-              }])
-          })
-      );
+    global.fetch = jest.fn(() =>
+      Promise.resolve({
+        json: () =>
+          Promise.resolve([
+            {
+              id: 1,
+              name: "Proyecto de prueba",
+              is_team_complete: false,
+              total_positions: 5,
+              positions: [],
+            },
+          ]),
+      })
+    );
   });
 
   afterEach(() => {
-      jest.clearAllMocks();
+    jest.clearAllMocks();
   });
 
-  it('renders the component correctly', () => {
-    const mockSession = {
-      user: {
-        name: "Test User",
-        email: "test@example.com",
-        role_id: 2
-      }
-    };
+  it("renders the component correctly", async () => {
+    let screen;
 
-    render(
-      <SessionProvider session={mockSession}>
-        <ListProject />
-      </SessionProvider>
-    );
-
-    expect(screen.getByText("Proyectos")).toBeInTheDocument();
-    expect(screen.getByText("Gestiona tus proyectos y tu equipo")).toBeInTheDocument();
-    expect(screen.getByText("CREAR")).toBeInTheDocument();
+    await act(async () => {
+      screen = render(<ProjectList />, { userRole: 2, locale: "en" });
+    });
+    const h3Element = screen?.getByRole("heading", { name: "title" });
+    expect(h3Element.tagName).toBe("H4");
   });
 });

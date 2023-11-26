@@ -11,6 +11,7 @@ import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableHead from "@mui/material/TableHead";
 import TableContainer from "@mui/material/TableContainer";
+import { useTranslations } from "next-intl";
 
 type TCandidate = {
   fullname: string;
@@ -24,6 +25,7 @@ export default function CandidatesTable() {
 
   const searchSoftSkills = searchParams.get("soft_skills");
   const searchTechSkills = searchParams.get("tech_skills");
+  const lang = useTranslations("Candidates");
 
   const { data: session } = useSession();
   const [candidates, setCandidates] = useState<TCandidate[]>();
@@ -87,13 +89,13 @@ export default function CandidatesTable() {
   return (
     <Paper sx={{ width: "100%", overflow: "hidden" }}>
       <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+        <Table sx={{ minWidth: 650 }} aria-label="simple table" size="small">
           <TableHead>
             <TableRow>
               <TableCell align="left">ID</TableCell>
-              <TableCell align="left">Habilidades tecnicas</TableCell>
-              <TableCell align="left">Habilidades blandas</TableCell>
-              <TableCell align="left">Idiomas</TableCell>
+              <TableCell align="left">{lang("tech_skills")}</TableCell>
+              <TableCell align="left">{lang("soft_skills")}</TableCell>
+              <TableCell align="left">{lang("languages")}</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -110,6 +112,7 @@ export default function CandidatesTable() {
                       key={techSkill.id}
                       label={techSkill.name}
                       sx={{ backgroundColor: "#FAE8FF" }}
+                      size="small"
                     ></Chip>
                   ))}
                 </TableCell>
@@ -119,10 +122,11 @@ export default function CandidatesTable() {
                       key={softSkill.id}
                       label={softSkill.name}
                       sx={{ backgroundColor: "#FEF7E7" }}
+                      size="small"
                     ></Chip>
                   ))}
                 </TableCell>
-                <TableCell align="left">Español</TableCell>
+                <TableCell align="left">{lang("spanish")}</TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -134,6 +138,7 @@ export default function CandidatesTable() {
         count={totalPages * rowsPerPage}
         rowsPerPage={rowsPerPage}
         page={currentPage - 1}
+        labelRowsPerPage={lang("rows_page")}
         onPageChange={handleChangePage}
         onRowsPerPageChange={handleChangeRowsPerPage}
       />

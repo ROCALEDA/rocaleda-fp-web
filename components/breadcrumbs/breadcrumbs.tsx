@@ -2,7 +2,6 @@ import * as React from "react";
 import Typography from "@mui/material/Typography";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
 import Link from "next/link";
-import MUILink from "@mui/material/Link";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 
 interface RouteType {
@@ -12,14 +11,23 @@ interface RouteType {
 interface BreadcrumbsProps {
   routes: RouteType[];
   paddingLeft?: string;
+  marginTop?: string;
 }
 
 export default function CustomBreadcrumbs({
   routes,
   paddingLeft,
+  marginTop,
 }: BreadcrumbsProps) {
   return (
-    <div role="presentation" style={{ paddingLeft: paddingLeft }}>
+    <div
+      role="presentation"
+      style={{
+        paddingLeft: paddingLeft,
+        marginTop: marginTop,
+        position: "absolute",
+      }}
+    >
       <Breadcrumbs
         separator={<NavigateNextIcon fontSize="small" />}
         aria-label="breadcrumb"
@@ -33,10 +41,8 @@ export default function CustomBreadcrumbs({
             );
           }
           return (
-            <Link key={index} href={route.path} passHref>
-              <MUILink underline="hover" color="inherit">
-                {route.name}
-              </MUILink>
+            <Link key={index} href={route.path}>
+              {route.name}
             </Link>
           );
         })}

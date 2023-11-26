@@ -1,0 +1,120 @@
+{
+  "General": {
+    "language": "Idioma",
+    "en": "Inglés",
+    "es": "Español",
+    "loading": "Loading...",
+    "logout": "Cerrar sesión"
+  },
+  "Login": {
+    "title": "Iniciar sesión",
+    "subtitle": "Estamos felices por verte nuevamente",
+    "registerMotivation": "¿Aún no tienes una cuenta?",
+    "candidateButton": "Quiero ser candidato",
+    "companyButton": "Soy una empresa",
+    "email": "Correo",
+    "password": "Contraseña",
+    "loading": "Cargando..."
+  },
+  "Home": {
+    "logout": "Cerrar sesión",
+    "candidates": {
+      "title": "Candidatos",
+      "description": "Elige a los mejores candidatos para tus proyectos",
+      "action": "Ver candidatos"
+    },
+    "projects": {
+      "title": "Proyectos",
+      "description": "Gestiona tus proyectos creados, sus posiciones y candidatos asociados",
+      "action": "Ver proyectos"
+    },
+    "interviews": {
+      "title": "Entrevistas",
+      "description": "Gestiona tus entrevistas agendadas",
+      "action": "Ver entrevistas"
+    },
+    "quickLinks": {
+      "title": "Enlaces rápidos",
+      "description": "Evalua a los candidatos de tus proyectos",
+      "action": "Evaluar desempeño"
+    }
+  },
+  "Interviews": {
+    "title": "Entrevistas",
+    "description": "Gestiona tus entrevistas agendadas",
+    "date": "Fecha",
+    "company": "Compañía",
+    "result": "Resultado",
+    "no_results": "No hay resultados por mostrar",
+    "schedule": "Agendar",
+    "schedule_interview": "Agendar entrevista",
+    "form": {
+      "name": "Título",
+      "candidate": "Candidato",
+      "position": "Posición",
+      "schedule": "Agendar",
+      "date": "Fecha"
+    }
+  },
+  "Candidates": {
+    "title": "Candidatos",
+    "description": "Aquí puedes elegir a los candidatos que se ajustan a los perfiles que estás buscando",
+    "tech_skills": "Habilidades técnicas",
+    "soft_skills": "Habilidades blandas",
+    "languages": "Idiomas",
+    "rows_page": "Filas por página",
+    "spanish": "Español",
+    "english": "Inglés"
+  },
+  "Projects": {
+    "title": "Proyectos",
+    "description": "Administra tus proyectos",
+    "loading": "Cargando",
+    "create": "Crear",
+    "cancel": "Cancelar",
+    "save": "Guardar",
+    "add": "Añadir",
+    "your_project": "Tu proyecto",
+    "team": "Equipo",
+    "team_complete": "Equipo completo",
+    "team_pending": "Equipo pendiente",
+    "profile": "Profile",
+    "create_detail": "Crea tu proyecto",
+    "no_projects": "No hay proyectos para mostrar",
+    "employee_name": "Nombre del funcionario",
+    "profile_name": "Nombre del perfil",
+    "employee_name_required": "El nombre del funcionario es requerido",
+    "employee_name_chars": "El nombre del funcionario no puede tener más de 100 caracteres",
+    "profile_name_required": "El nombre del perfil es requerido",
+    "profile_name_chars": "El nombre del perfil asociado no puede tener más de 30 caracteres",
+    "form": {
+      "name": "Nombre",
+      "description": "Descripción",
+      "basic": "1. Datos Básicos",
+      "profiles": "2. Perfiles",
+      "no_profile": "Aún no has agregado ningún perfil",
+      "create_profile": "Crear perfil",
+      "employees": "3. Funcionarios",
+      "no_employee": "Aún no has agregado ningún funcionario",
+      "add_employee": "Añadir funcionario",
+      "cancel": "Cancelar",
+      "create_project": "Crear proyecto",
+      "optional": "Opcional"
+    }
+  },
+  "Profile": {
+    "create_profile": "Crear perfil"
+  },
+  "TechTest": {
+    "title": "Registrar prueba técnica",
+    "name": "Nombre prueba técnica",
+    "position": "Posición",
+    "role": "Candidato",
+    "description": "Descripción de habilidades técnicas",
+    "cancel": "Cancelar",
+    "save": "Registrar Prueba",
+    "position_required": "Por favor debe seleccionar una posición.",
+    "candidate_required": "Por favor debe seleccionar un candidato.",
+    "observation_required": "Las observaciones no pueden estar vacías"
+  }
+}
