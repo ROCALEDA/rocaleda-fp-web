@@ -10,6 +10,7 @@ interface EmployeesProps {
   onDeleteClick: (employeeName: string) => void;
 }
 
+
 const EmployeeCard: React.FC<EmployeesProps> = ({
   name,
   role,

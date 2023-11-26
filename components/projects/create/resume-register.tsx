@@ -53,7 +53,7 @@ export default function ResumeRegisterProyect({
             <Typography variant="h5" sx={{ mr: 2 }}>
               {proyectName}
             </Typography>
-            <Chip label="Equipo pendiente" size="small" />
+            <Chip label={lang("team_pending")} size="small" />
           </Box>
           {/* Descripción Proyecto creada */}
           <Box
