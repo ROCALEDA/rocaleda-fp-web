@@ -90,11 +90,31 @@ describe("Candidates Table", () => {
       status: 200,
       json: jest.fn(() => ({ data: mockCandidates, total_pages: 7 })),
     });
-    const screen = render(<CandidatesTable />, { userRole: 2, locale: "en" });
+    const screen = render(<Candidates />, { userRole: 2, locale: "en" });
+
+    await act(() => global.fetch);
 
     await waitFor(() => {
       const tdElements = screen.getAllByRole("cell");
-      expect(tdElements).toHaveLength(10);
+      expect(tdElements).toHaveLength(5);
+    });
+  });
+
+  it("It renders correctly the candidate detail", async () => {
+    let fetchMock = jest.fn();
+    global.fetch = fetchMock;
+
+    fetchMock.mockResolvedValue({
+      status: 200,
+      json: jest.fn(() => ({ data: mockCandidates, total_pages: 7 })),
+    });
+    const screen = render(<Candidates />, { userRole: 2, locale: "en" });
+
+    await act(() => global.fetch);
+
+    await waitFor(() => {
+      const tdElements = screen.getAllByRole("cell");
+      expect(tdElements).toHaveLength(5);
     });
   });
 });

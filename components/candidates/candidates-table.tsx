@@ -1,7 +1,7 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
-import { Chip, TablePagination } from "@mui/material";
+import { Button, Chip, TablePagination } from "@mui/material";
 
 import API_URL from "@/api/config";
 import Table from "@mui/material/Table";
@@ -20,7 +20,13 @@ type TCandidate = {
   user_id: string;
 };
 
-export default function CandidatesTable() {
+type TCandidatesTableProps = {
+  selectCandidate: (candidate: TCandidate) => void;
+};
+
+export default function CandidatesTable({
+  selectCandidate,
+}: TCandidatesTableProps) {
   const searchParams = useSearchParams();
 
   const searchSoftSkills = searchParams.get("soft_skills");
@@ -89,25 +95,28 @@ export default function CandidatesTable() {
   return (
     <Paper sx={{ width: "100%", overflow: "hidden" }}>
       <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table" size="small">
+        <Table aria-label="simple table" size="small">
           <TableHead>
             <TableRow>
-              <TableCell align="left">ID</TableCell>
+              <TableCell align="left">{lang("name")}</TableCell>
               <TableCell align="left">{lang("tech_skills")}</TableCell>
               <TableCell align="left">{lang("soft_skills")}</TableCell>
-              <TableCell align="left">{lang("languages")}</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {candidates.map((candidate) => (
               <TableRow
+                onClick={() => selectCandidate(candidate)} // Add onClick here
+                sx={{
+                  "&:last-child td, &:last-child th": { border: 0 },
+                  cursor: "pointer",
+                }}
                 tabIndex={-1}
                 key={candidate.user_id}
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
-                <TableCell align="left">{candidate.user_id}</TableCell>
+                <TableCell align="left">{candidate.fullname}</TableCell>
                 <TableCell component="th" scope="row">
-                  {candidate.tech_skills.map((techSkill) => (
+                  {candidate.tech_skills.slice(0, 2).map((techSkill) => (
                     <Chip
                       key={techSkill.id}
                       label={techSkill.name}
@@ -117,7 +126,7 @@ export default function CandidatesTable() {
                   ))}
                 </TableCell>
                 <TableCell component="th" scope="row">
-                  {candidate.soft_skills.map((softSkill) => (
+                  {candidate.soft_skills.slice(0, 2).map((softSkill) => (
                     <Chip
                       key={softSkill.id}
                       label={softSkill.name}
@@ -126,7 +135,6 @@ export default function CandidatesTable() {
                     ></Chip>
                   ))}
                 </TableCell>
-                <TableCell align="left">{lang("spanish")}</TableCell>
               </TableRow>
             ))}
           </TableBody>

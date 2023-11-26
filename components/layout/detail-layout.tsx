@@ -1,4 +1,4 @@
-import { Box, Container, Grid } from "@mui/material";
+import { Box, Container, Grid, Stack } from "@mui/material";
 import { ReactNode } from "react";
 import Image from "next/image";
 
@@ -8,7 +8,7 @@ interface LayoutProps {
 
 export default function DetailLayout({ children }: LayoutProps) {
   return (
-    <Box sx={{ position: "relative" }}>
+    <Stack sx={{ position: "relative" }}>
       <Container
         maxWidth="lg"
         sx={{
@@ -20,7 +20,7 @@ export default function DetailLayout({ children }: LayoutProps) {
           zIndex: -1,
         }}
       >
-        <Grid container sx={{ height: "100%" }} spacing={4}>
+        <Grid container sx={{ height: "100%" }} spacing={2}>
           <Grid item xs={12} md={7}>
             <Box
               component="img"
@@ -50,6 +50,6 @@ export default function DetailLayout({ children }: LayoutProps) {
         </Grid>
       </Container>
       {children}
-    </Box>
+    </Stack>
   );
 }
