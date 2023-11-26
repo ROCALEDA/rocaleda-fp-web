@@ -43,7 +43,7 @@ describe('Login Client Test', () => {
 
   });
 
-  it.skip('Create Project', () => {
+  it('Create Project', () => {
     cy.visit('/es/projects/create');
     cy.get('input[name="nombre"]').type(nameProject);
     cy.get('[data-cy=description]').type(descriptionProject);
@@ -98,7 +98,8 @@ describe('Register Client Test', () => {
   const userEmail = faker.internet.email();
   const userPassword = 'cristian';
 
-  it.skip('Client/Enterprise Register', () => {
+  it('Client/Enterprise Register', () => {
+    cy.visit('/es/login');
     cy.get('[data-cy=candidate-signup]').click();
 
     cy.get('input[name="company"]').type(faker.company.name());
