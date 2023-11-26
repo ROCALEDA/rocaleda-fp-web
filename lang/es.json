@@ -69,11 +69,11 @@
     "english": "Inglés",
     "assignPosition": "Asignar posición",
     "form": {
-      "assign_candidate": "Assign candidate to position",
-      "position": "Position",
-      "project": "Project",
-      "assign": "Assign",
-      "cancel": "Cancel"
+      "assign_candidate": "Asignar candidato a position",
+      "position": "Posición",
+      "project": "Proyecto",
+      "assign": "Asignar",
+      "cancel": "Cancelar"
     }
   },
   "Projects": {
