@@ -98,7 +98,7 @@ export default function CandidatesTable({
         <Table aria-label="simple table" size="small">
           <TableHead>
             <TableRow>
-              <TableCell align="left">{lang("name")}</TableCell>
+              <TableCell align="left">ID</TableCell>
               <TableCell align="left">{lang("tech_skills")}</TableCell>
               <TableCell align="left">{lang("soft_skills")}</TableCell>
             </TableRow>
@@ -114,7 +114,7 @@ export default function CandidatesTable({
                 tabIndex={-1}
                 key={candidate.user_id}
               >
-                <TableCell align="left">{candidate.fullname}</TableCell>
+                <TableCell align="left">{candidate.user_id}</TableCell>
                 <TableCell component="th" scope="row">
                   {candidate.tech_skills.slice(0, 2).map((techSkill) => (
                     <Chip
