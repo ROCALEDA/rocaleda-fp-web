@@ -26,7 +26,7 @@ export default function Navbar() {
   const lang = useTranslations("Home");
 
   const pages = [
-    { roles: [1, 2], name: lang("projects.title"), link: "/projects" },
+    { roles: [2], name: lang("projects.title"), link: "/projects" },
     { roles: [1, 2], name: lang("candidates.title"), link: "/candidates" },
     { roles: [3], name: lang("interviews.title"), link: "/interviews" },
   ];

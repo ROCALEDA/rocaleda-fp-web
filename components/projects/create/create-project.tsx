@@ -48,7 +48,7 @@ export default function CreateProject() {
       <Navbar />
       <DetailLayout>
         <Container>
-          <Grid container paddingY={5} gap={4}>
+          <Grid container paddingY={5}>
             <Grid item xs={12} md={7}>
               <CustomBreadcrumbs routes={routes}></CustomBreadcrumbs>
               <Paper
