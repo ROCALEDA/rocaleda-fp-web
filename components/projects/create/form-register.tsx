@@ -231,6 +231,7 @@ export default function FormRegisterProyect(props: FormRegisterProyectProps) {
           />
           <TextField
             fullWidth
+            data-cy="description"
             id="description"
             name="description"
             label={lang("form.description")}
@@ -253,7 +254,7 @@ export default function FormRegisterProyect(props: FormRegisterProyectProps) {
           className={styles.tituloConFondo2}
           style={{ marginTop: "20px" }}
         >
-          <span>{lang("form.no_profile")}</span>
+          <span>{lang("form.profiles")}</span>
         </Typography>
         <Box p={3}>
           {profiles.length === 0 ? (
@@ -280,6 +281,7 @@ export default function FormRegisterProyect(props: FormRegisterProyectProps) {
             />
           </div>
           <Button
+            data-cy="add-profile"
             variant="outlined"
             color="primary"
             fullWidth
@@ -320,6 +322,7 @@ export default function FormRegisterProyect(props: FormRegisterProyectProps) {
             </ul>
           )}
           <Button
+            data-cy="add-employee"
             variant="outlined"
             fullWidth
             color="primary"
@@ -348,6 +351,7 @@ export default function FormRegisterProyect(props: FormRegisterProyectProps) {
             {lang("form.cancel")}
           </Button>
           <Button
+            data-cy="register-project"
             type="submit"
             variant="contained"
             sx={{

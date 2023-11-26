@@ -188,6 +188,7 @@ const ProfileModal: React.FC<ProfileModalProps> = ({
         </Typography>
 
         <TextField
+          data-cy="profileName"
           label="Nombre del perfil"
           fullWidth
           value={profileName}
@@ -201,6 +202,7 @@ const ProfileModal: React.FC<ProfileModalProps> = ({
           Habilidades técnicas
         </InputLabel>
         <Select
+          data-cy="tech-skills-select"
           labelId="tech-skills-label"
           label="Habilidades técnicas"
           multiple
@@ -239,6 +241,7 @@ const ProfileModal: React.FC<ProfileModalProps> = ({
           Habilidades blandas
         </InputLabel>
         <Select
+          data-cy="soft-skills-select"
           labelId="soft-skills-label"
           multiple
           fullWidth
@@ -296,6 +299,7 @@ const ProfileModal: React.FC<ProfileModalProps> = ({
             CANCELAR
           </Button>
           <Button
+            data-cy="modal-profile"
             variant="contained"
             onClick={addProfile}
             sx={{
