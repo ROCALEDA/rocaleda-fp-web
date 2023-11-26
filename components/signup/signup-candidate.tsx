@@ -263,6 +263,7 @@ export default function SignUpCandidate() {
                       />
 
                       <Button
+                        data-cy="candidate-register"
                         type="submit"
                         variant="contained"
                         sx={{
