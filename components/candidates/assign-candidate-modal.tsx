@@ -113,14 +113,6 @@ const AssignCandidateModal = ({ projects, candidate }: AsignCandidateProps) => {
           >
             {lang("form.assign_candidate")}
           </Typography>
-          <Typography
-            variant="h6"
-            textAlign="center"
-            gutterBottom
-            fontFamily={philosopher.style.fontFamily}
-          >
-            {candidate.fullname}
-          </Typography>
           <Stack spacing={2} mt={2}>
             <FormControl fullWidth>
               <InputLabel id="project-selector-label">
