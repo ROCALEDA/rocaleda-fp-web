@@ -24,7 +24,8 @@ export default function DetailLayout({ children }: LayoutProps) {
           <Grid item xs={12} md={7}>
             <Box
               component="img"
-              src="/images/balloon.png" // Replace with your image path
+              alt="Ballon background"
+              src="/images/balloon.png"
               sx={{
                 position: "fixed",
                 left: -100,

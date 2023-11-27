@@ -87,6 +87,7 @@ export default function Home() {
     <Container maxWidth="lg">
       <Box
         component="img"
+        alt="Background cloud"
         src="/images/gradient-cloud.png" // Replace with your image path
         sx={{
           position: "fixed",
