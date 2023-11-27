@@ -22,6 +22,8 @@ import { getPositionCandidates } from "@/api/candidates";
 import { TPosition } from "@/types/position";
 import { scheduleInterview } from "@/api/interviews";
 import { enqueueSnackbar } from "notistack";
+import { getProjects } from "@/api/projects";
+import { TSimpleProject } from "@/types/types";
 
 type ScheduleInterviewProps = {
   triggerInterviews: () => void;
@@ -45,14 +47,25 @@ export default function ScheduleInterview({
 
   const [open, setOpen] = useState(false);
   const [candidates, setCandidates] = useState<TCandidate[] | null>(null);
-  const [positions, setPositions] = useState<TPosition[]>([]);
-
+  const [projects, setProjects] = useState<TSimpleProject[]>([]);
+  const [selectedProject, setSelectedProject] = useState<
+    TSimpleProject | undefined
+  >(undefined);
+  const [selectedProjectId, setSelectedProjectId] = useState("");
   const [selectedCandidateId, setSelectedCandidateId] = useState("");
   const [selectedPositionId, setSelectedPositionId] = useState("");
 
   const handleCandidateChange = (event: SelectChangeEvent) => {
     setSelectedCandidateId(event.target.value);
     setFormData({ ...formData, candidate_id: event.target.value });
+  };
+
+  const handleProjectChange = (event: SelectChangeEvent) => {
+    setSelectedProjectId(event.target.value);
+    const foundProject = projects.find(
+      (project) => Number(project.id) === Number(event.target.value)
+    );
+    setSelectedProject(foundProject);
   };
 
   const handlePositionChange = (event: SelectChangeEvent) => {
@@ -112,11 +125,11 @@ export default function ScheduleInterview({
 
   const getInterviewPositions = async () => {
     if (session) {
-      const positionsResponse = await getPositions({
+      const projectsResponse = await getProjects({
         token: session.user?.token,
       });
-      const positionsData = await positionsResponse.json();
-      setPositions(positionsData);
+      const projectsData = await projectsResponse.json();
+      setProjects(projectsData);
     }
   };
 
@@ -162,26 +175,41 @@ export default function ScheduleInterview({
               onChange={handleChange}
             />
             <FormControl fullWidth>
-              <InputLabel id="candidate-selector-label">Posición</InputLabel>
+              <InputLabel id="project-selector-label">Proyecto</InputLabel>
               <Select
                 required
-                labelId="candidate-selector-label"
-                id="candidate-selector"
-                value={selectedPositionId}
-                label={lang("form.position")}
-                onChange={handlePositionChange}
+                labelId="project-selector-label"
+                id="project-selector"
+                value={selectedProjectId}
+                label={lang("form.project")}
+                onChange={handleProjectChange}
               >
-                {positions?.map((position) => (
-                  <MenuItem
-                    key={position.open_position.id}
-                    value={position.open_position.id}
-                  >
-                    {position.open_position.position_name} -{" "}
-                    {position.project.name}
+                {projects?.map((project) => (
+                  <MenuItem key={project.id} value={project.id}>
+                    {project.name}
                   </MenuItem>
                 ))}
               </Select>
             </FormControl>
+            {selectedProject && (
+              <FormControl fullWidth>
+                <InputLabel id="position-selector-label">Posición</InputLabel>
+                <Select
+                  required
+                  labelId="position-selector-label"
+                  id="position-selector"
+                  value={selectedPositionId}
+                  label={lang("form.position")}
+                  onChange={handlePositionChange}
+                >
+                  {selectedProject?.positions?.map((position) => (
+                    <MenuItem key={position.id} value={position.id}>
+                      {position.name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            )}
             {candidates && candidates.length == 0 && (
               <Box>No hay candidatos en esta posición</Box>
             )}

@@ -5,7 +5,7 @@ import { TCandidate } from "@/types/users";
 import { useTranslations } from "next-intl";
 import { philosopher } from "@/app/[locale]/theme/fonts";
 import { TSimpleProject } from "@/types/types";
-import AsignCandidateModal from "./assign-candidate-modal";
+import AssignCandidateModal from "./assign-candidate-modal";
 
 type CandidateCardProps = {
   candidate: TCandidate;
@@ -66,7 +66,7 @@ export default function CandidateDetail({
           ))}
         </Grid>
         <Grid item xs={12} textAlign="center">
-          <AsignCandidateModal projects={projects} candidate={candidate} />
+          <AssignCandidateModal projects={projects} candidate={candidate} />
         </Grid>
       </Grid>
     </Card>

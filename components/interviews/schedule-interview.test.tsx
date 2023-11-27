@@ -1,7 +1,7 @@
 import { act, render } from "@/utils/test-utils";
 import ScheduleInterview from "./schedule-interview";
 import { mockCandidates } from "@/__mocks__/candidates";
-import { mockPositions } from "@/__mocks__/positions";
+import { mockProjects } from "@/__mocks__/projects";
 
 const mockTriggerInterviews = jest.fn();
 
@@ -16,8 +16,8 @@ global.fetch = jest.fn((url) =>
     json: () => {
       if (url.endsWith("/candidate")) {
         return Promise.resolve(mockCandidates);
-      } else if (url.includes("/positions")) {
-        return Promise.resolve(mockPositions);
+      } else if (url.includes("/projects")) {
+        return Promise.resolve(mockProjects);
       } else if (url.endsWith("/another/endpoint")) {
         return Promise.resolve(mockCandidates);
       }
