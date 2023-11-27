@@ -6,7 +6,6 @@ describe("FPM-85 - Selección de candidato a asignar a un equipo", { testIsolati
   const myuuid = faker.string.uuid();
   const projectName = "Test" + myuuid;
   const positionName = "Desarrollador Frontend";
-  const candidateName = "Roberto Parra";
 
   before(() => {
     cy.session([customerEmail, customerPassword], () => {
@@ -49,7 +48,7 @@ describe("FPM-85 - Selección de candidato a asignar a un equipo", { testIsolati
     cy.get('div#position-selector').click();
     cy.get('li').contains(positionName).click();
     cy.get('[data-cy="preasignar-candidato"]').click();
-    cy.contains("Test User asignado a Mi proyectoy");
+    cy.contains("Test User asignado a "+projectName);
   });
 
   it("Seleccionar candidato elegido para la posición", () => {
@@ -61,8 +60,8 @@ describe("FPM-85 - Selección de candidato a asignar a un equipo", { testIsolati
     cy.get('h5').contains(projectName);
     cy.contains("Posiciones abiertas");
     cy.get('p').contains(positionName).click();
-    cy.get('label').contains(candidateName).click({force: true});
+    cy.get('div[role="radiogroup"]').find('label').first().click();
     cy.get('button').contains('Seleccionar').click({force: true});
-    cy.get('label').contains(candidateName).siblings().get('span>span>svg');
+    cy.get('p.MuiTypography-root').find('svg');
   });
 });
