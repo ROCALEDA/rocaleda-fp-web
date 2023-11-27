@@ -166,7 +166,7 @@ const AssignCandidateModal = ({ projects, candidate }: AsignCandidateProps) => {
                   <Button variant="outlined" onClick={() => handleClose()}>
                     {lang("form.cancel")}
                   </Button>
-                  <Button type="submit" variant="contained">
+                  <Button type="submit" variant="contained" data-cy="preasignar-candidato">
                     {lang("form.assign")}
                   </Button>
                 </Stack>

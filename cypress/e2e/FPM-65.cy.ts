@@ -24,9 +24,9 @@ describe("FPM-65 - Formulario de registro de usuario candidato", () => {
     cy.contains("Leadership").click();
     cy.contains("Responsibility").click();
     cy.get('body').click(0,0);
-    /*cy.get('button').contains("Registrarme").click();
+    cy.get('button').contains("Registrarme").click();
     cy.url().should("include", "/es/login");
-    cy.contains('Registro completo exitoso');*/
+    cy.contains('Registro completo exitoso');
   });
 
 });

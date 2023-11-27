@@ -15,9 +15,9 @@ describe("FPM-69 - Formulario de registro de cliente (empresa)", () => {
     cy.get('input[name="phone"]').type(faker.phone.number('###############'));
     cy.get('input[name="password"]').type(userPassword);
     cy.get('input[name="password2"]').type(userPassword);
-    /*cy.get('[data-cy="candidate-register"]').click();
+    cy.get('[data-cy="candidate-register"]').click();
     cy.url().should("include", "/es/login");
-    cy.contains('Registro completo exitoso')*/;
+    cy.contains('Registro completo exitoso');
   });
 
 });
