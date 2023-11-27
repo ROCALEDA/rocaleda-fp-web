@@ -1,15 +1,6 @@
 "use client";
 
-import {
-  Box,
-  Card,
-  Chip,
-  Grid,
-  Stack,
-  Divider,
-  Typography,
-} from "@mui/material";
-import { formatTime, getDay, getMonth } from "@/utils/date";
+import { Card, Chip, Grid, Typography } from "@mui/material";
 import { TCandidate } from "@/types/users";
 
 type CandidateCardProps = {
@@ -27,10 +18,7 @@ export default function CandidateCard({ candidate }: CandidateCardProps) {
       }}
     >
       <Grid container spacing={2}>
-        <Grid item xs={4}>
-          <Typography variant="subtitle1">{candidate.fullname}</Typography>
-        </Grid>
-        <Grid item xs={4}>
+        <Grid item xs={6}>
           {candidate.tech_skills.map((techSkill) => (
             <Chip
               key={techSkill.id}
@@ -40,7 +28,7 @@ export default function CandidateCard({ candidate }: CandidateCardProps) {
             />
           ))}
         </Grid>
-        <Grid item xs={4}>
+        <Grid item xs={6}>
           {candidate.soft_skills.map((softSkill) => (
             <Chip
               key={softSkill.id}
