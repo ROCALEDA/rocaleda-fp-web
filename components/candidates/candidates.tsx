@@ -131,6 +131,7 @@ export default function Candidates() {
                 <Stack direction="row">
                   <BasicSelect
                     text={lang("tech_skills")}
+                    data-cy="bs-tech-skills"
                     options={tech_skills}
                     selectedOptions={formik.values.techSkills}
                     onSelectionChange={(selected) => {
@@ -140,6 +141,7 @@ export default function Candidates() {
                   <BasicSelect
                     text={lang("soft_skills")}
                     options={soft_skills}
+                    data-cy="bs-soft-skills"
                     selectedOptions={formik.values.softSkills}
                     onSelectionChange={(selected) => {
                       setSoftSkills(selected);
