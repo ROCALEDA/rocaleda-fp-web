@@ -225,6 +225,7 @@ export default function SelectedProject({ project }: SelectedProjectProps) {
                 >
                   <AccordionSummary
                     expandIcon={<ExpandMoreIcon />}
+                    data-cy="item-posicion"
                     aria-controls={`panel${position.id}-content`}
                     id={`panel${position.id}-header`}
                   >

@@ -6,7 +6,6 @@ describe("FPM-90 - Formulario de login", () => {
   const customerPassword = "cristian";
 
   beforeEach(() => {
-    cy.clearCookies();
     cy.visit("/es/login");
   });
 
@@ -25,9 +24,9 @@ describe("FPM-90 - Formulario de login", () => {
     cy.get('button').contains("Iniciar sesión").click();
     cy.url().should("include", "/es/home");
     cy.contains('Candidatos');
-    cy.contains('Test User');
     cy.contains('Proyectos');
-    cy.contains('Mi proyectoy');
+    cy.contains('Entrevistas');
+    cy.contains('Enlaces rápidos');
   });
   
 });
